@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        /* background: linear-gradient(to right, #ff105f, #ffad06); */
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: fixed;
+        background-image: url(https://i.gifer.com/19XR.gif);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        opacity: 1px;
+}
+
+.login-box {
+  width: 20%;
+  height: 50%;
+  padding: 40px;
+  background: #fff;
+  text-align: center;
+  border-radius: 10px;
+  position: relative;
+  right: 0;
+  background-image: url(https://i.pinimg.com/originals/fd/fe/13/fdfe13b524c1c0b949bf6c2ec0b3f86c.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 1px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+form{
+  position: relative;
+  top: 50px;
+  left: 30px;
+  text-align: center;
+  width: 80%;
+
+}
+.login-box h2 {
+  color: white;
+  position: relative;
+  top: 60px;
+  right: 5px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 40px;
+}
+
+div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  box-shadow: 10 8px 15px rgba(0, 0, 0, 0.5);
+}
+
+button {
+  width: 50%;
+  padding: 10px;
+  position: relative;
+  top: 20px;
+  background: red;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background: #ff374f;
+}
+
+#message {
+  margin-top: 20px;
+  color: red;
+}
+
+</style>
+</head>
+<body><div class="login-box">
+  <h2>LOGIN</h2>
+    <form id="loginForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+  </div>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                window.location.href = '/record.html';
+            } else {
+                alert(result.message);
+            }
+        });
+    </script>
+</body>
+</html>
