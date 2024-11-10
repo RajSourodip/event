@@ -201,156 +201,151 @@
 </body>
 </html> -->
 
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/style.css" />
     <style>
       /* General Body Styling */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
 
-/* Main Container Styling */
-.container {
-    text-align: center;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
-}
+      /* Main Container Styling */
+      .container {
+        text-align: center;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 400px;
+      }
 
-/* Buttons Section Styling */
-.login-options {
-    display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 20px;
-}
+      /* Buttons Section Styling */
+      .login-options {
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 20px;
+      }
 
-button {
-    padding: 10px 20px;
-    font-size: 40px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    position: relative;
-    left: 40px;
-}
+      button {
+        padding: 10px 20px;
+        font-size: 40px;
+        cursor: pointer;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        position: relative;
+        left: 40px;
+      }
 
-button:hover {
-    background-color: #45a049;
-}
+      button:hover {
+        background-color: #45a049;
+      }
 
-/* Hidden Elements */
-.hidden {
-    display: none;
-}
+      /* Hidden Elements */
+      .hidden {
+        display: none;
+      }
 
-/* Districts List Styling */
-#districts ul {
-    list-style-type: none;
-    padding: 0;
-    position: relative;
-    top: 350px;
-}
+      /* Districts List Styling */
+      #districts ul {
+        list-style-type: none;
+        padding: 0;
+        position: relative;
+        top: 350px;
+      }
 
-#districts li {
-    padding: 10px;
-    cursor: pointer;
-    background: #2ecc71;
-    margin: 5px 0;
-    border-radius: 5px;
-    color: white;
-    transition: background-color 0.3s;
-    text-align: center;
-    position: relative;
-    right: 135px;
-}
+      #districts li {
+        padding: 10px;
+        cursor: pointer;
+        background: #2ecc71;
+        margin: 5px 0;
+        border-radius: 5px;
+        color: white;
+        transition: background-color 0.3s;
+        text-align: center;
+        position: relative;
+        right: 135px;
+      }
 
-#districts li:hover {
-    background: #27ae60;
-}
+      #districts li:hover {
+        background: #27ae60;
+      }
 
-/* Report Table Styling */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
+      /* Report Table Styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ccc;
-}
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
 
-th {
-    background: #f4f4f4;
-}
-
+      th {
+        background: #f4f4f4;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="login-options">
-            <button id="employeeBtn">Login as Employee</button>
-            <button id="adminBtn">Login as Admin</button>
-        </div>
-        <div id="districts" class="hidden">
-            <h2>Select a District</h2>
-            <ul>
-                <li data-district="Nilgiris">Nilgiris</li>
-                <li data-district="Kasaragod">Kasaragod</li>
-                <li data-district="Kannur">Kannur</li>
-                <li data-district="Calicut">Calicut</li>
-                <li data-district="Wayanad">Wayanad</li>
-                <li data-district="Malappuram">Malappuram</li>
-                <li data-district="Palakkad">Palakkad</li>
-                <li data-district="Trichur">Trichur</li>
-                <li data-district="Ernakulam">Ernakulam</li>
-                <li data-district="Kotayam">Kotayam</li>
-                <li data-district="Idukki">Idukki</li>
-                <li data-district="Alleppey">Alleppey</li>
-                <li data-district="Kollam">Kollam</li>
-                <li data-district="Pathanamthitta">Pathanamthitta</li>
-                <li data-district="Thiruvananthapuram">Thiruvananthapuram</li>
-            </ul>
-        </div>
+      <div class="login-options">
+        <button id="employeeBtn">Login as Employee</button>
+        <button id="adminBtn">Login as Admin</button>
+      </div>
+      <div id="districts" class="hidden">
+        <h2>Select a District</h2>
+        <ul>
+          <li data-district="Nilgiris">Nilgiris</li>
+          <li data-district="Kasaragod">Kasaragod</li>
+          <li data-district="Kannur">Kannur</li>
+          <li data-district="Calicut">Calicut</li>
+          <li data-district="Wayanad">Wayanad</li>
+          <li data-district="Malappuram">Malappuram</li>
+          <li data-district="Palakkad">Palakkad</li>
+          <li data-district="Trichur">Trichur</li>
+          <li data-district="Ernakulam">Ernakulam</li>
+          <li data-district="Kotayam">Kotayam</li>
+          <li data-district="Idukki">Idukki</li>
+          <li data-district="Alleppey">Alleppey</li>
+          <li data-district="Kollam">Kollam</li>
+          <li data-district="Pathanamthitta">Pathanamthitta</li>
+          <li data-district="Thiruvananthapuram">Thiruvananthapuram</li>
+        </ul>
+      </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const employeeBtn = document.getElementById('employeeBtn');
-            const districtsDiv = document.getElementById('districts');
+      document.addEventListener("DOMContentLoaded", () => {
+        const employeeBtn = document.getElementById("employeeBtn");
+        const districtsDiv = document.getElementById("districts");
 
-            employeeBtn.addEventListener('click', () => {
-                districtsDiv.classList.remove('hidden');
-            });
-
-            districtsDiv.addEventListener('click', (event) => {
-                if (event.target.tagName === 'LI') {
-                    const district = event.target.getAttribute('data-district');
-                    window.location.href = `report_form.html?district=${district}`;
-                }
-            });
+        employeeBtn.addEventListener("click", () => {
+          districtsDiv.classList.remove("hidden");
         });
+
+        districtsDiv.addEventListener("click", (event) => {
+          if (event.target.tagName === "LI") {
+            const district = event.target.getAttribute("data-district");
+            window.location.href = `report_form?district=${district}`;
+          }
+        });
+      });
     </script>
-</body>
+  </body>
 </html>

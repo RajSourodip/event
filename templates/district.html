@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>District Reports</title>
+    <style>
+      .district-list,
+      .report-list {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .district-item,
+      .report-item {
+        padding: 10px;
+        margin: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+
+      .district-item:hover,
+      .report-item:hover {
+        background-color: #f0f0f0;
+      }
+
+      #reportDetails {
+        display: none;
+      }
+
+      #districtList {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>District Reports</h1>
+
+    <!-- List of Districts -->
+    <div id="districtList">
+      <h3>Districts</h3>
+      <ul class="district-list" id="districtListContainer">
+        <!-- Districts will be loaded here dynamically -->
+      </ul>
+    </div>
+
+    <!-- Reports for a Specific District -->
+    <div id="reportDetails">
+      <h3>Reports for <span id="districtName"></span></h3>
+      <ul class="report-list" id="reportListContainer">
+        <!-- Reports will be loaded here dynamically -->
+      </ul>
+    </div>
+
+    <script>
+      // Fetch all districts and display them
+      fetch("/getReportsByDistrict")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            const districtListContainer = document.getElementById(
+              "districtListContainer"
+            );
+            const reports = data.data;
+
+            // Extract unique districts
+            const districts = [
+              ...new Set(reports.map((report) => report.district)),
+            ];
+
+            districts.forEach((district) => {
+              const districtItem = document.createElement("li");
+              districtItem.classList.add("district-item");
+              districtItem.textContent = district;
+              districtItem.onclick = () => loadReportsByDistrict(district);
+              districtListContainer.appendChild(districtItem);
+            });
+          }
+        });
+
+      // Function to load reports by district
+      function loadReportsByDistrict(district) {
+        // Show loading or a message if no reports are found for the district
+        document.getElementById("reportDetails").style.display = "none";
+        document.getElementById("districtName").textContent = district;
+
+        fetch(`/getReportsByDistrict?district=${district}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const reportListContainer = document.getElementById(
+              "reportListContainer"
+            );
+            reportListContainer.innerHTML = ""; // Clear any existing reports
+            if (data.status === "success" && data.data.length > 0) {
+              data.data.forEach((report) => {
+                const reportItem = document.createElement("li");
+                reportItem.classList.add("report-item");
+
+                // Assuming 'report' is an object containing the report details fetched from the server
+
+                reportItem.innerHTML = `
+    <strong>ID:</strong> ${report._id} <br>
+    <strong>Date:</strong> ${report.date} <br>
+    <strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited} <br>
+    <strong>Interested:</strong> ${report.interested} <br>
+    <strong>PD Done:</strong> ${report.pdDone} <br>
+    <strong>PD Fixed:</strong> ${report.pdFixed} <br>
+    <strong>TD Done:</strong> ${report.tdDone} <br>
+    <strong>TD Fixed:</strong> ${report.tdFixed} <br>
+    <strong>SMD Done:</strong> ${report.smdDone} <br>
+    <strong>SMD Fixed:</strong> ${report.smdFixed} <br>
+    <strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp} <br>
+    <strong>Signed:</strong> ${report.signed} <br>
+    <strong>Total Schools For SignUp:</strong> ${report.totalSchoolsForSignUp} <br>
+    <strong>Strength:</strong> ${report.strength} <br>
+    <strong>Submitted by:</strong> ${report.user} <br>
+    <strong>Time:</strong> ${report.time}
+`;
+
+                reportListContainer.appendChild(reportItem);
+              });
+            } else {
+              const noReportsMessage = document.createElement("li");
+              noReportsMessage.textContent =
+                "No reports found for this district.";
+              reportListContainer.appendChild(noReportsMessage);
+            }
+          });
+
+        // Show the report details section
+        document.getElementById("reportDetails").style.display = "block";
+      }
+    </script>
+  </body>
+</html>

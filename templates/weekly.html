@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weekly Report</title>
+    <style>
+      /* Add your CSS styling here */
+      .report-item {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .report-item h4 {
+        margin: 0;
+        font-size: 18px;
+      }
+      .report-item p {
+        margin: 5px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Weekly Reports</h1>
+    <div id="weeklyReports"></div>
+
+    <script>
+      // Fetch the weekly reports from the backend
+      fetch("/getWeeklyReport")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            const reports = data.data;
+            const reportsContainer = document.getElementById("weeklyReports");
+
+            reports.forEach((report) => {
+              const reportItem = document.createElement("div");
+              reportItem.classList.add("report-item");
+              reportItem.innerHTML = `
+                            <h4>Report ID: ${report._id}</h4>
+                            <p><strong>Date:</strong> ${report.date}</p>
+                            <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
+                            <p><strong>Interested:</strong> ${report.interested}</p>
+                            <p><strong>PD Done:</strong> ${report.pdDone}</p>
+                            <p><strong>PD Fixed:</strong> ${report.pdFixed}</p>
+                            <p><strong>TD Done:</strong> ${report.tdDone}</p>
+                            <p><strong>TD Fixed:</strong> ${report.tdFixed}</p>
+                            <p><strong>SMD Done:</strong> ${report.smdDone}</p>
+                            <p><strong>SMD Fixed:</strong> ${report.smdFixed}</p>
+                            <p><strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp}</p>
+                            <p><strong>Signed:</strong> ${report.signed}</p>
+                            <p><strong>Total Schools For SignUp:</strong> ${report.totalSchoolsForSignUp}</p>
+                            <p><strong>Strength:</strong> ${report.strength}</p>
+                            <p><strong>Submitted by:</strong> ${report.user}</p>
+                            <p><strong>Time:</strong> ${report.time}</p>
+                        `;
+              reportsContainer.appendChild(reportItem);
+            });
+          } else {
+            alert("Failed to fetch reports");
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching reports:", error);
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Individual Report</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .report-container {
+        margin: 20px;
+
+        display: flex;
+        gap: 50px;
+      }
+      .report {
+        background-color: #f9f9f9;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: fit-content;
+      }
+      .report h3 {
+        margin: 0;
+        color: #333;
+      }
+      .report p {
+        margin: 5px 0;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="report-container" id="reports">
+      <div id="loadingMessage">Loading reports...</div>
+      <div id="noReportsMessage" style="display: none">
+        No reports available for you.
+      </div>
+    </div>
+
+    <script>
+      // Function to fetch reports from the backend
+      function fetchReports() {
+        // Show loading message
+        document.getElementById("loadingMessage").style.display = "block";
+
+        // Make AJAX request to fetch the reports
+        fetch("/getReport", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("loadingMessage").style.display = "none";
+
+            if (data.status === "success" && data.data.length > 0) {
+              // Create a report for each record
+              const reportsContainer = document.getElementById("reports");
+              reportsContainer.innerHTML = "<h2>Your Reports</h2>"; // Reset content
+
+              data.data.forEach((report) => {
+                const reportDiv = document.createElement("div");
+                reportDiv.className = "report";
+
+                reportDiv.innerHTML = `
+    <h3>Report ID: ${report._id}</h3>
+    <p><strong>Submitted by:</strong> ${report.user}</p>
+    <p><strong>Date:</strong> ${report.date}</p>
+    <p><strong>Time:</strong> ${report.time}</p>
+    <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
+    <p><strong>Interested:</strong> ${report.interested}</p>
+    <p><strong>PD Done:</strong> ${report.pdDone}</p>
+    <p><strong>PD Fixed:</strong> ${report.pdFixed}</p>
+    <p><strong>TD Done:</strong> ${report.tdDone}</p>
+    <p><strong>TD Fixed:</strong> ${report.tdFixed}</p>
+    <p><strong>SMD Done:</strong> ${report.smdDone}</p>
+    <p><strong>SMD Fixed:</strong> ${report.smdFixed}</p>
+    <p><strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp}</p>
+    <p><strong>Signed:</strong> ${report.signed}</p>
+    <p><strong>Total Schools for Sign Up:</strong> ${report.totalSchoolsForSignUp}</p>
+    <p><strong>Strength:</strong> ${report.strength}</p>
+`;
+
+                reportsContainer.appendChild(reportDiv);
+              });
+            } else {
+              document.getElementById("noReportsMessage").style.display =
+                "block";
+            }
+          })
+          .catch((error) => {
+            document.getElementById("loadingMessage").style.display = "none";
+            document.getElementById("noReportsMessage").style.display = "block";
+            console.error("Error fetching reports:", error);
+          });
+      }
+
+      // Fetch reports when the page loads
+      window.onload = fetchReports;
+    </script>
+  </body>
+</html>
