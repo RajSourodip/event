@@ -3,132 +3,102 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>District Reports</title>
+    <title>District Records</title>
     <style>
-      .district-list,
-      .report-list {
-        list-style-type: none;
-        padding: 0;
-      }
-
-      .district-item,
-      .report-item {
+      .district-button {
         padding: 10px;
         margin: 5px;
-        border: 1px solid #ccc;
+        background-color: #4caf50;
+        color: white;
+        border: none;
         cursor: pointer;
       }
-
-      .district-item:hover,
-      .report-item:hover {
-        background-color: #f0f0f0;
+      .district-button:hover {
+        background-color: #45a049;
       }
-
-      #reportDetails {
-        display: none;
-      }
-
-      #districtList {
-        margin-bottom: 20px;
+      .record {
+        margin-top: 10px;
       }
     </style>
   </head>
   <body>
-    <h1>District Reports</h1>
+    <h1>User's District Reports</h1>
 
-    <!-- List of Districts -->
-    <div id="districtList">
-      <h3>Districts</h3>
-      <ul class="district-list" id="districtListContainer">
-        <!-- Districts will be loaded here dynamically -->
-      </ul>
-    </div>
+    <!-- Buttons for Districts will be injected here -->
+    <div id="district-buttons"></div>
 
-    <!-- Reports for a Specific District -->
-    <div id="reportDetails">
-      <h3>Reports for <span id="districtName"></span></h3>
-      <ul class="report-list" id="reportListContainer">
-        <!-- Reports will be loaded here dynamically -->
-      </ul>
-    </div>
+    <!-- Records for the selected district -->
+    <div id="records-container"></div>
 
     <script>
-      // Fetch all districts and display them
-      fetch("/getReportsByDistrict")
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "success") {
-            const districtListContainer = document.getElementById(
-              "districtListContainer"
-            );
-            const reports = data.data;
+      // Fetch all the reports for the user and classify them by districts
+      document.addEventListener("DOMContentLoaded", async function () {
+        try {
+          const userDistricts = await fetchReportsByUser();
 
-            // Extract unique districts
-            const districts = [
-              ...new Set(reports.map((report) => report.district)),
-            ];
-
-            districts.forEach((district) => {
-              const districtItem = document.createElement("li");
-              districtItem.classList.add("district-item");
-              districtItem.textContent = district;
-              districtItem.onclick = () => loadReportsByDistrict(district);
-              districtListContainer.appendChild(districtItem);
+          if (userDistricts) {
+            // Dynamically create buttons for each district
+            const districtButtonsDiv =
+              document.getElementById("district-buttons");
+            Object.keys(userDistricts).forEach((district) => {
+              const button = document.createElement("button");
+              button.classList.add("district-button");
+              button.textContent = district;
+              button.onclick = () =>
+                displayDistrictRecords(district, userDistricts[district]);
+              districtButtonsDiv.appendChild(button);
             });
           }
-        });
+        } catch (error) {
+          console.error("Error fetching user reports:", error);
+        }
+      });
 
-      // Function to load reports by district
-      function loadReportsByDistrict(district) {
-        // Show loading or a message if no reports are found for the district
-        document.getElementById("reportDetails").style.display = "none";
-        document.getElementById("districtName").textContent = district;
+      // Function to fetch reports based on the authenticated user
+      async function fetchReportsByUser() {
+        const response = await fetch("/getReportsByDistrict");
+        const data = await response.json();
 
-        fetch(`/getReportsByDistrict?district=${district}`)
-          .then((response) => response.json())
-          .then((data) => {
-            const reportListContainer = document.getElementById(
-              "reportListContainer"
-            );
-            reportListContainer.innerHTML = ""; // Clear any existing reports
-            if (data.status === "success" && data.data.length > 0) {
-              data.data.forEach((report) => {
-                const reportItem = document.createElement("li");
-                reportItem.classList.add("report-item");
+        if (data.status === "success") {
+          // Classify reports by district
+          const reportsByDistrict = {};
 
-                // Assuming 'report' is an object containing the report details fetched from the server
-
-                reportItem.innerHTML = `
-    <strong>ID:</strong> ${report._id} <br>
-    <strong>Date:</strong> ${report.date} <br>
-    <strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited} <br>
-    <strong>Interested:</strong> ${report.interested} <br>
-    <strong>PD Done:</strong> ${report.pdDone} <br>
-    <strong>PD Fixed:</strong> ${report.pdFixed} <br>
-    <strong>TD Done:</strong> ${report.tdDone} <br>
-    <strong>TD Fixed:</strong> ${report.tdFixed} <br>
-    <strong>SMD Done:</strong> ${report.smdDone} <br>
-    <strong>SMD Fixed:</strong> ${report.smdFixed} <br>
-    <strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp} <br>
-    <strong>Signed:</strong> ${report.signed} <br>
-    <strong>Total Schools For SignUp:</strong> ${report.totalSchoolsForSignUp} <br>
-    <strong>Strength:</strong> ${report.strength} <br>
-    <strong>Submitted by:</strong> ${report.user} <br>
-    <strong>Time:</strong> ${report.time}
-`;
-
-                reportListContainer.appendChild(reportItem);
-              });
-            } else {
-              const noReportsMessage = document.createElement("li");
-              noReportsMessage.textContent =
-                "No reports found for this district.";
-              reportListContainer.appendChild(noReportsMessage);
+          data.data.forEach((report) => {
+            const district = report.district;
+            if (!reportsByDistrict[district]) {
+              reportsByDistrict[district] = [];
             }
+            reportsByDistrict[district].push(report);
           });
 
-        // Show the report details section
-        document.getElementById("reportDetails").style.display = "block";
+          return reportsByDistrict;
+        } else {
+          alert("Failed to fetch reports");
+          return null;
+        }
+      }
+
+      // Function to display records for the selected district
+      function displayDistrictRecords(district, records) {
+        const recordsContainer = document.getElementById("records-container");
+        recordsContainer.innerHTML = ""; // Clear previous records
+
+        const districtTitle = document.createElement("h2");
+        districtTitle.textContent = `Records for ${district}`;
+        recordsContainer.appendChild(districtTitle);
+
+        records.forEach((report) => {
+          const reportDiv = document.createElement("div");
+          reportDiv.classList.add("record");
+          reportDiv.innerHTML = `
+                    <p><strong>Date:</strong> ${report.date}</p>
+                    <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
+                    <p><strong>Interested:</strong> ${report.interested}</p>
+                    <p><strong>Follow Up Signed:</strong> ${report.signed}</p>
+                    <!-- Add more fields as needed -->
+                `;
+          recordsContainer.appendChild(reportDiv);
+        });
       }
     </script>
   </body>

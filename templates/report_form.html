@@ -124,6 +124,10 @@
         .addEventListener("submit", function (event) {
           event.preventDefault();
 
+          // Get the district parameter from the current URL
+          const urlParams = new URLSearchParams(window.location.search);
+          const district = urlParams.get("district"); // Extract district from URL
+
           // Get all form data
           const formData = new FormData(document.getElementById("reportForm"));
 
@@ -132,6 +136,9 @@
           formData.forEach((value, key) => {
             formDataJson[key] = value;
           });
+
+          // Add the district to the form data JSON
+          formDataJson.district = district;
 
           // Send data to the SubmitDistrictReport route
           fetch("/SubmitDistrictReport", {

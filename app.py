@@ -49,7 +49,7 @@ def get_report():
         username = session["username"]
         
         # Query the database for records that match the user's username
-        reports = Record.find({"user": username})
+        reports = Dash.find({"user": username})
 
         # Convert the reports to a list and replace ObjectId with string
         reports_data = []
@@ -73,22 +73,47 @@ def report_form():
   
     return render_template("report_form.html", district=district)
 
+
 @app.route('/getReportsByDistrict', methods=['GET'])
 def get_reports_by_district():
-    # Get the district parameter from the query string
-    district = request.args.get('district')
+    # Ensure the user is authenticated by checking session data
+    username = session.get('username')  # Assuming the user_id is stored in the session
+    print(f"User ID from session: {username}")  # Debugging: Check if the user is authenticated
     
-    if district:
-        reports_data = list(Record.find({"district": district}))
-    else:
-        reports_data = list(Record.find({}))  # Get all reports if no district is provided
+    if not username:
+        return jsonify({"status": "error", "message": "User not authenticated"}), 401
+
+    # Fetch all reports for the current user
+    query = {"username": username}  # Only fetch reports for the authenticated user
+    print(f"Query to fetch reports: {query}")  # Debugging: Print the query to see if it's correct
+
+    try:
+        reports_data = list(Dash.find(query))  # Fetch reports from the database
+    except Exception as e:
+        print(f"Error while fetching reports: {str(e)}")  # Log any database fetching errors
+        return jsonify({"status": "error", "message": "Error fetching reports from the database"}), 500
+
+    if not reports_data:
+        print("No reports found for the user.")  # Debugging: If no reports are found
+        return jsonify({"status": "error", "message": "No reports found for this user"}), 404
+
+    # Classify reports by district
+    reports_by_district = {}
+    
+    for report in reports_data:
+        district = report.get('district', 'Unknown')  # Get district from report, default to 'Unknown' if not present
+        if district not in reports_by_district:
+            reports_by_district[district] = []
+        reports_by_district[district].append(report)
 
     # Convert ObjectId to string for JSON serialization
-    for report in reports_data:
-        report["_id"] = str(report["_id"])
-    print(report)
-    
-    return jsonify({"status": "success", "data": reports_data}), 200
+    for district, reports in reports_by_district.items():
+        for report in reports:
+            report["_id"] = str(report["_id"])
+
+    # Return the classified reports
+    print("Reports classified by district:", reports_by_district)  # Debugging: Check the classified reports
+    return jsonify({"status": "success", "data": reports_by_district}), 200
 
 @app.route('/individual_records')
 def individual_records():
@@ -109,7 +134,7 @@ def get_weekly_report():
     one_week_ago = now - timedelta(days=7)
 
     # Query MongoDB to find records created within the last week
-    reports = Record.find({"date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+    reports = Dash.find({"date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
 
     # Prepare the response data
     reports_data = []
@@ -163,7 +188,7 @@ def dr():
 
 
 # Route to handle form submission
-@app.route('/submitForm', methods=['POST'])
+@app.route('/submitForm', methods=['POST', 'GET'])
 def submit_form():
     data = request.get_json()
 
@@ -173,6 +198,7 @@ def submit_form():
         "totalSchoolsVisited": data.get("totalSchoolsVisited"),
         "interested": data.get("interested"),
         "pdDone": data.get("pdDone"),
+        "username": session.get('username'),
         "pdFixed": data.get("pdFixed"),
         "tdDone": data.get("tdDone"),
         "tdFixed": data.get("tdFixed"),
@@ -182,6 +208,7 @@ def submit_form():
         "signed": data.get("signed"),
         "totalSchoolsForSignUp": data.get("totalSchoolsForSignUp"),
         "strength": data.get("strength"),
+        "district": data.get('district'),
         "submittedAt": datetime.utcnow()  # Add timestamp
     }
 
