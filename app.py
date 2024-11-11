@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory, render_template, session, redirect, url_for
-from pywhatkit import send_mail
-from bson.json_util import dumps
+import yagmail
+from bson.json_util import dumps, ObjectId
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 import os
@@ -241,12 +241,25 @@ def get_events():
     year = request.args.get('year')
     events = list(Event.find({"day": day, "month": month, "year": year}))
     return dumps(events), 200
+def convert_objectid_to_str(document):
+    if isinstance(document, dict):
+        return {k: convert_objectid_to_str(v) for k, v in document.items()}
+    elif isinstance(document, list):
+        return [convert_objectid_to_str(i) for i in document]
+    elif isinstance(document, ObjectId):
+        return str(document)
+    else:
+        return document
 
 @app.route('/events', methods=['POST'])
 def add_event():
     try:
         event_data = request.get_json()
+        
+        # Insert the event into MongoDB
         Event.insert_one(event_data)
+        
+        # Extract necessary fields from the event data
         day = event_data.get("day")
         month = event_data.get("month")
         year = event_data.get("year")
@@ -263,15 +276,27 @@ def add_event():
         
         # Customize subject and content of the email
         subject = "Event Registration Confirmation"
-        send_mail(
-            sender_email="ghoshraj368@gmail.com",
-            password="",
-            receiver_email=recipient_email,
+        print(message)
+        
+        # Send email using yagmail
+        yag = yagmail.SMTP('ghoshraj368@gmail.com', 'enter your password')
+        yag.send(
+            to=recipient_email,
             subject=subject,
-            message=message
+            contents=message
         )
-        return jsonify(event_data), 201
+        
+        # Convert the inserted event data to ensure ObjectId is serialized
+        # Retrieve the event data from MongoDB
+        inserted_event = Event.find_one({"title": title, "description": description})
+        
+        # Convert ObjectId fields to string
+        inserted_event = convert_objectid_to_str(inserted_event)
+        
+        # Return the event data with a 201 response
+        return jsonify(inserted_event), 201
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/events', methods=['DELETE'])
@@ -337,6 +362,6 @@ def serve_static(filename):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 3000))
-    app.run(debug=True, port=port)
+    app.run(debug=True, port=5000)
 
 
