@@ -1,105 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>District Records</title>
+<html>
+<head>
+    <title>District Reports</title>
     <style>
-      .district-button {
-        padding: 10px;
-        margin: 5px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        cursor: pointer;
-      }
-      .district-button:hover {
-        background-color: #45a049;
-      }
-      .record {
-        margin-top: 10px;
-      }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
-  </head>
-  <body>
-    <h1>User's District Reports</h1>
-
-    <!-- Buttons for Districts will be injected here -->
-    <div id="district-buttons"></div>
-
-    <!-- Records for the selected district -->
-    <div id="records-container"></div>
-
+</head>
+<body>
+    <h1>District Reports</h1>
+    <table id="reportsTable">
+        <thead>
+            <tr>
+                <th>District</th>
+                <th>Schools</th>
+                <th>PD</th>
+                <th>SMD</th>
+                <th>Signed</th>
+                <th>SMD to Sign Up Follow Up</th>
+                <th>Hot Follow Up</th>
+                <th>NI</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    
     <script>
-      // Fetch all the reports for the user and classify them by districts
-      document.addEventListener("DOMContentLoaded", async function () {
-        try {
-          const userDistricts = await fetchReportsByUser();
+        // Function to create the table rows and cells
+        function createTable(data) {
+            const tbody = document.getElementById('reportsTable').getElementsByTagName('tbody')[0];
 
-          if (userDistricts) {
-            // Dynamically create buttons for each district
-            const districtButtonsDiv =
-              document.getElementById("district-buttons");
-            Object.keys(userDistricts).forEach((district) => {
-              const button = document.createElement("button");
-              button.classList.add("district-button");
-              button.textContent = district;
-              button.onclick = () =>
-                displayDistrictRecords(district, userDistricts[district]);
-              districtButtonsDiv.appendChild(button);
-            });
-          }
-        } catch (error) {
-          console.error("Error fetching user reports:", error);
-        }
-      });
+            const districts = Object.keys(data);
+            const totals = {
+                schools: 0,
+                pd: 0,
+                smd: 0,
+                signed: 0,
+                smdToSignUpFollowUp: 0,
+                hotFollowUp: 0,
+                ni: 0
+            };
 
-      // Function to fetch reports based on the authenticated user
-      async function fetchReportsByUser() {
-        const response = await fetch("/getReportsByDistrict");
-        const data = await response.json();
+            districts.forEach(district => {
+                const reports = data[district];
+                const districtRow = document.createElement('tr');
 
-        if (data.status === "success") {
-          // Classify reports by district
-          const reportsByDistrict = {};
+                const districtCell = document.createElement('td');
+                districtCell.innerText = district;
+                districtRow.appendChild(districtCell);
 
-          data.data.forEach((report) => {
-            const district = report.district;
-            if (!reportsByDistrict[district]) {
-              reportsByDistrict[district] = [];
-            }
-            reportsByDistrict[district].push(report);
-          });
+                const stats = {
+                    schools: reports.length,
+                    pd: 0,
+                    smd: 0,
+                    signed: 0,
+                    smdToSignUpFollowUp: 0,
+                    hotFollowUp: 0,
+                    ni: 0
+                };
 
-          return reportsByDistrict;
-        } else {
-          alert("Failed to fetch reports");
-          return null;
-        }
-      }
+                reports.forEach(report => {
+                    stats.pd += parseInt(report.pdDone);
+                    stats.smd += parseInt(report.smdDone);
+                    stats.signed += parseInt(report.signed);
+                    stats.smdToSignUpFollowUp +=parseInt( report.signUpFollowUp);
+                    stats.hotFollowUp += parseInt(report.tdDone);  // Assuming hot follow-up is related to tdDone
+                    stats.ni += parseInt(report.strength);  // Assuming NI is related to strength
+                });
 
-      // Function to display records for the selected district
-      function displayDistrictRecords(district, records) {
-        const recordsContainer = document.getElementById("records-container");
-        recordsContainer.innerHTML = ""; // Clear previous records
+                totals.schools += parseInt(stats.schools);
+                totals.pd += parseInt(stats.pd);
+                console.log(totals.pd);
+                
+                totals.smd += parseInt(stats.smd);
+                totals.signed += parseInt(stats.signed);
+                totals.smdToSignUpFollowUp += parseInt(stats.smdToSignUpFollowUp);
+                totals.hotFollowUp += parseInt(stats.hotFollowUp);
+                totals.ni += parseInt(stats.ni);
 
-        const districtTitle = document.createElement("h2");
-        districtTitle.textContent = `Records for ${district}`;
-        recordsContainer.appendChild(districtTitle);
-
-        records.forEach((report) => {
-          const reportDiv = document.createElement("div");
-          reportDiv.classList.add("record");
-          reportDiv.innerHTML = `
-                    <p><strong>Date:</strong> ${report.date}</p>
-                    <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
-                    <p><strong>Interested:</strong> ${report.interested}</p>
-                    <p><strong>Follow Up Signed:</strong> ${report.signed}</p>
-                    <!-- Add more fields as needed -->
+                districtRow.innerHTML += `
+                    <td>${stats.schools}</td>
+                    <td>${stats.pd}</td>
+                    <td>${stats.smd}</td>
+                    <td>${stats.signed}</td>
+                    <td>${stats.smdToSignUpFollowUp}</td>
+                    <td>${stats.hotFollowUp}</td>
+                    <td>${stats.ni}</td>
                 `;
-          recordsContainer.appendChild(reportDiv);
-        });
-      }
+
+                tbody.appendChild(districtRow);
+            });
+
+            const totalRow = document.createElement('tr');
+            totalRow.innerHTML = `
+                <td>Total</td>
+                <td>${totals.schools}</td>
+                <td>${totals.pd}</td>
+                <td>${totals.smd}</td>
+                <td>${totals.signed}</td>
+                <td>${totals.smdToSignUpFollowUp}</td>
+                <td>${totals.hotFollowUp}</td>
+                <td>${totals.ni}</td>
+            `;
+            tbody.appendChild(totalRow);
+        }
+
+        // Function to fetch data from the backend
+        function fetchData() {
+            fetch('/getReportsByDistrict')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        createTable(data.data);
+                    } else {
+                        console.error('Error fetching data:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        // Fetch data when the page loads
+        window.onload = fetchData;
     </script>
-  </body>
+</body>
 </html>

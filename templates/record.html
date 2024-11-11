@@ -242,41 +242,60 @@
           event.preventDefault(); // Prevent the default form submission
 
           const formData = {
-            date: document.getElementById("date").value,
-            totalSchoolsVisited: document.getElementById("totalSchoolsVisited")
-              .value,
-            interested: document.getElementById("interested").value,
-            pdDone: document.getElementById("pdDone").value,
-            pdFixed: document.getElementById("pdFixed").value,
-            tdDone: document.getElementById("tdDone").value,
-            tdFixed: document.getElementById("tdFixed").value,
-            smdDone: document.getElementById("smdDone").value,
-            smdFixed: document.getElementById("smdFixed").value,
-            signUpFollowUp: document.getElementById("signUpFollowUp").value,
-            signed: document.getElementById("signed").value,
-            totalSchoolsForSignUp: document.getElementById(
-              "totalSchoolsForSignUp"
-            ).value,
-            strength: document.getElementById("strength").value,
-          };
+      serialNo: document.getElementById('serialNo').value,
+      state: document.getElementById('state').value,
+      spocFromMikids: document.getElementById('spocFromMikids').value,
+      modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
+      schoolName: document.getElementById('schoolName').value,
+      board: document.getElementById('board').value,
+      district: document.getElementById('district').value,
+      area: document.getElementById('area').value,
+      totalStrength: document.getElementById('totalStrength').value,
+      principalName: document.getElementById('principalName').value,
+      contactNumber: document.getElementById('contactNumber').value,
+      schoolSpoc: document.getElementById('schoolSpoc').value,
+      spocContactNumber: document.getElementById('spocContactNumber').value,
+      demoGivenTo: document.getElementById('demoGivenTo').value,
+      demoGivenDate: document.getElementById('demoGivenDate').value,
+      followUpDate: document.getElementById('followUpDate').value,
+      remarksStatus: document.getElementById('remarksStatus').value,
+      infrastructure: document.getElementById('infrastructure').value,
+      teachersQuality: document.getElementById('teachersQuality').value,
+      signedFor: document.getElementById('signedFor').value,
+      //signedAt: document.getElementById('signedAt').value,
+  };
 
-          try {
-            const response = await fetch("/submitForm", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(formData),
-            });
+        //   try {
+        //     const response = await fetch("/submitForm", {
+        //       method: "POST",
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //       body: JSON.stringify(formData),
+        //     });
 
-            const result = await response.json();
-            alert(result.message);
-          } catch (error) {
-            alert("Error submitting form");
-            console.error(error);
-          }
-        });
+        //     const result = await response.json();
+        //     alert(result.message);
+        //   } catch (error) {
+        //     alert("Error submitting form");
+        //     console.error(error);
+        //   }
+        // });
+        const response = await fetch('/submit', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+  });
 
+  if (response.ok) {
+      alert('Record submitted successfully!');
+      document.getElementById('recordForm').reset();
+  } else {
+      alert('Error submitting record.');
+  }
+});
       document
         .getElementById("showButton")
         .addEventListener("click", function () {

@@ -306,8 +306,8 @@
   <body>
     <div class="container">
       <div class="login-options">
-        <button id="employeeBtn">Login as Admin</button>
-        <button id="adminBtn">Login as Employee</button>
+        <button id="employeeBtn">Login as Employee</button>
+        <button id="enterBtn" class="hidden">Enter</button>
       </div>
       <div id="districts" class="hidden">
         <h2>Select a District</h2>
@@ -331,20 +331,70 @@
       </div>
     </div>
     <script>
+       
       document.addEventListener("DOMContentLoaded", () => {
         const employeeBtn = document.getElementById("employeeBtn");
+        const enterBtn = document.getElementById("enterBtn"); // Enter button
         const districtsDiv = document.getElementById("districts");
 
+        // Show the 'Enter' button after employee login
         employeeBtn.addEventListener("click", () => {
-          districtsDiv.classList.remove("hidden");
+          enterBtn.classList.remove("hidden");
         });
 
-        districtsDiv.addEventListener("click", (event) => {
-          if (event.target.tagName === "LI") {
-            const district = event.target.getAttribute("data-district");
-            window.location.href = `report_form?district=${district}`;
-          }
+        // Handle the 'Enter' button click event
+        enterBtn.addEventListener("click", () => {
+          // Check if the employee has permission to access
+          checkAccess();
         });
+
+        function checkAccess() {
+          fetch("/check_permission", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: "employee_username", // Replace with actual username
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.hasAccess) {
+              alert("Access granted. Proceeding to district selection.");
+              districtsDiv.classList.remove("hidden"); // Show districts if access granted
+            } else {
+              alert("You do not have access. Sending access request.");
+              sendAccessRequest();
+            }
+          })
+          .catch(error => {
+            console.error("Error checking access:", error);
+          });
+        }
+
+        function sendAccessRequest() {
+          fetch("/send_permission_request", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: "employee_username", // Replace with actual username
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert("Access request sent. Please wait for approval.");
+            } else {
+              alert("Error sending access request.");
+            }
+          })
+          .catch(error => {
+            console.error("Error sending access request:", error);
+          });
+        }
       });
     </script>
   </body>

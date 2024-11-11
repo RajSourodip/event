@@ -333,6 +333,8 @@ function showModal(day, month, year) {
 
       const eventDesc = document.createElement("div");
       eventDesc.classList.add("event-desc");
+      // const eventDes = document.createElement("div");
+      // eventDesc.classList.add("event-des");
 
       const eventTitle = document.createElement("p");
       eventTitle.innerText = event.title;
@@ -363,6 +365,7 @@ function hideModal() {
   modal.classList.add("hide-modal");
   eventName.value = '';
   eventDesc.value = '';
+ 
 }
 
 async function addEvent() {
@@ -373,7 +376,7 @@ async function addEvent() {
       year: clicked.year,
       title: eventName.value.trim(),
       description: eventDesc.value.trim(),
-      recipient_email: "ghoshraj368@gmail.com"
+      recipient_email: document.getElementById("eventDes").value
     };
 
     await fetch('/events', {
