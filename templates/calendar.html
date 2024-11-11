@@ -17,61 +17,63 @@
     />
   </head>
   <body>
-    <div class="row">
-      <div class="col">
-        <button class="btn">
-          <span class="material-symbols-outlined"> event </span>
-        </button>
-      </div>
-      <div class="col">
-        <span>Calendar </span>
-      </div>
-      <div class="col">
-        <button class="btn" id="theme" onclick="changeTheme()">
-          <span class="material-symbols-outlined">dark_mode</span>
-        </button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <span id="displayMonth"></span>
-        <span id="displayYear"></span>
-      </div>
-      <div class="col">
-        <button class="btn" onclick="prevMonth()">
-          <span class="material-symbols-outlined"> chevron_left </span>
-        </button>
-        <button class="btn" onclick="nextMonth()">
-          <span class="material-symbols-outlined"> chevron_right </span>
-        </button>
-      </div>
-    </div>
-    <div class="container" id="week"></div>
-    <div class="container" id="calendar"></div>
-    <div class="modal hide-modal" id="modal">
-      <div class="modal-body">
-        <div class="modal-title">
-          <h1>
-            <span id="mDate"></span> <span id="mMonth"></span>
-            <span id="mYear"></span>
-          </h1>
-          <span class="material-symbols-outlined close" onclick="hideModal()">
-            close
-          </span>
+    <div class="calContainer">
+      <div class="row">
+        <div class="col">
+          <button class="btn">
+            <span class="material-symbols-outlined"> event </span>
+          </button>
         </div>
-        <div class="modal-title">
-          <h1>
-            <span id="mDay"></span>
-          </h1>
+        <div class="col">
+          <span>Calendar </span>
         </div>
-        <div class="modal-form">
-          <label>Event title <b>*</b></label>
-          <input type="text" id="eventName" autocomplete="off" />
-          <label>Description </label>
-          <input type="text" id="eventDesc" autocomplete="off" />
-          <button onclick="addEvent()">Add Event</button>
+        <div class="col">
+          <button class="btn" id="theme" onclick="changeTheme()">
+            <span class="material-symbols-outlined">dark_mode</span>
+          </button>
         </div>
-        <div class="allEvents" id="allEvents"></div>
+      </div>
+      <div class="row" id="cal">
+        <div class="col">
+          <span id="displayMonth"></span>
+          <span id="displayYear"></span>
+        </div>
+        <div class="col">
+          <button class="btn" onclick="prevMonth()">
+            <span class="material-symbols-outlined"> chevron_left </span>
+          </button>
+          <button class="btn" onclick="nextMonth()">
+            <span class="material-symbols-outlined"> chevron_right </span>
+          </button>
+        </div>
+      </div>
+      <div class="container" id="week"></div>
+      <div class="container" id="calendar"></div>
+      <div class="modal hide-modal" id="modal">
+        <div class="modal-body">
+          <div class="modal-title">
+            <h1>
+              <span id="mDate"></span> <span id="mMonth"></span>
+              <span id="mYear"></span>
+            </h1>
+            <span class="material-symbols-outlined close" onclick="hideModal()">
+              close
+            </span>
+          </div>
+          <div class="modal-title">
+            <h1>
+              <span id="mDay"></span>
+            </h1>
+          </div>
+          <div class="modal-form">
+            <label>Event title <b>*</b></label>
+            <input type="text" id="eventName" autocomplete="off" />
+            <label>Description </label>
+            <input type="text" id="eventDesc" autocomplete="off" />
+            <button onclick="addEvent()">Add Event</button>
+          </div>
+          <div class="allEvents" id="allEvents"></div>
+        </div>
       </div>
     </div>
     <script src="/static/script.js"></script>

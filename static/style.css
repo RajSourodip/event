@@ -19,6 +19,11 @@
 }
 body {
   background-color: var(--white);
+  transition: all 1s ease;
+}
+body.dark{
+  background-color: var(--black);
+  
 }
 .container {
   display: grid;
@@ -108,6 +113,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-left: 8px;
+  
 }
 .col span {
   font-size: 24px;
@@ -585,3 +591,10 @@ body, html {
     border: 6px solid #056af7;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 } */
+
+.calContainer
+{
+  display: flex;
+  flex-direction: column;
+
+}

@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory, render_template, session, redirect, url_for
+from pywhatkit import send_mail
 from bson.json_util import dumps
 from datetime import datetime, timedelta
 from pymongo import MongoClient
@@ -246,6 +247,29 @@ def add_event():
     try:
         event_data = request.get_json()
         Event.insert_one(event_data)
+        day = event_data.get("day")
+        month = event_data.get("month")
+        year = event_data.get("year")
+        title = event_data.get("title")
+        description = event_data.get("description")
+        recipient_email = event_data.get("recipient_email")
+
+        message = (f"Hello,\n\nYour event '{title}' has been successfully registered!\n\n"
+                   f"Event Details:\n"
+                   f"Date: {day}/{month}/{year}\n"
+                   f"Title: {title}\n"
+                   f"Description: {description}\n\n"
+                   "Thank you for using our service!")
+        
+        # Customize subject and content of the email
+        subject = "Event Registration Confirmation"
+        send_mail(
+            sender_email="ghoshraj368@gmail.com",
+            password="",
+            receiver_email=recipient_email,
+            subject=subject,
+            message=message
+        )
         return jsonify(event_data), 201
     except Exception as e:
         return jsonify({'error': str(e)}), 500
