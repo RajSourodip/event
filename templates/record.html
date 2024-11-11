@@ -264,23 +264,6 @@
       signedFor: document.getElementById('signedFor').value,
       //signedAt: document.getElementById('signedAt').value,
   };
-
-        //   try {
-        //     const response = await fetch("/submitForm", {
-        //       method: "POST",
-        //       headers: {
-        //         "Content-Type": "application/json",
-        //       },
-        //       body: JSON.stringify(formData),
-        //     });
-
-        //     const result = await response.json();
-        //     alert(result.message);
-        //   } catch (error) {
-        //     alert("Error submitting form");
-        //     console.error(error);
-        //   }
-        // });
         const response = await fetch('/submit', {
       method: 'POST',
       headers: {
