@@ -265,7 +265,7 @@ def add_event():
         subject = "Event Registration Confirmation"
         send_mail(
             sender_email="ghoshraj368@gmail.com",
-            password="",
+            password="wumw yxwy qfab hetz",
             receiver_email=recipient_email,
             subject=subject,
             message=message
