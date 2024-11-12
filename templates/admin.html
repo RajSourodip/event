@@ -198,7 +198,7 @@
                 const permissionDiv = document.createElement('div');
                 permissionDiv.innerHTML = `
                     <p><strong>Username:</strong> ${permission.username}</p>
-                    <p><strong>Requested At:</strong> ${permission.request_time}</p>
+                    <p><strong>Requested At:</strong> ${permission.request_date}</p>
                     <button onclick="updatePermission('${permission.username}', 'granted')">Grant</button>
                     <button onclick="updatePermission('${permission.username}', 'rejected')">Reject</button>
                 `;

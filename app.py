@@ -6,6 +6,8 @@ from datetime import datetime, timedelta,  timezone
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
+from flask import Flask, render_template, request, redirect, url_for, session
+from datetime import timedelta
 
 
 
@@ -17,6 +19,11 @@ load_dotenv()
 myPASS = os.getenv('pass')
 app = Flask(__name__)
 app.secret_key = "hihihihih"
+
+app.permanent_session_lifetime = timedelta(minutes=5)
+
+
+
 # MongoDB connection
 app.config["MONGO_URI"] = "mongodb+srv://sourodip:rajghosh@first.ff1ia.mongodb.net/first?retryWrites=true&w=majority"
 client = MongoClient(app.config["MONGO_URI"])
@@ -176,20 +183,28 @@ def send_permission_request():
 
         # Check if the user already has a request in the permissions collection
         existing_request = Permit.find_one({'username': username})
-        if existing_request:
-            return jsonify({'message': 'Permission request already exists for this user'}), 400
+
+        # If the user has a granted request, return an error
+        if existing_request and existing_request.get('status') == 'granted':
+            return jsonify({'message': 'Permission already granted for this user'}), 400
 
         # Create a new permission request document in the MongoDB database
-        permission_request = {
-            'username': username,
-            'status': 'pending',  # Pending status initially
-            'request_date': datetime.now(timezone.utc)  # Use timezone-aware datetime
-        }
-        print(permission_request)
-        Permit.insert_one(permission_request)
+        if not existing_request or existing_request.get('status') == 'rejected':
+            now_utc = datetime.now(timezone.utc)
+            # Convert UTC to IST (UTC + 5:30)
+            ist_offset = timedelta(hours=5, minutes=30)
+            now_ist = now_utc + ist_offset
+            permission_request = {
+                'username': username,
+                'status': 'pending',  # Pending status initially
+                'request_date': now_ist.isoformat()  # Use timezone-aware datetime
+            }
+            print(permission_request)
+            Permit.insert_one(permission_request)
+            return jsonify({'message': 'Permission request sent successfully', 'success': True}), 200
 
         # Return success response
-        return jsonify({'message': 'Permission request sent successfully', 'success':True}), 200
+        return jsonify({'message': 'Permission request already exists for this user'}), 400
 
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -225,7 +240,7 @@ def update_permission():
         status = request.json.get('status')  # Expected values: 'granted' or 'rejected'
         
         # Validate the input
-        if status not in ['granted', 'rejected']:
+        if status not in ['granted']:
             return jsonify({'message': 'Invalid status. Use "granted" or "rejected".'}), 400
         
         # Update the permission status in the 'permissions' collection
@@ -275,7 +290,7 @@ def signin():
     admin = Admin.find_one({'username': username})
 
     if admin and bcrypt.check_password_hash(admin['password'], password):
-        return jsonify({'message': 'Signin successful!'}), 200
+        return jsonify({'message': 'Login successful!'}), 200
     else:
         return jsonify({'message': 'Invalid username or password'}), 401
 
@@ -300,6 +315,7 @@ def get_weekly_report():
             "_id": str(report["_id"]),
             "date": report["date"],
             "totalSchoolsVisited": report["totalSchoolsVisited"],
+            "weekSelect": report["weekSelect"], 
             "interested": report["interested"],
             "pdDone": report["pdDone"],
             "pdFixed": report["pdFixed"],
@@ -317,6 +333,45 @@ def get_weekly_report():
         reports_data.append(report_data)
 
     return jsonify({"status": "success", "data": reports_data}), 200
+
+# <p><strong>Week no.:</strong> ${report.weekSelect}</p>   in weekly.html
+# @app.route('/getWeeklyReport', methods=['GET'])
+# def get_weekly_report():
+#     # Get the current date and time
+#     now = datetime.now()
+
+#     # Calculate the date for one week ago
+#     one_week_ago = now - timedelta(days=7)
+
+#     # Query MongoDB to find records created within the last week
+#     reports = Dash.find({"date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+
+#     # Prepare the response data
+#     reports_data = []
+#     for report in reports:
+#         report_data = {
+#             "_id": str(report["_id"]),
+#             "date": report["date"],
+#             "totalSchoolsVisited": report.get("totalSchoolsVisited", None),
+#             "weekSelect": report.get("weekSelect", None),  # Corrected line
+#             "interested": report.get("interested", None),
+#             "pdDone": report.get("pdDone", None),
+#             "pdFixed": report.get("pdFixed", None),
+#             "tdDone": report.get("tdDone", None),
+#             "tdFixed": report.get("tdFixed", None),
+#             "smdDone": report.get("smdDone", None),
+#             "smdFixed": report.get("smdFixed", None),
+#             "signUpFollowUp": report.get("signUpFollowUp", None),
+#             "signed": report.get("signed", None),
+#             "totalSchoolsForSignUp": report.get("totalSchoolsForSignUp", None),
+#             "strength": report.get("strength", None),
+#             "user": report.get("user", None),
+#             "time": report.get("time", None)
+#         }
+#         reports_data.append(report_data)
+
+#     return jsonify(reports_data)
+
 
 @app.route('/')
 def index():
@@ -497,9 +552,34 @@ def login():
         User.insert_one({"username": username, "password": password})
         return jsonify({'success': True, 'message': 'User registered and logged in'}), 201
 
+# Real-Time GPS Tracker
 
+# @app.route('/')
+# def home():
+#     if 'user' in session:
+#         return redirect(url_for('tracker'))
+#     return render_template('login.html')
 
+# @app.route('/login', methods=['POST'])
+# def login():
+#     user = request.form['username']
+#     session['user'] = user
+#     return redirect(url_for('tracker'))
 
+@app.route('/tracker')
+def tracker():
+    if 'user' in session:
+        return render_template('tracker.html')
+    return redirect(url_for('index'))
+
+@app.route('/update_location', methods=['POST'])
+def update_location():
+    if 'user' in session:
+        latitude = request.form['latitude']
+        longitude = request.form['longitude']
+        # Here you can save the coordinates to a database or perform other operations
+        return f"Location updated to {latitude}, {longitude}"
+    return "User not logged in", 403
 # Submit a new record
 @app.route('/submit', methods=['POST', 'GET'])
 def submit_record():
@@ -530,10 +610,5 @@ if __name__ == '__main__':
     app.run(debug=True, port=5000)
 
 
-
-
-
-
-
-
-
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -311,7 +311,7 @@
       </div>
       <div id="districts" class="hidden">
         <h2>Select a District</h2>
-        <ul>
+        <ul id="districtList">
           <li data-district="Nilgiris">Nilgiris</li>
           <li data-district="Kasaragod">Kasaragod</li>
           <li data-district="Kannur">Kannur</li>
@@ -341,6 +341,16 @@
         employeeBtn.addEventListener("click", () => {
           enterBtn.classList.remove("hidden");
         });
+
+        const districtList = document.getElementById('districtList');
+        const districtItems = districtList.querySelectorAll('li');
+      
+      districtItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+          const selectedDistrict = item.getAttribute('data-district');
+          window.location.href = `/report_form?district=${encodeURIComponent(selectedDistrict)}`;
+        });
+      });
 
         // Handle the 'Enter' button click event
         enterBtn.addEventListener("click", () => {
@@ -388,7 +398,7 @@
             if (data.success) {
               alert("Access request sent. Please wait for approval.");
             } else {
-              alert("Error sending access request.");
+              alert("Error sending access request  hghfhh.");
             }
           })
           .catch(error => {
@@ -396,6 +406,10 @@
           });
         }
       });
+      document.getElementById("reportForm")
+    .addEventListener("click", function () {
+        window.location.href = "/report_form";
+    });
     </script>
   </body>
 </html>

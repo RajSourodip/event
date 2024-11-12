@@ -231,6 +231,9 @@
           <button type="button" class="show-button" id="dashButton">
             Dashboard
           </button>
+          <button type="button" class="show-button" id="trackButton">
+            Track Your Location
+        </button>        
         </div>
       </form>
     </div>
@@ -295,6 +298,11 @@
         .addEventListener("click", function () {
           window.location.href = "/dashboard";
         });
+        document.getElementById("trackButton")
+    .addEventListener("click", function () {
+        window.location.href = "/tracker";
+    });
     </script>
   </body>
 </html>
+
