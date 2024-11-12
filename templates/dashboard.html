@@ -219,94 +219,161 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-      }
-
+        background: fixed;
+        background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/9bc27292880429.5e569ff84e4d0.gif);  
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        }
+    
       /* Main Container Styling */
       .container {
         text-align: center;
-        background: #fff;
-        padding: 20px;
+        padding: 100px;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 400px;
+        width: 600px;
+        background: fixed;
       }
-
+    
       /* Buttons Section Styling */
       .login-options {
         display: flex;
         justify-content: space-evenly;
         margin-bottom: 20px;
       }
-
+    
       button {
         padding: 10px 20px;
-        font-size: 40px;
+        font-size: 20px;
         cursor: pointer;
-        background-color: #4caf50;
+        background-color: goldenrod;
         color: white;
         border: none;
         border-radius: 5px;
         transition: background-color 0.3s;
-        position: relative;
-        left: 40px;
       }
-
+    
       button:hover {
-        background-color: #45a049;
+        background-color: black;
+      }
+      #employeeBtn{
+        color: white;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: xx-large;
+        background-color: rgb(223, 84, 223);
+      }
+      #employeeBtn:hover{
+        background-color: black;
+      }
+      #enterBtn{
+        color: white;
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: xx-large;
+        background-color: rgb(223, 84, 223);
+      }
+      #enterBtn:hover{
+        background-color: black;
       }
 
       /* Hidden Elements */
       .hidden {
         display: none;
       }
-
+    
       /* Districts List Styling */
       #districts ul {
         list-style-type: none;
         padding: 0;
         position: relative;
-        top: 350px;
       }
-
+    
       #districts li {
         padding: 10px;
         cursor: pointer;
-        background: #2ecc71;
+        background: black;
         margin: 5px 0;
         border-radius: 5px;
         color: white;
         transition: background-color 0.3s;
         text-align: center;
-        position: relative;
-        right: 135px;
       }
-
+    
       #districts li:hover {
-        background: #27ae60;
+        background: goldenrod;
       }
-
-      /* Report Table Styling */
+    
+      /* Stylish and Responsive Table Styling */
       table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden; /* Ensures rounded corners */
       }
-
+    
       th,
       td {
-        padding: 10px;
-        border: 1px solid #ccc;
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
       }
-
+    
       th {
         background: #f4f4f4;
+        font-weight: bold;
       }
-    </style>
+    
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+    
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+    
+      /* Responsive Design for Tables */
+      @media (max-width: 768px) {
+        /* Stacks the table rows on smaller screens */
+        table {
+          width: 100%;
+          font-size: 12px;
+        }
+    
+        th,
+        td {
+          padding: 10px;
+        }
+    
+        td {
+          display: block;
+          text-align: right;
+          padding-left: 50%;
+        }
+    
+        td::before {
+          content: attr(data-label);
+          font-weight: bold;
+          text-align: left;
+          display: inline-block;
+          width: 50%;
+          padding-right: 10px;
+        }
+    
+        /* Adds a cleaner border for mobile */
+        tr {
+          border-bottom: 2px solid #ddd;
+        }
+      }
+    </style>    
   </head>
   <body>
     <div class="container">
       <div class="login-options">
-        <button id="employeeBtn">Login as Employee</button>
+        <button id="employeeBtn">Login As Employee</button>
         <button id="enterBtn" class="hidden">Enter</button>
       </div>
       <div id="districts" class="hidden">
@@ -398,7 +465,7 @@
             if (data.success) {
               alert("Access request sent. Please wait for approval.");
             } else {
-              alert("Error sending access request  hghfhh.");
+              alert("Error sending access request.");
             }
           })
           .catch(error => {

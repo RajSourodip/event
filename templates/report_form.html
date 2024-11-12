@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>District Records</title>
+    
+
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -17,7 +19,7 @@
         top: 30px;
         background-color: #f5f5f5;
         background: fixed;
-        background: url(https://cdn.prod.website-files.com/624ac40503a527cf47af4192/65a8e037a9cf99aabbe9e385_ai-gif-generator-7.gif);
+        background: url(https://i.gifer.com/embedded/download/I5zb.gif);
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
@@ -26,9 +28,10 @@
       }
       .container {
         max-width: 500px;
-        padding: 20px;
+        padding: 40px;
         background-color: #ffffff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 8px rgba(6, 238, 10);
+        background-color: goldenrod;
       }
       .buttons {
         display: flex;
@@ -41,6 +44,30 @@
         cursor: pointer;
         position: relative;
         top: 30px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+        font-family: Arial, sans-serif;
+        display: flex;
+      }
+      button:hover {
+        background-color: black; /* Darker green */
+        transform: scale(1.05); /* Slightly larger */
+      }
+    
+      /* Active effect */
+      button:active {
+        background-color: #3e8e41; /* Even darker green */
+        transform: scale(0.95); /* Slightly smaller */
+      }
+    
+      /* Focus effect */
+      button:focus {
+        outline: none; /* Remove default outline */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Custom focus outline */
       }
       h2 {
         text-align: center;
@@ -53,7 +80,43 @@
         width: 100%;
         margin-bottom: 10px;
       }
+    
+      /* Styling for the submit button */
+      .submit-btn {
+        padding: 15px 30px;
+        font-size: 16px;
+        background-color: red; /* Green background */
+        color: white; /* White text */
+        border: none;
+        border-radius: 5px; /* Rounded corners */
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    
+      /* Hover effect */
+      .submit-btn:hover {
+        background-color: black; /* Darker green */
+        transform: scale(1.05); /* Slightly larger */
+      }
+    
+      /* Active effect */
+      .submit-btn:active {
+        background-color: #3e8e41; /* Even darker green */
+        transform: scale(0.95); /* Slightly smaller */
+      }
+    
+      /* Focus effect */
+      .submit-btn:focus {
+        outline: none; /* Remove default outline */
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Custom focus outline */
+      }
     </style>
+    
+    
   </head>
   <body>
     <div class="container">
@@ -131,7 +194,7 @@
         <label for="strength">Strength:</label>
         <input type="number" id="strength" name="strength" required />
 
-        <button type="submit">Submit</button>
+        <button type="submit" class="submit-btn">Submit</button>
       </form>
       <p id="message" style="color: green; display: none">
         The record has been submitted!

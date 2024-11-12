@@ -542,16 +542,3 @@ tr:hover td {
     font-size: 14px;
   }
 }
-
-
-
-
-
-
-
-.calContainer
-{
-  display: flex;
-  flex-direction: column;
-
-}

@@ -5,21 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weekly Report</title>
     <style>
-      /* Add your CSS styling here */
+      /* Body styling */
+      body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          background-color: #f5f5f5;
+          color: #333;
+          background: fixed;
+          background-image: url(https://media4.giphy.com/media/zW0n7AIWG4ka4/giphy.gif);
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+          opacity: 1;
+      }
+  
+      /* Container for report items */
+      .report-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px; 
+        justify-content: center;
+        padding: 20px;
+      }
+  
+      /* Individual report item styling */
       .report-item {
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 5px;
+          background-color: goldenrod;
+          border: 1px solid goldenrod;
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          width: calc(100% - 40px); 
+          gap: 40px;
+          box-sizing: border-box;
+          max-width: 400px;
+          transition: transform 0.2s, box-shadow 0.2s ease-in-out;
+          box-shadow: 0 4px 8px goldenrod;
+
       }
+  
+      /* Hover effect for report items */
+      .report-item:hover {
+          transform: translateY(-15px);
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      }
+  
+      /* Title styling */
       .report-item h4 {
-        margin: 0;
-        font-size: 18px;
+          font-size: 20px;
+          color: black;
+          margin-bottom: 10px;
+          font-weight: 600;
       }
+  
+      /* Paragraph styling for content inside report items */
       .report-item p {
-        margin: 5px 0;
+          margin: 5px 0;
+          color: black;
+          line-height: 1.5;
       }
-    </style>
+      h1{
+        color: white;
+        font-size: xx-large;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      }
+  
+      /* Mobile responsiveness */
+      @media (max-width: 600px) {
+          .report-container {
+              padding: 10px;
+          }
+  
+          .report-item {
+              width: 100%; /* Full width for mobile */
+              margin-bottom: 15px;
+          }
+  
+          .report-item h4 {
+              font-size: 18px; /* Slightly smaller font size on mobile */
+          }
+      }
+  
+      /* Tablet responsiveness */
+      @media (max-width: 900px) {
+          .report-item {
+              width: calc(50% - 20px); /* 2 items per row on tablets */
+          }
+      }
+  
+      /* Desktop responsiveness */
+      @media (min-width: 1200px) {
+          .report-item {
+              width: calc(33.33% - 30px); /* 3 items per row on larger screens */
+          }
+      }
+  </style>
+  
   </head>
   <body>
     <h1>Weekly Reports</h1>
@@ -41,7 +124,7 @@
                             <h4>Report ID: ${report._id}</h4>
                             <p><strong>Date:</strong> ${report.date}</p>
                             <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
-                            <p><strong>Week no.:</strong> ${report.weekSelect}</p> 
+                            <p><strong>Week No. :</strong> ${report.weekSelect}</p> 
                             <p><strong>Interested:</strong> ${report.interested}</p>
                             <p><strong>PD Done:</strong> ${report.pdDone}</p>
                             <p><strong>PD Fixed:</strong> ${report.pdFixed}</p>

@@ -9,10 +9,6 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import timedelta
 
-
-
-
-
 import os
 load_dotenv()
 
@@ -552,19 +548,7 @@ def login():
         User.insert_one({"username": username, "password": password})
         return jsonify({'success': True, 'message': 'User registered and logged in'}), 201
 
-# Real-Time GPS Tracker
 
-# @app.route('/')
-# def home():
-#     if 'user' in session:
-#         return redirect(url_for('tracker'))
-#     return render_template('login.html')
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     user = request.form['username']
-#     session['user'] = user
-#     return redirect(url_for('tracker'))
 
 @app.route('/tracker')
 def tracker():

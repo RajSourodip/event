@@ -4,34 +4,110 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Individual Report</title>
+    <div class="rep"> Individual Reports</div>
     <style>
       body {
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: fixed;
+        background-image: url(https://media0.giphy.com/media/U3qYN8S0j3bpK/200w.gif?cid=6c09b952wjzwluau84k91ojbz90zsztdo7x6banqrjspxbn7&ep=v1_gifs_search&rid=200w.gif&ct=g);
       }
-
+    
       .report-container {
-        margin: 20px;
-
         display: flex;
-        gap: 50px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        position: relative;
+        top: 90px;
       }
+    
+      .rep {
+        position: relative;
+        font-size: xx-large;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        color: white;
+        position: relative;
+        left: 650px;
+        top: 50px;
+      }
+    
       .report {
-        background-color: #f9f9f9;
-        padding: 10px;
+        background-color: #ffffff;
+        padding: 20px;
         margin-bottom: 15px;
         border: 1px solid #ddd;
-        border-radius: 5px;
-        width: fit-content;
+        border-radius: 10px;
+        width: calc(100% - 40px);
+        max-width: 300px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        background-color: goldenrod;
+        box-shadow: 0 4px 8px rgba(6, 238, 10);
       }
+    
+      .report:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+    
       .report h3 {
-        margin: 0;
-        color: #333;
+        margin: 0 0 10px 0;
+        color: black;
+        font-size: 1.2em;
       }
+    
       .report p {
         margin: 5px 0;
-        color: #555;
+        color: black;
+        line-height: 1.5;
       }
-    </style>
+    
+      @media (min-width: 600px) {
+        .report-container {
+          justify-content: flex-start;
+        }
+    
+        .report {
+          width: calc(50% - 40px);
+        }
+      }
+    
+      @media (min-width: 900px) {
+        .report {
+          width: calc(33.33% - 40px);
+        }
+      }
+    
+      @media (min-width: 1200px) {
+        .report {
+          width: calc(25% - 40px);
+        }
+      }
+    
+      @media (max-width: 599px) {
+        .report-container {
+          flex-direction: column;
+          align-items: center;
+        }
+    
+        .report {
+          width: 100%;
+          max-width: none;
+          margin: 10px 0;
+        }
+    
+        .rep {
+          font-size: xx-large;
+          text-align: center;
+          left: 0;
+          top: 20px;
+        }
+      }
+    </style>    
   </head>
   <body>
     <div class="report-container" id="reports">
@@ -61,30 +137,30 @@
             if (data.status === "success" && data.data.length > 0) {
               // Create a report for each record
               const reportsContainer = document.getElementById("reports");
-              reportsContainer.innerHTML = "<h2>Your Reports</h2>"; // Reset content
+              reportsContainer.innerHTML = ""; // Reset content
 
               data.data.forEach((report) => {
                 const reportDiv = document.createElement("div");
                 reportDiv.className = "report";
 
                 reportDiv.innerHTML = `
-    <h3>Report ID: ${report._id}</h3>
-    <p><strong>Submitted by:</strong> ${report.user}</p>
-    <p><strong>Date:</strong> ${report.date}</p>
-    <p><strong>Time:</strong> ${report.time}</p>
-    <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
-    <p><strong>Interested:</strong> ${report.interested}</p>
-    <p><strong>PD Done:</strong> ${report.pdDone}</p>
-    <p><strong>PD Fixed:</strong> ${report.pdFixed}</p>
-    <p><strong>TD Done:</strong> ${report.tdDone}</p>
-    <p><strong>TD Fixed:</strong> ${report.tdFixed}</p>
-    <p><strong>SMD Done:</strong> ${report.smdDone}</p>
-    <p><strong>SMD Fixed:</strong> ${report.smdFixed}</p>
-    <p><strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp}</p>
-    <p><strong>Signed:</strong> ${report.signed}</p>
-    <p><strong>Total Schools for Sign Up:</strong> ${report.totalSchoolsForSignUp}</p>
-    <p><strong>Strength:</strong> ${report.strength}</p>
-`;
+                <h3>Report ID: ${report._id}</h3>
+                <p><strong>Submitted by:</strong> ${report.user}</p>
+                <p><strong>Date:</strong> ${report.date}</p>
+                <p><strong>Time:</strong> ${report.time}</p>
+                <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
+                <p><strong>Interested:</strong> ${report.interested}</p>
+                <p><strong>PD Done:</strong> ${report.pdDone}</p>
+                <p><strong>PD Fixed:</strong> ${report.pdFixed}</p>
+                <p><strong>TD Done:</strong> ${report.tdDone}</p>
+                <p><strong>TD Fixed:</strong> ${report.tdFixed}</p>
+                <p><strong>SMD Done:</strong> ${report.smdDone}</p>
+                <p><strong>SMD Fixed:</strong> ${report.smdFixed}</p>
+                <p><strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp}</p>
+                <p><strong>Signed:</strong> ${report.signed}</p>
+                <p><strong>Total Schools for Sign Up:</strong> ${report.totalSchoolsForSignUp}</p>
+                <p><strong>Strength:</strong> ${report.strength}</p>
+            `;
 
                 reportsContainer.appendChild(reportDiv);
               });
