@@ -1,317 +1,208 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Record Form</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/38094b95235473.5e92ecc4409a8.gif);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        opacity: 1px;
-      }
-      .form-container {
-        background: white;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 80%;
-        background: fixed;
-      }
-      .form-container h2 {
-        margin-bottom: 20px;
-        font-size: xx-large;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        color: white;
-      }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/38094b95235473.5e92ecc4409a8.gif);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      opacity: 1px;
+    }
+    .form-container {
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      background: fixed;
+      margin: auto;
+    }
+    .form-container h2 {
+      margin-bottom: 20px;
+      font-size: xx-large;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+      color: white;
+    }
+    .form-container input,
+    .form-container textarea {
+      width: calc(50% - 20px);
+      padding: 10px;
+      margin: 10px 10px 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    .form-container input[type="date"] {
+      width: calc(50% - 20px);
+    }
+    .form-container button {
+      padding: 10px 20px;
+      border: none;
+      background: red;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .form-container button:hover {
+      background-color: black;
+    }
+    .form-container .show-button {
+      background: rgb(221, 67, 221);
+    }
+    .form-container .show-button:hover {
+      background-color: black;
+    }
+    .form-container .down-button {
+      background: rgb(221, 67, 221);
+    }
+    .form-container .down-button:hover {
+      background-color: black;
+    }
+    .form-container h2 {
+      text-align: center;
+      position: relative;
+      top: 15px;
+    }
+    .form-container .button-container {
+      text-align: center;
+    }
+    @media (max-width: 768px) {
       .form-container input,
       .form-container textarea {
-        width: calc(50% - 20px);
-        padding: 10px;
-        margin: 10px 10px 10px 0;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-      }
-      .form-container input[type="date"] {
-        width: calc(50% - 20px);
+        width: calc(100% - 20px);
+        margin: 10px 0;
       }
       .form-container button {
-        padding: 10px 20px;
-        border: none;
-        background: red;
-        color: white;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-right: 10px;
+        width: calc(100% - 20px);
+        margin: 10px 0;
       }
-      .form-container button:hover{
-        background-color: black;
-      }
-      .form-container .show-button {
-        background: rgb(221, 67, 221);
-      }
-      .form-container .show-button:hover{
-        background-color: black;
-      }
-      .form-container h2 {
-        text-align: center;
-        position: relative;
-        top: 15px;
-      }
-      .form-container .button-container {
-        text-align: center;
-      }
-      @media (max-width: 768px) {
-        .form-container input,
-        .form-container textarea {
-          width: calc(100% - 20px);
-          margin: 10px 0;
-        }
-        .form-container button {
-          width: calc(100% - 20px);
-          margin: 10px 0;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="form-container">
-      <h2>Record Form</h2>
-      <form id="recordForm">
-        <input
-          type="number"
-          id="serialNo"
-          name="serialNo"
-          placeholder="S.No"
-          required
-        />
-        <input
-          type="text"
-          id="state"
-          name="state"
-          placeholder="State"
-          required
-        />
-        <input
-          type="text"
-          id="spocFromMikids"
-          name="spocFromMikids"
-          placeholder="SPOC from Mikids"
-          required
-        />
-        <input
-          type="text"
-          id="modeOfEnquiry"
-          name="modeOfEnquiry"
-          placeholder="Mode of Enquiry"
-          required
-        />
-        <input
-          type="text"
-          id="schoolName"
-          name="schoolName"
-          placeholder="Name of the School"
-          required
-        />
-        <input
-          type="text"
-          id="board"
-          name="board"
-          placeholder="Board"
-          required
-        />
-        <input
-          type="text"
-          id="district"
-          name="district"
-          placeholder="District"
-          required
-        />
-        <input type="text" id="area" name="area" placeholder="Area" required />
-        <input
-          type="text"
-          id="totalStrength"
-          name="totalStrength"
-          placeholder="Total Strength"
-          required
-        />
-        <input
-          type="text"
-          id="principalName"
-          name="principalName"
-          placeholder="Name of Principal"
-          required
-        />
-        <input
-          type="text"
-          id="contactNumber"
-          name="contactNumber"
-          placeholder="Contact Number"
-          required
-        />
-        <input
-          type="text"
-          id="schoolSpoc"
-          name="schoolSpoc"
-          placeholder="School SPOC"
-          required
-        />
-        <input
-          type="text"
-          id="spocContactNumber"
-          name="spocContactNumber"
-          placeholder="SPOC Contact Number"
-          required
-        />
-        <input
-          type="text"
-          id="modeOfEnquiry"
-          name="modeOfEnquiry"
-          placeholder="Mode of Enquiry"
-          required
-        />
-        <input
-          type="text"
-          id="demoGivenTo"
-          name="demoGivenTo"
-          placeholder="Demo Given to"
-          required
-        />
-        <input
-          type="date"
-          id="demoGivenDate"
-          name="demoGivenDate"
-          placeholder="Demo Given Date"
-          required
-        />
-        <input
-          type="date"
-          id="followUpDate"
-          name="followUpDate"
-          placeholder="Follow up Date"
-          required
-        />
-        <textarea
-          id="remarksStatus"
-          name="remarksStatus"
-          placeholder="Remarks/Status"
-          required
-        ></textarea>
-        <input
-          type="text"
-          id="infrastructure"
-          name="infrastructure"
-          placeholder="Infrastructure"
-          required
-        />
-        <input
-          type="text"
-          id="teachersQuality"
-          name="teachersQuality"
-          placeholder="Teacher's Quality"
-          required
-        />
-        <input
-          type="text"
-          id="signedFor"
-          name="signedFor"
-          placeholder="Signed for"
-          required
-        />
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Record Form</h2>
+    <form id="recordForm">
+      <input type="number" id="serialNo" name="serialNo" placeholder="S.No" required />
+      <input type="text" id="state" name="state" placeholder="State" required />
+      <input type="text" id="spocFromMikids" name="spocFromMikids" placeholder="SPOC from Mikids" required />
+      <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" required />
+      <input type="text" id="schoolName" name="schoolName" placeholder="Name of the School" required />
+      <input type="text" id="board" name="board" placeholder="Board" required />
+      <input type="text" id="district" name="district" placeholder="District" required />
+      <input type="text" id="area" name="area" placeholder="Area" required />
+      <input type="text" id="totalStrength" name="totalStrength" placeholder="Total Strength" required />
+      <input type="text" id="principalName" name="principalName" placeholder="Name of Principal" required />
+      <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" required />
+      <input type="text" id="schoolSpoc" name="schoolSpoc" placeholder="School SPOC" required />
+      <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" required />
+      <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" required />
+      <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" required />
+      <input type="date" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" required />
+      <input type="date" id="followUpDate" name="followUpDate" placeholder="Follow up Date" required />
+      <textarea id="remarksStatus" name="remarksStatus" placeholder="Remarks/Status" required></textarea>
+      <input type="text" id="infrastructure" name="infrastructure" placeholder="Infrastructure" required />
+      <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" required />
+      <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" required />
 
-        <div>
-          <button type="submit" id="submitBTN">Submit</button>
-          <button type="button" class="show-button" id="showButton">
-            Show Records
-          </button>
-          <button type="button" class="show-button" id="calButton">
-            Show Calendar
-          </button>
-          <button type="button" class="show-button" id="dashButton">
-            Dashboard
-          </button>
-          <button type="button" class="show-button" id="trackButton">
-            Track Your Location
-        </button>        
-        </div>
-      </form>
-    </div>
+      <div>
+        <button type="submit" id="submitBTN">Submit</button>
+        <button type="button" class="show-button" id="showButton">Show Records</button>
+        <button type="button" class="down-button" id="downloadButton">Download Record</button>
+        <button type="button" class="show-button" id="calButton">Show Calendar</button>
+        <button type="button" class="show-button" id="dashButton">Dashboard</button>
+        <button type="button" class="show-button" id="trackButton">Track Your Location</button>
+      </div>
+    </form>
+  </div>
 
-    <script>
-      document
-        .getElementById("submitBTN")
-        .addEventListener("click", async function (event) {
-          event.preventDefault(); // Prevent the default form submission
+  <script>
+    document.getElementById("submitBTN").addEventListener("click", async function (event) {
+      event.preventDefault(); // Prevent the default form submission
 
-          const formData = {
-      serialNo: document.getElementById('serialNo').value,
-      state: document.getElementById('state').value,
-      spocFromMikids: document.getElementById('spocFromMikids').value,
-      modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
-      schoolName: document.getElementById('schoolName').value,
-      board: document.getElementById('board').value,
-      district: document.getElementById('district').value,
-      area: document.getElementById('area').value,
-      totalStrength: document.getElementById('totalStrength').value,
-      principalName: document.getElementById('principalName').value,
-      contactNumber: document.getElementById('contactNumber').value,
-      schoolSpoc: document.getElementById('schoolSpoc').value,
-      spocContactNumber: document.getElementById('spocContactNumber').value,
-      demoGivenTo: document.getElementById('demoGivenTo').value,
-      demoGivenDate: document.getElementById('demoGivenDate').value,
-      followUpDate: document.getElementById('followUpDate').value,
-      remarksStatus: document.getElementById('remarksStatus').value,
-      infrastructure: document.getElementById('infrastructure').value,
-      teachersQuality: document.getElementById('teachersQuality').value,
-      signedFor: document.getElementById('signedFor').value,
-      //signedAt: document.getElementById('signedAt').value,
-  };
-        const response = await fetch('/submit', {
-      method: 'POST',
-      headers: {
+      const formData = {
+        serialNo: document.getElementById('serialNo').value,
+        state: document.getElementById('state').value,
+        spocFromMikids: document.getElementById('spocFromMikids').value,
+        modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
+        schoolName: document.getElementById('schoolName').value,
+        board: document.getElementById('board').value,
+        district: document.getElementById('district').value,
+        area: document.getElementById('area').value,
+        totalStrength: document.getElementById('totalStrength').value,
+        principalName: document.getElementById('principalName').value,
+        contactNumber: document.getElementById('contactNumber').value,
+        schoolSpoc: document.getElementById('schoolSpoc').value,
+        spocContactNumber: document.getElementById('spocContactNumber').value,
+        demoGivenTo: document.getElementById('demoGivenTo').value,
+        demoGivenDate: document.getElementById('demoGivenDate').value,
+        followUpDate: document.getElementById('followUpDate').value,
+        remarksStatus: document.getElementById('remarksStatus').value,
+        infrastructure: document.getElementById('infrastructure').value,
+        teachersQuality: document.getElementById('teachersQuality').value,
+        signedFor: document.getElementById('signedFor').value,
+ 
+      };
+
+      const response = await fetch('/submit', {
+        method: 'POST',
+        headers: {
           'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-  });
+        },
+        body: JSON.stringify(formData)
+      });
 
-  if (response.ok) {
-      alert('Record submitted successfully!');
-      document.getElementById('recordForm').reset();
-  } else {
-      alert('Error submitting record.');
-  }
-});
-      document
-        .getElementById("showButton")
-        .addEventListener("click", function () {
-          window.location.href = "/show";
-        });
-
-      document
-        .getElementById("calButton")
-        .addEventListener("click", function () {
-          window.location.href = "/calendar";
-        });
-      document
-        .getElementById("dashButton")
-        .addEventListener("click", function () {
-          window.location.href = "/dashboard";
-        });
-        document.getElementById("trackButton")
-    .addEventListener("click", function () {
-        window.location.href = "/tracker";
+      if (response.ok) {
+        alert('Record submitted successfully!');
+        document.getElementById('recordForm').reset();
+      } else {
+        alert('Error submitting record.');
+      }
     });
-    </script>
-  </body>
-</html>
 
+    document.getElementById('downloadButton').addEventListener('click', function() {
+      fetch('/downloads')
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'data.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+        })
+        .catch(error => console.error('Error downloading the file:', error));
+    });
+
+    document.getElementById("showButton").addEventListener("click", function () {
+      window.location.href = "/show";
+    });
+
+    document.getElementById("calButton").addEventListener("click", function () {
+      window.location.href = "/calendar";
+    });
+
+    document.getElementById("dashButton").addEventListener("click", function () {
+      window.location.href = "/dashboard";
+    });
+
+    document.getElementById("trackButton").addEventListener("click", function () {
+      window.location.href = "/tracker";
+    });
+  </script>
+</body>
+</html>

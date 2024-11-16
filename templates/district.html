@@ -14,11 +14,14 @@
             background-position: center;
             background-attachment: fixed;
             opacity: 1;
+            min-height: 100vh;
+            max-height: fit-content;
         }
         table {
             border-collapse: collapse;
             width: 100%;
             margin-bottom: 20px;
+            font-size: 2em;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         th, td {
@@ -27,22 +30,26 @@
             text-align: center;
         }
         th {
-            background-color: goldenrod;
+            background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
             color: white;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        tr{
+        tr {
             background-color: white;
         }
         td {
             color: black;
         }
-        h1{
+        h1 {
             color: white;
-            font-size: xx-large;
+            font-size: 2.5em;
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            text-align: center;
+            margin: auto;
+            margin-bottom: 10%;
+            width: fit-content;
         }
     
         @media (max-width: 768px) {
@@ -50,7 +57,8 @@
                 display: block;
             }
             th {
-                background-color: #4CAF50;
+                /* background-color: rgb(37, 45, 192); */
+                background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
                 color: white;
                 position: sticky;
                 top: 0;
@@ -59,25 +67,28 @@
                 display: flex;
                 flex-direction: column;
                 margin-bottom: 10px;
+                border: 1px solid #ddd;
+                background-color: white;
             }
             td {
-                text-align: right;
+                text-align: left;
                 padding-left: 50%;
                 position: relative;
             }
             td::before {
                 content: attr(data-label);
                 position: absolute;
-                left: 0;
+                left: 10px;
                 width: 50%;
                 padding-left: 10px;
                 font-weight: bold;
                 text-align: left;
                 background-color: #f2f2f2;
+                border-right: 1px solid #ddd;
+                box-sizing: border-box;
             }
         }
     </style>
-    
 </head>
 <body>
     <h1>District Reports</h1>

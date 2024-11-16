@@ -57,7 +57,7 @@ body.dark{
 }
 .today {
   position: relative;
-  color: var(--light);
+  color: var(--blue);
   transition: all 0.5s;
 }
 .today:hover {

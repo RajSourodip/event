@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, redirect, url_for
+from flask import Flask, request, jsonify, send_from_directory, render_template, session, redirect, url_for, send_file
 from flask_bcrypt import Bcrypt
 import yagmail
 from bson.json_util import dumps, ObjectId
@@ -7,7 +7,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 
 from flask import Flask, render_template, request, redirect, url_for, session
-from datetime import timedelta
+import io
+import pandas as pd
 
 import os
 load_dotenv()
@@ -58,6 +59,45 @@ def submit_district_report():
         # Handle exceptions and send an error response
         print(f"An error occurred: {e}")
         return jsonify({"status": "error", "message": "Failed to submit report"}), 500
+
+@app.route('/download')
+def download_data():
+    # Fetch data from MongoDB
+    data = list(Dash.find({}, {'_id': False}))
+
+    # Convert data to DataFrame
+    df = pd.DataFrame(data)
+
+    # Convert DataFrame to Excel
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+    output.seek(0)
+
+    # Return the Excel file
+    return send_file(output, download_name="data.xlsx", as_attachment=True, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+
+
+
+@app.route('/downloads')
+def download_records():
+
+    records = list(Record.find({}, {'_id': False}))  # Exclude the _id field
+    
+    df = pd.DataFrame(records)
+    
+    # Create a BytesIO object and save the DataFrame to it as an Excel file
+    output =  io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False)
+    
+    # Rewind the BytesIO object
+    output.seek(0)
+    
+    # Send the file
+    return send_file(output, download_name="data.xlsx", as_attachment=True,mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
 
 @app.route('/getReport', methods=['GET'])
 def get_report():
@@ -139,7 +179,7 @@ def individual_records():
         
         return render_template('individual.html')
     else:
-        return redirect(url_for('login'))
+        return redirect(url_for('index'))
 
 @app.route('/get_permissions', methods=['GET'])
 def get_permissions():
@@ -324,49 +364,11 @@ def get_weekly_report():
             "totalSchoolsForSignUp": report["totalSchoolsForSignUp"],
             "strength": report["strength"],
             "user": report["user"],
-            "time": report["time"]
+            "time": report["time"],
         }
         reports_data.append(report_data)
 
     return jsonify({"status": "success", "data": reports_data}), 200
-
-# <p><strong>Week no.:</strong> ${report.weekSelect}</p>   in weekly.html
-# @app.route('/getWeeklyReport', methods=['GET'])
-# def get_weekly_report():
-#     # Get the current date and time
-#     now = datetime.now()
-
-#     # Calculate the date for one week ago
-#     one_week_ago = now - timedelta(days=7)
-
-#     # Query MongoDB to find records created within the last week
-#     reports = Dash.find({"date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
-
-#     # Prepare the response data
-#     reports_data = []
-#     for report in reports:
-#         report_data = {
-#             "_id": str(report["_id"]),
-#             "date": report["date"],
-#             "totalSchoolsVisited": report.get("totalSchoolsVisited", None),
-#             "weekSelect": report.get("weekSelect", None),  # Corrected line
-#             "interested": report.get("interested", None),
-#             "pdDone": report.get("pdDone", None),
-#             "pdFixed": report.get("pdFixed", None),
-#             "tdDone": report.get("tdDone", None),
-#             "tdFixed": report.get("tdFixed", None),
-#             "smdDone": report.get("smdDone", None),
-#             "smdFixed": report.get("smdFixed", None),
-#             "signUpFollowUp": report.get("signUpFollowUp", None),
-#             "signed": report.get("signed", None),
-#             "totalSchoolsForSignUp": report.get("totalSchoolsForSignUp", None),
-#             "strength": report.get("strength", None),
-#             "user": report.get("user", None),
-#             "time": report.get("time", None)
-#         }
-#         reports_data.append(report_data)
-
-#     return jsonify(reports_data)
 
 
 @app.route('/')
@@ -390,10 +392,6 @@ def dashboard():
 @app.route('/district_records')
 def dr():
     return render_template("district.html")
-
-
-
-
 
 # Route to handle form submission
 
@@ -425,7 +423,7 @@ def fetch_user_records():
 
         # Query the database for records for the specific user
         user_records = list(Record.find({'user': username}))
-
+        
         # If no records are found, return a message
         if not user_records:
             return jsonify({'message': 'No records found for this user'}), 404
@@ -565,10 +563,14 @@ def update_location():
         return f"Location updated to {latitude}, {longitude}"
     return "User not logged in", 403
 # Submit a new record
+
 @app.route('/submit', methods=['POST', 'GET'])
 def submit_record():
-    try:
+    try:  
         record_data = request.get_json()
+        record_data['demoGivenDate'] = datetime.strptime(record_data['demoGivenDate'], '%Y-%m-%d')
+        record_data['followUpDate'] = datetime.strptime(record_data['followUpDate'], '%Y-%m-%d')
+        record_data['signedAt'] = datetime.now()
         record_data["user"]   = session.get("user")
         Record.insert_one(record_data)
         return jsonify({'message': 'Record submitted successfully!'}), 200

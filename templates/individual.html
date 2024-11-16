@@ -6,107 +6,124 @@
     <title>Individual Report</title>
     <div class="rep"> Individual Reports</div>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: fixed;
-        background-image: url(https://media0.giphy.com/media/U3qYN8S0j3bpK/200w.gif?cid=6c09b952wjzwluau84k91ojbz90zsztdo7x6banqrjspxbn7&ep=v1_gifs_search&rid=200w.gif&ct=g);
-      }
-    
-      .report-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        padding: 20px;
-        position: relative;
-        top: 90px;
-      }
-    
-      .rep {
-        position: relative;
-        font-size: xx-large;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-        display: flex;
-        align-items: center;
-        color: white;
-        position: relative;
-        left: 650px;
-        top: 50px;
-      }
-    
-      .report {
-        background-color: #ffffff;
-        padding: 20px;
-        margin-bottom: 15px;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        width: calc(100% - 40px);
-        max-width: 300px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        background-color: goldenrod;
-        box-shadow: 0 4px 8px rgba(6, 238, 10);
-      }
-    
-      .report:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      }
-    
-      .report h3 {
-        margin: 0 0 10px 0;
-        color: black;
-        font-size: 1.2em;
-      }
-    
-      .report p {
-        margin: 5px 0;
-        color: black;
-        line-height: 1.5;
-      }
-    
-      @media (min-width: 600px) {
-        .report-container {
-          justify-content: flex-start;
-        }
-    
-        .report {
-          width: calc(50% - 40px);
-        }
-      }
-    
-      @media (min-width: 900px) {
-        .report {
-          width: calc(33.33% - 40px);
-        }
-      }
-    
-      @media (min-width: 1200px) {
-        .report {
-          width: calc(25% - 40px);
-        }
-      }
-    
-      @media (max-width: 599px) {
-        .report-container {
-          flex-direction: column;
-          align-items: center;
-        }
-    
-        .report {
-          width: 100%;
-          max-width: none;
-          margin: 10px 0;
-        }
-    
-        .rep {
-          font-size: xx-large;
-          text-align: center;
-          left: 0;
-          top: 20px;
-        }
-      }
+  body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: fixed;
+  background-image: url(https://media0.giphy.com/media/U3qYN8S0j3bpK/200w.gif?cid=6c09b952wjzwluau84k91ojbz90zsztdo7x6banqrjspxbn7&ep=v1_gifs_search&rid=200w.gif&ct=g);
+}
+
+.report-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  position: relative;
+  top: 90px;
+
+}
+
+.rep {
+  position: relative;
+  font-size: xx-large;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  color: white;
+  position: relative;
+  top: 50px;
+  left: 10%;
+
+
+}
+
+.report {
+  background-color: #ffffff;
+  padding: 0px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: fit-content;
+  
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-color: #333;
+  box-shadow: 0 0 10px cyan;
+}
+
+.report:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.report h3 {
+  margin: 0 0 10px 0;
+  color: white;
+  text-align: center;
+  width: fit-content;
+  font-size: 1.2em;
+}
+
+.report p {
+  margin: 5px 0;
+  color: cyan;
+  line-height: 1.5;
+}
+
+/* Add specific CSS rule for PD Date */
+.report p strong {
+  color: rgb(57, 117, 207);
+}
+
+.report p strong + span {
+  background-color: rgb(9, 235, 9);  /* Green highlight */
+  padding: 5px;
+  border-radius: 5px;
+}
+
+@media (min-width: 600px) {
+  .report-container {
+    justify-content: flex-start;
+  }
+
+  .report {
+    width: calc(50% - 40px);
+  }
+}
+
+@media (min-width: 900px) {
+  .report {
+    width: calc(33.33% - 40px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .report {
+    width: calc(25% - 40px);
+  }
+}
+
+@media (max-width: 599px) {
+  .report-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .report {
+    width: 100%;
+    max-width: none;
+    margin: 10px 0;
+  }
+
+  .rep {
+    font-size: xx-large;
+    text-align: center;
+    left: 0;
+    top: 20px;
+  }
+}
+
     </style>    
   </head>
   <body>
@@ -145,6 +162,7 @@
 
                 reportDiv.innerHTML = `
                 <h3>Report ID: ${report._id}</h3>
+                <p><strong>PD Date on:</strong> ${report.pdDate}</p>
                 <p><strong>Submitted by:</strong> ${report.user}</p>
                 <p><strong>Date:</strong> ${report.date}</p>
                 <p><strong>Time:</strong> ${report.time}</p>

@@ -21,7 +21,12 @@
         background-attachment: fixed;
         opacity: 1;
       }
-
+        #adminLogin{
+          color: white;
+        }
+        #adminLogin a{
+          color: rgb(16, 223, 61);
+        }
       .login-box {
         width: 80%;
         max-width: 400px;
@@ -116,7 +121,7 @@
         <input type="password" id="password" placeholder="Password" required />
         <button type="submit">Login as User</button>
       </form>
-      <p>Login as Admin <a href="/admin" onclick="adminLogin()">Login</a></p>
+      <p id="adminLogin">Login as Admin <a href="/admin" onclick="adminLogin()">Login</a></p>
     </div>
     <script>
       document

@@ -10,6 +10,10 @@
         padding: 0;
         box-sizing: border-box;
       }
+      #permissionRequests{
+        display: flex;
+        width: fit-content;
+      }
 
       body {
         font-family: Arial, sans-serif;
@@ -32,10 +36,31 @@
         border-radius: 8px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 30px;
-        width: 300px;
+        width: fit-content;
+        display: flex;
+        margin: auto;
+        flex-direction: column;
         background-color: rgb(246, 122, 246);
       }
+      #permissionRequests div button{
+        width: 50%;
+      }
+      #permissionRequests div{
+        border: 1px solid purple;
+        margin-top: 10px;
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        gap: 10px;
+        border-radius: 10px;
+        flex-direction: column;
+      }
 
+      #permissionRequests{
+        display: flex;
+        flex-direction: column;
+      }
       h2 {
         text-align: center;
       }
@@ -75,7 +100,9 @@
         color: #007BFF;
         text-decoration: none;
       }
-
+      #adminLogin{
+        color: white;
+      }
       a:hover {
         text-decoration: underline;
       }
