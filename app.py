@@ -591,10 +591,6 @@ def fetch_records():
 def serve_static(filename):
     return send_from_directory('public', filename)
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 3000))
-    app.run(debug=True, port=5000)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
