@@ -1,3 +1,6 @@
 Flask
+Flask-Bcrypt
+yagmail
 pymongo
-pyth
+python-dotenv
+pandas
