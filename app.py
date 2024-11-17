@@ -200,7 +200,7 @@ def get_permissions():
             })
 
 
-            
+
         
         # Return the list of permission requests as a JSON response
         print(permissions_list)
@@ -594,6 +594,3 @@ def fetch_records():
 def serve_static(filename):
     return send_from_directory('public', filename)
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
