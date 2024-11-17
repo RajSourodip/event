@@ -198,6 +198,9 @@ def get_permissions():
                 'request_date': permission['request_date'],
                 'status': permission['status']
             })
+
+
+            
         
         # Return the list of permission requests as a JSON response
         print(permissions_list)
