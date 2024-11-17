@@ -343,9 +343,9 @@ def get_weekly_report():
     
     # Calculate the date for one week ago
     one_week_ago = now - timedelta(days=7)
-
+    username =  session.get("user")
     # Query MongoDB to find records created within the last week
-    reports = Dash.find({"date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+    reports = Dash.find({"user":username, "date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
 
     # Prepare the response data
     reports_data = []
@@ -584,7 +584,8 @@ def submit_record():
 @app.route('/fetch_records', methods=['GET'])
 def fetch_records():
     try:
-        records = list(Record.find())
+        username = session.get("user")
+        records = list(Record.find({'user': username}))
         return dumps(records), 200
     except Exception as e:
         return jsonify({'message': 'Error fetching data.', 'error': str(e)}), 500
