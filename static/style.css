@@ -24,6 +24,14 @@ body {
 body.dark{
   background-color: var(--black);
   
+} 
+body.dark .event-item{
+  color: white;
+  border-color: rgb(64, 213, 22);
+  
+}
+body.dark .event-msg{
+  color: lime;
 }
 .container {
   display: grid;
@@ -268,6 +276,24 @@ body.dark{
   align-items: center;
   font-weight: 200;
   color: var(--black);
+}
+.event-item:hover{
+  box-shadow: 0 0 10px lightgreen;
+}
+.event-item{
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 14px;
+  width: fit-content;
+  transition: all 1s ease-in-out;
+}
+#userEventsList{
+  justify-content: center;
+  align-items: center;
+display: flex;
+flex-direction: column;
+gap: 20px;
+
 }
 .card-title span:last-child:hover {
   cursor: pointer;

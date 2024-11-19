@@ -207,3 +207,21 @@ function changeTheme() {
     document.body.classList.remove("dark");
   }
  }
+
+      const eventDescription = document.createElement("p");
+      eventDescription.innerText = `Description: ${event.description}`;
+
+      const eventDate = document.createElement("p");
+      eventDate.innerText = `Date: ${event.day}-${months[event.month - 1]}-${event.year}`;
+
+      eventDesc.appendChild(eventTitle);
+      eventDesc.appendChild(eventDescription);
+      eventDesc.appendChild(eventDate);
+      eventElement.appendChild(eventDesc);
+
+      userEventsList.appendChild(eventElement);
+    });
+  }
+
+
+}

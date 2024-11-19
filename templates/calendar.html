@@ -20,7 +20,7 @@
     <div class="calContainer">
       <div class="row">
         <div class="col">
-          <button class="btn">
+          <button class="btn" onclick="showUserEvents()">
             <span class="material-symbols-outlined"> event </span>
           </button>
         </div>
@@ -74,10 +74,13 @@
             <input type="text" id="eventDes" autocomplete="off" />
             <button onclick="addEvent()">Add Event</button>
           </div>
-          <div class="allEvents" id="allEvents"></div>
+          <button id="showUserEvents">Show My Events</button>
         </div>
+       
       </div>
+      <div id="userEventsList"></div>
     </div>
+
     <script src="/static/script.js"></script>
   </body>
 </html>

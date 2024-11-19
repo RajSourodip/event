@@ -454,15 +454,17 @@ def fetch_user_records():
 
     
 # Get events by date
-@app.route('/events', methods=['GET'])
+@app.route('/fevents', methods=['GET'])
 def get_events():
     day = request.args.get('day')
     month = request.args.get('month')
     year = request.args.get('year')
-    events = list(Event.find({"day": day, "month": month, "year": year}))
+    username = session['username']
+    events = list(Event.find({"user":username}))
+    print(events)
     return dumps(events), 200
 
-    
+
 def convert_objectid_to_str(document):
     if isinstance(document, dict):
         return {k: convert_objectid_to_str(v) for k, v in document.items()}
@@ -473,11 +475,13 @@ def convert_objectid_to_str(document):
     else:
         return document
 
-@app.route('/events', methods=['POST'])
+@app.route('/events', methods=['POST', "GET"])
 def add_event():
     try:
         event_data = request.get_json()
-        
+        username   =  session.get("username")
+        event_data["user"] =  username
+        print(event_data)
         # Insert the event into MongoDB
         Event.insert_one(event_data)
         
