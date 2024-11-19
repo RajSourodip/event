@@ -462,7 +462,7 @@ def get_events():
     year = request.args.get('year')
     username = session['username']
     events = list(Event.find({"user":username}))
-    print(events)
+    
     return dumps(events), 200
 
 

@@ -20,7 +20,7 @@ const mYear = document.getElementById("mYear");
 const mDay = document.getElementById("mDay");
 const eventName = document.getElementById("eventName");
 const eventDesc = document.getElementById("eventDesc");
-const allEvents = document.getElementById("allEvents");
+  const allEvents = document.getElementById("userEventsList");
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -69,7 +69,7 @@ async function loadMonth() {
         (e) => e.day === dayNumber && e.month === month + 1 && e.year === year
       );
 
-      const events = await fetch(`/events?day=${dayNumber}&month=${month + 1}&year=${year}`)
+      const events = await fetch(`/fevents?day=${dayNumber}&month=${month + 1}&year=${year}`)
         .then(response => response.json());
 
       if (eventForDay) {
@@ -207,6 +207,28 @@ function changeTheme() {
     document.body.classList.remove("dark");
   }
  }
+
+
+ async function showUserEvents() {
+  const response = await fetch('/fevents', { method: 'GET' });
+  const events = await response.json();
+  const userEventsList = document.getElementById("userEventsList");
+
+  userEventsList.innerHTML = '';
+
+  if (events.length === 0) {
+    userEventsList.innerHTML = '<p class="event-msg">No events found.</p>';
+  } else {
+    userEventsList.innerHTML = '<p class="event-msg">Your events: </p>';
+    events.forEach(event => {
+      const eventElement = document.createElement("div");
+      eventElement.classList.add("event-item");
+
+      const eventDesc = document.createElement("div");
+      eventDesc.classList.add("event-desc");
+
+      const eventTitle = document.createElement("p");
+      eventTitle.innerText = `Title: ${event.title}`;
 
       const eventDescription = document.createElement("p");
       eventDescription.innerText = `Description: ${event.description}`;
