@@ -199,7 +199,7 @@ def get_permissions():
                 'request_date': permission['request_date'],
                 'status': permission['status']
             })
-
+        print(permissions_list)
 
 
         
