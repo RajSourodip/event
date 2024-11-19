@@ -444,49 +444,54 @@
           
           <label for="name">Name:</label>
           <input type="text" id="name" name="name" required />
-
+      
           <label for="schoolsApproached">Schools Approached:</label>
           <input type="number" id="schoolsApproached" name="schoolsApproached" required />
-
+      
           <label for="metDate">Today's Met:</label>
           <input type="date" id="metDate" name="metDate" required />
-
+      
           <label for="surveyDone">Survey Done:</label>
           <select id="surveyDone" name="surveyDone" required>
               <option value="yes">Yes</option>
               <option value="no">No</option>
           </select>
-
+      
           <label for="appointmentFixed">Appointment Fixed:</label>
           <input type="number" id="appointmentFixed" name="appointmentFixed" required />
-
+      
           <label for="pdDoneToday">PD Done Today:</label>
           <input type="number" id="pdDoneToday" name="pdDoneToday" required />
-
+      
           <label for="smdDoneToday">SMD Done Today:</label>
           <input type="number" id="smdDoneToday" name="smdDoneToday" required />
-
-          <label for="signed">Signed:</label>
-          <input type="time" id="signed" name="signed" required />
-
+      
+          <!-- New Signed Field -->
+          <label for="signed">Signed(How many?):</label>
+          <input type="number" id="signed" name="signed" required />
+      
+          <!-- Renamed Signed At Field -->
+          <label for="signedAt">Signed At:</label>
+          <input type="time" id="signedAt" name="signedAt" required />
+      
           <label for="mtdApproached">MTD Approached:</label>
           <input type="number" id="mtdApproached" name="mtdApproached" required />
-
+      
           <label for="mtdPdAppointments">MTD PD Appointments:</label>
           <input type="number" id="mtdPdAppointments" name="mtdPdAppointments" required />
-
+      
           <label for="mtdPdDone">MTD PD Done:</label>
           <input type="number" id="mtdPdDone" name="mtdPdDone" required />
-
+      
           <label for="mtdPdFeedbackFormCollected">MTD PD Feedback Form Collected:</label>
           <input type="number" id="mtdPdFeedbackFormCollected" name="mtdPdFeedbackFormCollected" required />
-
+      
           <label for="mtdSmdDone">MTD SMD Done:</label>
           <input type="number" id="mtdSmdDone" name="mtdSmdDone" required />
-
+      
           <label for="mtdSignupDone">MTD Signup Done:</label>
           <input type="number" id="mtdSignupDone" name="mtdSignupDone" required />
-
+      
           <label for="weekSelect">Select Week:</label>
           <select id="weekSelect" name="weekSelect" required>
               <option value="week1">Week 1</option>
@@ -495,10 +500,11 @@
               <option value="week4">Week 4</option>
               <option value="week5">Week 5</option>
           </select>
-
+      
           <button type="submit" class="submit-btn">Submit</button>
-          <button id="download-btn">Download</button>
+          <button id="download-btn" type="button">Download</button>
       </form>
+      
         <p id="message" style="color: green; display: none">The record has been submitted!</p>
     </div>
     <script>

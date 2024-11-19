@@ -363,6 +363,7 @@ def get_weekly_report():
             "pdDoneToday": report.get("pdDoneToday", "0"),
             "smdDoneToday": report.get("smdDoneToday", "0"),
             "signed": report.get("signed", "0"),  # Adjust if signed is not a numeric value
+            "signedAt": report.get("signedAt", "0"),
             "mtdApproached": report.get("mtdApproached", "0"),
             "mtdPdAppointments": report.get("mtdPdAppointments", "0"),
             "mtdPdDone": report.get("mtdPdDone", "0"),
@@ -460,6 +461,8 @@ def get_events():
     year = request.args.get('year')
     events = list(Event.find({"day": day, "month": month, "year": year}))
     return dumps(events), 200
+
+    
 def convert_objectid_to_str(document):
     if isinstance(document, dict):
         return {k: convert_objectid_to_str(v) for k, v in document.items()}

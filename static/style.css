@@ -283,6 +283,7 @@ body.dark{
 }
 .hide-modal .modal-body {
   display: none;
+  transition: none;
 }
 /* Animation */
 @keyframes slideDown {
