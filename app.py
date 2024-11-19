@@ -13,14 +13,15 @@ import pandas as pd
 import os
 load_dotenv()
 
+
+
 myPASS = os.getenv('pass')
 app = Flask(__name__)
 app.secret_key = "hihihihih"
 
-app.permanent_session_lifetime = timedelta(minutes=5)
 
 
-
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
 # MongoDB connection
 app.config["MONGO_URI"] = "mongodb+srv://sourodip:rajghosh@first.ff1ia.mongodb.net/first?retryWrites=true&w=majority"
 client = MongoClient(app.config["MONGO_URI"])
