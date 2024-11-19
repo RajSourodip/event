@@ -137,7 +137,8 @@ def get_reports_by_district():
     print(f"User ID from session: {username}")  # Debugging: Check if the user is authenticated
     
     if not username:
-        return jsonify({"status": "error", "message": "User not authenticated"}), 401
+        
+        return redirect(url_for('login')), 401
 
     # Fetch all reports for the current user
     query = {"user": username}  # Only fetch reports for the authenticated user
@@ -194,7 +195,7 @@ def get_permissions():
         # Iterate over each permission request and format the response
         for permission in permissions:
             permissions_list.append({
-                'username': permission['username'],
+                'user': permission['user'],
                 'request_date': permission['request_date'],
                 'status': permission['status']
             })
@@ -215,13 +216,13 @@ def send_permission_request():
     try:
         # Get the username from the incoming JSON request body
         data = request.json
-        username = session.get("user")
+        username = session.get("username")
         # Check if username is provided
         if not username:
             return jsonify({'message': 'Username is required'}), 400
 
         # Check if the user already has a request in the permissions collection
-        existing_request = Permit.find_one({'username': username})
+        existing_request = Permit.find_one({'user': username})
 
         # If the user has a granted request, return an error
         if existing_request and existing_request.get('status') == 'granted':
@@ -234,7 +235,7 @@ def send_permission_request():
             ist_offset = timedelta(hours=5, minutes=30)
             now_ist = now_utc + ist_offset
             permission_request = {
-                'username': username,
+                'user': username,
                 'status': 'pending',  # Pending status initially
                 'request_date': now_ist.isoformat()  # Use timezone-aware datetime
             }
@@ -253,11 +254,11 @@ def send_permission_request():
 def check_permission():
     try:
         print("Received POST request for /check_permission")  # Debug print
-        username = session.get("user")
+        username = session.get("username")
         if not username:
             return jsonify({'message': 'Username is required'}), 400
         
-        permission = Permit.find_one({'username': username})
+        permission = Permit.find_one({'user': username})
 
         if permission:
             if permission['status'] == 'granted':
@@ -284,7 +285,7 @@ def update_permission():
         
         # Update the permission status in the 'permissions' collection
         result = Permit.update_one(
-            {'username': username, 'status': 'pending'},  # Find pending request by username
+            {'user': username, 'status': 'pending'},  # Find pending request by username
             {'$set': {'status': status}}  # Set the new status
         )
         
@@ -343,31 +344,36 @@ def get_weekly_report():
     
     # Calculate the date for one week ago
     one_week_ago = now - timedelta(days=7)
-    username =  session.get("user")
+    username = session.get("username")
+    
     # Query MongoDB to find records created within the last week
-    reports = Dash.find({"user":username, "date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+    reports = Dash.find({"user": username, "date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
 
     # Prepare the response data
     reports_data = []
     for report in reports:
         report_data = {
             "_id": str(report["_id"]),
-            "date": report["date"],
-            "totalSchoolsVisited": report["totalSchoolsVisited"],
-            "weekSelect": report["weekSelect"], 
-            "interested": report["interested"],
-            "pdDone": report["pdDone"],
-            "pdFixed": report["pdFixed"],
-            "tdDone": report["tdDone"],
-            "tdFixed": report["tdFixed"],
-            "smdDone": report["smdDone"],
-            "smdFixed": report["smdFixed"],
-            "signUpFollowUp": report["signUpFollowUp"],
-            "signed": report["signed"],
-            "totalSchoolsForSignUp": report["totalSchoolsForSignUp"],
-            "strength": report["strength"],
-            "user": report["user"],
-            "time": report["time"],
+            "reportDate": report.get("reportDate", ""),
+            "name": report.get("name", ""),
+            "schoolsApproached": report.get("schoolsApproached", "0"),
+            "metDate": report.get("metDate", ""),
+            "surveyDone": report.get("surveyDone", "no"),
+            "appointmentFixed": report.get("appointmentFixed", "0"),
+            "pdDoneToday": report.get("pdDoneToday", "0"),
+            "smdDoneToday": report.get("smdDoneToday", "0"),
+            "signed": report.get("signed", "0"),  # Adjust if signed is not a numeric value
+            "mtdApproached": report.get("mtdApproached", "0"),
+            "mtdPdAppointments": report.get("mtdPdAppointments", "0"),
+            "mtdPdDone": report.get("mtdPdDone", "0"),
+            "mtdPdFeedbackFormCollected": report.get("mtdPdFeedbackFormCollected", "0"),
+            "mtdSmdDone": report.get("mtdSmdDone", "0"),
+            "mtdSignupDone": report.get("mtdSignupDone", "0"),
+            "weekSelect": report.get("weekSelect", ""),
+            "district": report.get("district", ""),
+            "user": report.get("user", ""),
+            "date": report.get("date", ""),
+            "time": report.get("time", ""),
         }
         reports_data.append(report_data)
 
@@ -419,7 +425,7 @@ def submit_form():
 def fetch_user_records():
     try:
         # Get the username from the query parameters or headers (depending on your approach)
-        username = session.get('user')  # Assuming the username is passed as a query parameter
+        username = session.get('username')  # Assuming the username is passed as a query parameter
         
         if not username:
             return jsonify({'message': 'Username is required'}), 400
@@ -537,29 +543,29 @@ def login():
     print("session username set to: ", username)
     print(password)
 
-    user = User.find_one({"username": username})
+    user = User.find_one({"user": username})
     
     if user:
         if user['password'] == password:
-            session['user'] =  username
+            session['username'] =  username
             return jsonify({'success': True, 'message': 'Login successful'}), 200
         else:
             return jsonify({'success': False, 'message': 'Incorrect password'}), 401
     else:
-        User.insert_one({"username": username, "password": password})
+        User.insert_one({"user": username, "password": password})
         return jsonify({'success': True, 'message': 'User registered and logged in'}), 201
 
 
 
 @app.route('/tracker')
 def tracker():
-    if 'user' in session:
+    if 'username' in session:
         return render_template('tracker.html')
     return redirect(url_for('index'))
 
 @app.route('/update_location', methods=['POST'])
 def update_location():
-    if 'user' in session:
+    if 'username' in session:
         latitude = request.form['latitude']
         longitude = request.form['longitude']
         # Here you can save the coordinates to a database or perform other operations
@@ -574,7 +580,7 @@ def submit_record():
         record_data['demoGivenDate'] = datetime.strptime(record_data['demoGivenDate'], '%Y-%m-%d')
         record_data['followUpDate'] = datetime.strptime(record_data['followUpDate'], '%Y-%m-%d')
         record_data['signedAt'] = datetime.now()
-        record_data["user"]   = session.get("user")
+        record_data["user"]   = session.get("username")
         Record.insert_one(record_data)
         return jsonify({'message': 'Record submitted successfully!'}), 200
     except Exception as e:
@@ -584,7 +590,7 @@ def submit_record():
 @app.route('/fetch_records', methods=['GET'])
 def fetch_records():
     try:
-        username = session.get("user")
+        username = session.get("username")
         records = list(Record.find({'user': username}))
         return dumps(records), 200
     except Exception as e:

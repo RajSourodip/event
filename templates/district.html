@@ -51,13 +51,12 @@
             margin-bottom: 10%;
             width: fit-content;
         }
-    
+
         @media (max-width: 768px) {
             table, thead, tbody, th, td, tr {
                 display: block;
             }
             th {
-                /* background-color: rgb(37, 45, 192); */
                 background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
                 color: white;
                 position: sticky;
@@ -134,7 +133,7 @@
                 districtRow.appendChild(districtCell);
 
                 const stats = {
-                    schools: reports.length,
+                    schools: 0,
                     pd: 0,
                     smd: 0,
                     signed: 0,
@@ -144,23 +143,22 @@
                 };
 
                 reports.forEach(report => {
-                    stats.pd += parseInt(report.pdDone);
-                    stats.smd += parseInt(report.smdDone);
-                    stats.signed += parseInt(report.signed);
-                    stats.smdToSignUpFollowUp +=parseInt( report.signUpFollowUp);
-                    stats.hotFollowUp += parseInt(report.tdDone);  // Assuming hot follow-up is related to tdDone
-                    stats.ni += parseInt(report.strength);  // Assuming NI is related to strength
+                    stats.schools += parseInt(report.schoolsApproached);
+                    stats.pd += parseInt(report.pdDoneToday);
+                    stats.smd += parseInt(report.smdDoneToday);
+                    stats.signed += parseInt(report.signed);  // Assuming signed is a numeric value; adjust if it's a time
+                    stats.smdToSignUpFollowUp += parseInt(report.mtdSignupDone);  // Assuming SMD to Sign Up Follow Up is MTD Signup Done
+                    stats.hotFollowUp += parseInt(report.mtdPdAppointments);  // Assuming hot follow-up is related to MTD PD Appointments
+                    stats.ni += parseInt(report.mtdPdFeedbackFormCollected);  // Assuming NI is related to MTD PD Feedback Form Collected
                 });
 
-                totals.schools += parseInt(stats.schools);
-                totals.pd += parseInt(stats.pd);
-                console.log(totals.pd);
-                
-                totals.smd += parseInt(stats.smd);
-                totals.signed += parseInt(stats.signed);
-                totals.smdToSignUpFollowUp += parseInt(stats.smdToSignUpFollowUp);
-                totals.hotFollowUp += parseInt(stats.hotFollowUp);
-                totals.ni += parseInt(stats.ni);
+                totals.schools += stats.schools;
+                totals.pd += stats.pd;
+                totals.smd += stats.smd;
+                totals.signed += stats.signed;
+                totals.smdToSignUpFollowUp += stats.smdToSignUpFollowUp;
+                totals.hotFollowUp += stats.hotFollowUp;
+                totals.ni += stats.ni;
 
                 districtRow.innerHTML += `
                     <td>${stats.schools}</td>

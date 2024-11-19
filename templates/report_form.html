@@ -439,45 +439,66 @@
         </div>
         <h2>Report Form </h2>
         <form id="reportForm">
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required />
-            <label for="totalSchoolsVisited">Total Schools Visited:</label>
-            <input type="number" id="totalSchoolsVisited" name="totalSchoolsVisited" required />
-            <label for="weekSelect">Select Week:</label>
-            <select id="weekSelect" name="weekSelect" required>
-                <option value="week1">Week 1</option>
-                <option value="week2">Week 2</option>
-                <option value="week3">Week 3</option>
-                <option value="week4">Week 4</option>
-                <option value="week5">Week 5</option>
-            </select>
-            <label for="interested">Interested:</label>
-            <input type="number" id="interested" name="interested" required />
-            <label for="pdDone">PD(Principal Demo)Done:</label>
-            <input type="number" id="pdDone" name="pdDone" required />
-            <label for="pdFixed">PD(Principal Demo)Fixed:</label>
-            <input type="number" id="pdFixed" name="pdFixed" required />
-            <label for="date">PD(Principal Demo)Date:</label>
-            <input type="date" id="pdDate" name="pdDate" required />
-            <label for="tdDone">TD(Teacher 's Demo)Done:</label>
-            <input type="number" id="tdDone" name="tdDone" required />
-            <label for="tdFixed">TD(Teacher 's Demo)Fixed:</label>
-            <input type="number" id="tdFixed" name="tdFixed" required />
-            <label for="smdDone">SMD(Senior Management Demo)Done:</label>
-            <input type="number" id="smdDone" name="smdDone" required />
-            <label for="smdFixed">SMD(Senior Management Demo)Fixed:</label>
-            <input type="number" id="smdFixed" name="smdFixed" required />
-            <label for="signUpFollowUp">Sign Up Follow Up:</label>
-            <input type="number" id="signUpFollowUp" name="signUpFollowUp" required />
-            <label for="signed">Signed:</label>
-            <input type="number" id="signed" name="signed" required />
-            <label for="totalSchoolsForSignUp">Total Schools for Sign Up:</label>
-            <input type="number" id="totalSchoolsForSignUp" name="totalSchoolsForSignUp" required />
-            <label for="strength">Strength:</label>
-            <input type="number" id="strength" name="strength" required />
-            <button type="submit" class="submit-btn">Submit</button>
-            <button id="download-btn">Download</button>
-        </form>
+          <label for="reportDate">Today's Report:</label>
+          <input type="date" id="reportDate" name="reportDate" required />
+          
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required />
+
+          <label for="schoolsApproached">Schools Approached:</label>
+          <input type="number" id="schoolsApproached" name="schoolsApproached" required />
+
+          <label for="metDate">Today's Met:</label>
+          <input type="date" id="metDate" name="metDate" required />
+
+          <label for="surveyDone">Survey Done:</label>
+          <select id="surveyDone" name="surveyDone" required>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+          </select>
+
+          <label for="appointmentFixed">Appointment Fixed:</label>
+          <input type="number" id="appointmentFixed" name="appointmentFixed" required />
+
+          <label for="pdDoneToday">PD Done Today:</label>
+          <input type="number" id="pdDoneToday" name="pdDoneToday" required />
+
+          <label for="smdDoneToday">SMD Done Today:</label>
+          <input type="number" id="smdDoneToday" name="smdDoneToday" required />
+
+          <label for="signed">Signed:</label>
+          <input type="time" id="signed" name="signed" required />
+
+          <label for="mtdApproached">MTD Approached:</label>
+          <input type="number" id="mtdApproached" name="mtdApproached" required />
+
+          <label for="mtdPdAppointments">MTD PD Appointments:</label>
+          <input type="number" id="mtdPdAppointments" name="mtdPdAppointments" required />
+
+          <label for="mtdPdDone">MTD PD Done:</label>
+          <input type="number" id="mtdPdDone" name="mtdPdDone" required />
+
+          <label for="mtdPdFeedbackFormCollected">MTD PD Feedback Form Collected:</label>
+          <input type="number" id="mtdPdFeedbackFormCollected" name="mtdPdFeedbackFormCollected" required />
+
+          <label for="mtdSmdDone">MTD SMD Done:</label>
+          <input type="number" id="mtdSmdDone" name="mtdSmdDone" required />
+
+          <label for="mtdSignupDone">MTD Signup Done:</label>
+          <input type="number" id="mtdSignupDone" name="mtdSignupDone" required />
+
+          <label for="weekSelect">Select Week:</label>
+          <select id="weekSelect" name="weekSelect" required>
+              <option value="week1">Week 1</option>
+              <option value="week2">Week 2</option>
+              <option value="week3">Week 3</option>
+              <option value="week4">Week 4</option>
+              <option value="week5">Week 5</option>
+          </select>
+
+          <button type="submit" class="submit-btn">Submit</button>
+          <button id="download-btn">Download</button>
+      </form>
         <p id="message" style="color: green; display: none">The record has been submitted!</p>
     </div>
     <script>

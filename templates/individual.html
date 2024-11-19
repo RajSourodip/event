@@ -161,24 +161,24 @@
                 reportDiv.className = "report";
 
                 reportDiv.innerHTML = `
-                <h3>Report ID: ${report._id}</h3>
-                <p><strong>PD Date on:</strong> ${report.pdDate}</p>
-                <p><strong>Submitted by:</strong> ${report.user}</p>
-                <p><strong>Date:</strong> ${report.date}</p>
-                <p><strong>Time:</strong> ${report.time}</p>
-                <p><strong>Total Schools Visited:</strong> ${report.totalSchoolsVisited}</p>
-                <p><strong>Interested:</strong> ${report.interested}</p>
-                <p><strong>PD Done:</strong> ${report.pdDone}</p>
-                <p><strong>PD Fixed:</strong> ${report.pdFixed}</p>
-                <p><strong>TD Done:</strong> ${report.tdDone}</p>
-                <p><strong>TD Fixed:</strong> ${report.tdFixed}</p>
-                <p><strong>SMD Done:</strong> ${report.smdDone}</p>
-                <p><strong>SMD Fixed:</strong> ${report.smdFixed}</p>
-                <p><strong>Sign Up Follow Up:</strong> ${report.signUpFollowUp}</p>
-                <p><strong>Signed:</strong> ${report.signed}</p>
-                <p><strong>Total Schools for Sign Up:</strong> ${report.totalSchoolsForSignUp}</p>
-                <p><strong>Strength:</strong> ${report.strength}</p>
-            `;
+    <h3>Report ID: ${report._id}</h3>
+    <p><strong>Today's Report:</strong> ${report.reportDate}</p>
+    <p><strong>Submitted by:</strong> ${report.name}</p>
+    <p><strong>Date:</strong> ${report.metDate}</p>
+    <p><strong>Survey Done:</strong> ${report.surveyDone}</p>
+    <p><strong>Appointment Fixed:</strong> ${report.appointmentFixed}</p>
+    <p><strong>PD Done Today:</strong> ${report.pdDoneToday}</p>
+    <p><strong>SMD Done Today:</strong> ${report.smdDoneToday}</p>
+    <p><strong>Signed:</strong> ${report.signed}</p>
+    <p><strong>MTD Approached:</strong> ${report.mtdApproached}</p>
+    <p><strong>MTD PD Appointments:</strong> ${report.mtdPdAppointments}</p>
+    <p><strong>MTD PD Done:</strong> ${report.mtdPdDone}</p>
+    <p><strong>MTD PD Feedback Form Collected:</strong> ${report.mtdPdFeedbackFormCollected}</p>
+    <p><strong>MTD SMD Done:</strong> ${report.mtdSmdDone}</p>
+    <p><strong>MTD Signup Done:</strong> ${report.mtdSignupDone}</p>
+    <p><strong>Week No:</strong> ${report.weekSelect}</p>
+`;
+
 
                 reportsContainer.appendChild(reportDiv);
               });
