@@ -69,9 +69,6 @@ async function loadMonth() {
         (e) => e.day === dayNumber && e.month === month + 1 && e.year === year
       );
 
-      const events = await fetch(`/fevents?day=${dayNumber}&month=${month + 1}&year=${year}`)
-        .then(response => response.json());
-
       if (eventForDay) {
         daySquare.classList.add("event");
       }
@@ -89,6 +86,7 @@ async function loadMonth() {
     calendar.appendChild(daySquare);
   }
 }
+
 
 function showModal(day, month, year) {
   clicked = { day, month, year };
@@ -156,13 +154,13 @@ async function addEvent() {
       recipient_email: document.getElementById("eventDes").value
     };
 
-    // await fetch('/events', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(event)
-    // });
+    await fetch('/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(event)
+    });
 
     hideModal();
     loadMonth();
