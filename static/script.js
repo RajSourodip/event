@@ -242,7 +242,7 @@ function changeTheme() {
       eventElement.appendChild(eventDesc);
 
       userEventsList.appendChild(eventElement);
-    });
+  });
   }
 
 
