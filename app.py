@@ -5,7 +5,7 @@ from bson.json_util import dumps, ObjectId
 from datetime import datetime, timedelta,  timezone
 from pymongo import MongoClient
 from dotenv import load_dotenv
-
+from flask_cors import  CORS
 from flask import Flask, render_template, request, redirect, url_for, session
 import io
 import pandas as pd
@@ -19,7 +19,7 @@ myPASS = os.getenv('pass')
 app = Flask(__name__)
 app.secret_key = "hihihihih"
 
-
+cors =  CORS(app)
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
 # MongoDB connection

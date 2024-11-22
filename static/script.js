@@ -1,3 +1,4 @@
+
 const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = [
   "January", "February", "March", "April", "May", "June",
@@ -19,7 +20,7 @@ const mYear = document.getElementById("mYear");
 const mDay = document.getElementById("mDay");
 const eventName = document.getElementById("eventName");
 const eventDesc = document.getElementById("eventDesc");
-const allEvents = document.getElementById("userEventsList");
+  const allEvents = document.getElementById("userEventsList");
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -86,6 +87,7 @@ async function loadMonth() {
   }
 }
 
+
 function showModal(day, month, year) {
   clicked = { day, month, year };
   const eventForDay = eventsArr.filter(
@@ -106,6 +108,8 @@ function showModal(day, month, year) {
 
       const eventDesc = document.createElement("div");
       eventDesc.classList.add("event-desc");
+      // const eventDes = document.createElement("div");
+      // eventDesc.classList.add("event-des");
 
       const eventTitle = document.createElement("p");
       eventTitle.innerText = event.title;
@@ -136,10 +140,12 @@ function hideModal() {
   modal.classList.add("hide-modal");
   eventName.value = '';
   eventDesc.value = '';
+ 
 }
 
-function addEvent() {
-  hideModal();
+async function addEvent() {
+  
+  
   const eventStatus = document.getElementById("eventStatus");
   if (eventName.value.trim()) {
     const event = {
@@ -150,13 +156,14 @@ function addEvent() {
       description: eventDesc.value.trim(),
       recipient_email: document.getElementById("eventDes").value
     };
-
+    console.log(event);
+    
     // Show "registering event" message
     eventStatus.innerText = "Registering event...";
     eventStatus.classList.add("show");
     eventStatus.classList.remove("success", "error");
-
-    fetch('/events', {
+    hideModal();
+    await fetch('/events', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -174,6 +181,8 @@ function addEvent() {
       eventStatus.innerText = "Event successfully registered!";
       eventStatus.classList.add("success");
       eventStatus.classList.remove("error");
+      console.log(data.status);
+      
     })
     .catch(error => {
       // Display an error message
@@ -186,12 +195,16 @@ function addEvent() {
       setTimeout(() => {
         eventStatus.classList.remove("show");
       }, 3000);
-
+      // hideModal();
       // Reload the month
       loadMonth();
     });
   }
 }
+
+
+
+
 
 async function deleteEvent(title) {
   eventsArr = eventsArr.filter(
@@ -230,9 +243,10 @@ function changeTheme() {
     theme = "light";
     document.body.classList.remove("dark");
   }
-}
+ }
 
-async function showUserEvents() {
+
+ async function showUserEvents() {
   const response = await fetch('/fevents', { method: 'GET' });
   const events = await response.json();
   const userEventsList = document.getElementById("userEventsList");
@@ -265,6 +279,8 @@ async function showUserEvents() {
       eventElement.appendChild(eventDesc);
 
       userEventsList.appendChild(eventElement);
-    });
+  });
   }
+
+
 }

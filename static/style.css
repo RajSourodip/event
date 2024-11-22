@@ -280,7 +280,7 @@ body.dark .event-msg{
 
 .status-message {
   position: fixed;
-  top: -50px; /* Adjust based on the height of the message element */
+  top: -20%; /* Adjust based on the height of the message element */
   left: 50%;
   transform: translateX(-50%);
   background-color: #fff;
