@@ -513,15 +513,8 @@ def add_event():
             contents=message
         )
         
-        # Convert the inserted event data to ensure ObjectId is serialized
-        # Retrieve the event data from MongoDB
-        inserted_event = Event.find_one({"title": title, "description": description})
-        
-        # Convert ObjectId fields to string
-        inserted_event = convert_objectid_to_str(inserted_event)
-        
         # Return the event data with a 201 response
-        return jsonify(inserted_event), 201
+        return jsonify({"status":"success"}), 201
     except Exception as e:
         print(e)
         return jsonify({'error': str(e)}), 500

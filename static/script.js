@@ -144,6 +144,9 @@ function hideModal() {
 }
 
 async function addEvent() {
+  
+  
+  const eventStatus = document.getElementById("eventStatus");
   if (eventName.value.trim()) {
     const event = {
       day: clicked.day,
@@ -153,19 +156,55 @@ async function addEvent() {
       description: eventDesc.value.trim(),
       recipient_email: document.getElementById("eventDes").value
     };
-
+    console.log(event);
+    
+    // Show "registering event" message
+    eventStatus.innerText = "Registering event...";
+    eventStatus.classList.add("show");
+    eventStatus.classList.remove("success", "error");
+    hideModal();
     await fetch('/events', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(event)
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(data => { throw new Error(data.error || 'Failed to register event'); });
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Show success message
+      eventStatus.innerText = "Event successfully registered!";
+      eventStatus.classList.add("success");
+      eventStatus.classList.remove("error");
+      console.log(data.status);
+      
+    })
+    .catch(error => {
+      // Display an error message
+      eventStatus.innerText = `Error: ${error.message}`;
+      eventStatus.classList.add("error");
+      eventStatus.classList.remove("success");
+    })
+    .finally(() => {
+      // Remove the show class after a delay
+      setTimeout(() => {
+        eventStatus.classList.remove("show");
+      }, 3000);
+      // hideModal();
+      // Reload the month
+      loadMonth();
     });
-
-    hideModal();
-    loadMonth();
   }
 }
+
+
+
+
 
 async function deleteEvent(title) {
   eventsArr = eventsArr.filter(

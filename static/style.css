@@ -277,6 +277,37 @@ body.dark .event-msg{
   font-weight: 200;
   color: var(--black);
 }
+
+.status-message {
+  position: fixed;
+  top: -50px; /* Adjust based on the height of the message element */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.5s ease-in-out;
+}
+body.dark .status-message{
+ 
+  box-shadow: 0 0 10px lime;
+  color: green;
+}
+.status-message.show {
+  top: 10%; /* Adjust to where you want the message to slide down to */
+}
+
+.status-message.success {
+  color: green;
+}
+
+.status-message.error {
+  color: red;
+}
+
 .event-item:hover{
   box-shadow: 0 0 10px lightgreen;
 }
