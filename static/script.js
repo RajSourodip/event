@@ -156,13 +156,13 @@ async function addEvent() {
       recipient_email: document.getElementById("eventDes").value
     };
 
-    await fetch('/events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(event)
-    });
+    // await fetch('/events', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(event)
+    // });
 
     hideModal();
     loadMonth();
