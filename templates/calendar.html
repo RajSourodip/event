@@ -7,7 +7,613 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Event Calendar</title>
-    <link rel="stylesheet" href="/static/style.css" />
+    <!-- <link rel="stylesheet" href="/static/style.css" /> -->
+     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+* {
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+:root {
+  --white: #f0f0f0;
+  --light: #f8f8f8;
+  --black: #1a1a1a;
+  --line: #d6d6d6;
+  --grey: #8a8a8a;
+  --blue: #1992e6;
+  --today: #2b2b2b;
+  --green: #0eaa50;
+  --red: #cf0000;
+  --transparent: #000000a6;
+}
+body {
+  background-color: var(--white);
+  transition: all 1s ease;
+}
+body.dark{
+  background-color: var(--black);
+  
+} 
+body.dark .event-item{
+  color: white;
+  border-color: rgb(64, 213, 22);
+  
+}
+body.dark .event-msg{
+  color: lime;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  align-items: center;
+  justify-content: center;
+  width: min(700px, 100%);
+  margin: 0 auto;
+  padding: 0 16px;
+  font-size: 16px;
+}
+.box {
+  height: min(100px, 100%);
+  aspect-ratio: 1;
+  padding: 8px;
+  color: var(--black);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box:hover {
+  cursor: pointer;
+}
+.week {
+  font-weight: 500;
+  color: var(--green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.today {
+  position: relative;
+  color: var(--blue);
+  transition: all 0.5s;
+}
+.today:hover {
+  color: var(--black);
+  transition: all 0.5s;
+}
+
+.today::after {
+  content: "";
+  z-index: -1;
+  aspect-ratio: 1;
+  position: absolute;
+  background-color: var(--green);
+  border-radius: 50%;
+  height: 100px;
+  bottom: 0px;
+  left: 0px;
+  animation: slideUp 0.5s linear 0s 1 forwards;
+}
+.today:hover::after {
+  animation: slideDown 0.5s linear 0s 1 forwards;
+}
+
+.event {
+  position: relative;
+  color: var(--black);
+  transition: all 0.5s;
+}
+.event:hover {
+  color: var(--light);
+  transition: all 0.5s;
+}
+
+.event::after {
+  content: "";
+  z-index: -1;
+  aspect-ratio: 1;
+  position: absolute;
+  background-color: var(--red);
+  border-radius: 50%;
+  height: 100px;
+  bottom: 0px;
+  left: 0px;
+  animation: slideDown 0.5s linear 0s 1 forwards;
+}
+.event:hover::after {
+  animation: slideUp 0.5s linear 0s 1 forwards;
+}
+.row {
+  margin: 24px auto 0px auto;
+  width: min(100%, 700px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 8px;
+  
+}
+.col span {
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--blue);
+}
+.btn {
+  width: 50px;
+  aspect-ratio: 1;
+  border: none;
+  background-color: var(--white);
+  border-radius: 50%;
+  color: var(--black);
+  display: inlin-flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn span:nth-child(2) {
+  padding-left: 50px;
+}
+.btn span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.btn:hover {
+  cursor: pointer;
+}
+.hide {
+  visibility: hidden;
+}
+.modal {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--transparent);
+  padding: 16px;
+  overflow-y: auto;
+}
+.modal-body {
+  margin: auto;
+  width: min(100%, 600px);
+  padding: 24px;
+  border-radius: 16px;
+  min-height: 400px;
+  background-color: var(--white);
+  transform: translateY(-20px);
+  opacity: 0;
+  animation: fadeDown 0.5s linear 0s 1 forwards;
+}
+.modal-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modal-title h1 {
+  font-size: 20px;
+  line-height: 36px;
+  font-weight: 400;
+  color: var(--blue);
+}
+.modal-title h1 span:first-child {
+  font-weight: 500;
+}
+.modal-title h1 span:last-child {
+  color: var(--grey);
+}
+.modal-title .close {
+  font-weight: 300;
+  color: var(--grey);
+}
+.modal-title .close:hover {
+  cursor: pointer;
+}
+.modal-form {
+  margin: 16px 0;
+}
+.modal-form input {
+  width: 100%;
+  margin-bottom: 12px;
+  height: 54px;
+  padding: 0 16px;
+  border: none;
+  background: none;
+  border: 1px solid var(--grey);
+  color: var(--black);
+  font-size: 16px;
+  border-radius: 8px;
+}
+.modal-form input:focus {
+  outline: none;
+  border: 1px solid var(--blue);
+}
+.modal-form label {
+  position: relative;
+  top: 10px;
+  left: 16px;
+  background-color: var(--white);
+  font-size: 18px;
+  color: var(--grey);
+  display: inline-block;
+  padding: 0 12px;
+  height: 20px;
+  font-size: 14px;
+}
+.modal-form button {
+  width: 100%;
+  height: 54px;
+  border-radius: 8px;
+  border: none;
+  color: var(--light);
+  background-color: var(--green);
+  font-size: 18px;
+  font-weight: 300;
+}
+.modal-form button:hover {
+  cursor: pointer;
+}
+.event-card {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  margin: 16px 0;
+}
+.card-title {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 32px;
+  line-height: 32px;
+}
+.card-title span:first-child {
+  width: calc(100% - 32px);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--black);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.card-title span:last-child {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 200;
+  color: var(--black);
+}
+
+.status-message {
+  position: fixed;
+  top: -20%; /* Adjust based on the height of the message element */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.5s ease-in-out;
+}
+body.dark .status-message{
+ 
+  box-shadow: 0 0 10px lime;
+  color: green;
+}
+.status-message.show {
+  top: 10%; /* Adjust to where you want the message to slide down to */
+}
+
+.status-message.success {
+  color: green;
+}
+
+.status-message.error {
+  color: red;
+}
+
+.event-item:hover{
+  box-shadow: 0 0 10px lightgreen;
+}
+.event-item{
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 14px;
+  width: fit-content;
+  transition: all 1s ease-in-out;
+}
+#userEventsList{
+  justify-content: center;
+  align-items: center;
+display: flex;
+flex-direction: column;
+gap: 20px;
+transition: all 0.5s ease-in-out;
+opacity: 0;
+}
+.card-title span:last-child:hover {
+  cursor: pointer;
+  font-weight: 500;
+}
+.event-card p {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--grey);
+}
+.hide-modal {
+  display: none;
+}
+.hide-modal .modal-body {
+  display: none;
+  transition: none;
+}
+/* Animation */
+@keyframes slideDown {
+  0% {
+    height: 40px;
+    bottom: calc(50% - 20px);
+    left: calc(50% - 20px);
+  }
+  70% {
+    height: 12px;
+    bottom: 44px;
+    left: calc(50% - 6px);
+  }
+  100% {
+    height: 12px;
+    bottom: 20px;
+    left: calc(50% - 6px);
+  }
+}
+@keyframes slideUp {
+  0% {
+    height: 12px;
+    bottom: 20px;
+    left: calc(50% - 6px);
+  }
+  70% {
+    height: 12px;
+    bottom: 44px;
+    left: calc(50% - 8px);
+  }
+  100% {
+    height: 40px;
+    bottom: calc(50% - 20px);
+    left: calc(50% - 20px);
+  }
+}
+@keyframes fadeDown {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 536px) {
+  .container {
+    font-size: 12px;
+  }
+  .btn {
+    font-size: 12px;
+    width: 36px;
+  }
+  .row {
+    padding: 0 16px;
+  }
+  /* Animation */
+  @keyframes slideDown {
+    0% {
+      height: 40px;
+      bottom: calc(50% - 20px);
+      left: calc(50% - 20px);
+    }
+    70% {
+      height: 12px;
+      bottom: 44px;
+      left: calc(50% - 6px);
+    }
+    100% {
+      height: 12px;
+      bottom: 0px;
+      left: calc(50% - 6px);
+    }
+  }
+  @keyframes slideUp {
+    0% {
+      height: 12px;
+      bottom: 0px;
+      left: calc(50% - 6px);
+    }
+    70% {
+      height: 12px;
+      bottom: 44px;
+      left: calc(50% - 8px);
+    }
+    100% {
+      height: 40px;
+      bottom: calc(50% - 20px);
+      left: calc(50% - 20px);
+    }
+  }
+}
+
+
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  text-align: center;
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 800px;
+  width: 90%;
+  margin: 20px;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  position: relative;
+  bottom: 770px;
+  left: 300px;
+  text-align: center;
+}
+
+.login-options button {
+  padding: 12px 24px;
+  margin: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.login-options button:hover {
+  background-color: #0056b3;
+}
+
+.hidden {
+  display: none;
+}
+
+#districts ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#districts li {
+  padding: 10px;
+  cursor: pointer;
+  background: #e4e4e4;
+  margin: 5px 0;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#districts li:hover {
+  background: #d4d4d4;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+form label {
+  margin: 10px 0 5px;
+  font-weight: bold;
+  width: 100%;
+  align-self: flex-start;
+}
+
+form input, form select {
+  margin: 5px 0 15px;
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+form input:focus, form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+form button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #218838;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background: #007bff;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+td {
+  background: #f9f9f9;
+}
+
+tr:nth-child(even) td {
+  background: #e4e4e4;
+}
+
+tr:hover td {
+  background: #d4d4d4;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+
+  form input, form button, form select {
+    width: 100%;
+  }
+
+  table, th, td {
+    font-size: 14px;
+  }
+}
+     </style>
+
     <!-- Icon -->
     <!-- <link rel="icon" type="image/x-icon" href="icon.png" /> -->
     <!-- Google Icons -->
@@ -92,6 +698,335 @@
 <div id="eventStatus" class="status-message"></div>
 
 
-    <script src="/static/script.js"></script>
+    <!-- <script src="/static/script.js"></script> -->
+    <script>
+      
+const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+let eventsArr = [];
+let nav = 0;
+let clicked = null;
+let theme = "light";
+
+const calendar = document.getElementById("calendar");
+const week = document.getElementById("week");
+const displayMonth = document.getElementById("displayMonth");
+const displayYear = document.getElementById("displayYear");
+const modal = document.getElementById("modal");
+const mDate = document.getElementById("mDate");
+const mMonth = document.getElementById("mMonth");
+const mYear = document.getElementById("mYear");
+const mDay = document.getElementById("mDay");
+
+  const allEvents = document.getElementById("userEventsList");
+
+document.addEventListener("DOMContentLoaded", init);
+
+function init() {
+  loadWeekDays();
+  loadMonth();
+}
+
+function loadWeekDays() {
+  week.innerHTML = '';
+  weeks.forEach((weekDay) => {
+    const weekDayElement = document.createElement("div");
+    weekDayElement.classList.add("week");
+    weekDayElement.innerText = weekDay;
+    week.appendChild(weekDayElement);
+  });
+}
+
+async function loadMonth() {
+  calendar.innerHTML = '';
+  const dt = new Date();
+
+  if (nav !== 0) {
+    dt.setMonth(new Date().getMonth() + nav);
+  }
+
+  const day = dt.getDate();
+  const month = dt.getMonth();
+  const year = dt.getFullYear();
+  const firstDayOfMonth = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const paddingDays = firstDayOfMonth.getDay();
+
+  displayMonth.innerText = months[month];
+  displayYear.innerText = year;
+
+  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+    const daySquare = document.createElement("div");
+    daySquare.classList.add("box");
+
+    if (i > paddingDays) {
+      const dayNumber = i - paddingDays;
+      daySquare.innerText = dayNumber;
+
+      const eventForDay = eventsArr.find(
+        (e) => e.day === dayNumber && e.month === month + 1 && e.year === year
+      );
+
+      if (eventForDay) {
+        daySquare.classList.add("event");
+      }
+
+      if (dayNumber === day && nav === 0) {
+        daySquare.id = "currentDay";
+        daySquare.classList.add("today");
+      }
+
+      daySquare.addEventListener("click", () => showModal(dayNumber, month + 1, year));
+    } else {
+      daySquare.classList.add("padding");
+    }
+
+    calendar.appendChild(daySquare);
+  }
+}
+
+
+function showModal(day, month, year) {
+  clicked = { day, month, year };
+  const eventForDay = eventsArr.filter(
+    (e) => e.day === day && e.month === month && e.year === year
+  );
+
+  mDate.innerText = day;
+  mMonth.innerText = months[month - 1];
+  mYear.innerText = year;
+  mDay.innerText = weeks[new Date(year, month - 1, day).getDay()];
+
+  allEvents.innerHTML = '';
+
+  if (eventForDay.length > 0) {
+    eventForDay.forEach((event) => {
+      const eventElement = document.createElement("div");
+      eventElement.classList.add("event-item");
+
+      const eventDesc = document.createElement("div");
+      eventDesc.classList.add("event-desc");
+      // const eventDes = document.createElement("div");
+      // eventDesc.classList.add("event-des");
+
+      const eventTitle = document.createElement("p");
+      eventTitle.innerText = event.title;
+
+      const eventDescription = document.createElement("p");
+      eventDescription.innerText = event.description;
+
+      eventDesc.appendChild(eventTitle);
+      eventDesc.appendChild(eventDescription);
+      eventElement.appendChild(eventDesc);
+
+      const deleteButton = document.createElement("button");
+      deleteButton.innerText = "Delete";
+      deleteButton.addEventListener("click", () => deleteEvent(event.title));
+
+      eventElement.appendChild(deleteButton);
+
+      allEvents.appendChild(eventElement);
+    });
+  }
+
+  modal.classList.remove("hide-modal");
+  modal.classList.add("show-modal");
+}
+
+function hideModal() {
+  modal.classList.remove("show-modal");
+  modal.classList.add("hide-modal");
+  document.getElementById("schoolName").innerHTML="";
+  document.getElementById("district").innerHTML="";
+  document.getElementById("mobileNumber").innerHTML="";
+  document.getElementById("email").innerHTML="";
+ 
+}
+
+async function addEvent() {
+  const eventStatus = document.getElementById("eventStatus");
+  const schoolName = document.getElementById("schoolName");
+  const district = document.getElementById("district");
+  const mobileNumber = document.getElementById("mobileNumber");
+  const email = document.getElementById("email");
+
+  if (schoolName.value.trim() && district.value.trim() && mobileNumber.value.trim() && email.value.trim()) {
+    const event = {
+      day: clicked.day,
+      month: clicked.month,
+      year: clicked.year,
+      schoolName: schoolName.value.trim(),
+      district: district.value.trim(),
+      mobileNumber: mobileNumber.value.trim(),
+      email: email.value.trim()
+    };
+    console.log(event);
+    
+    // Show "registering event" message
+    eventStatus.innerText = "Registering event...";
+    eventStatus.classList.add("show");
+    eventStatus.classList.remove("success", "error");
+    hideModal();
+    await fetch('/events', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(event)
+    })
+    .then(response => {
+      if (!response.ok) {
+        return response.json().then(data => { throw new Error(data.error || 'Failed to register event'); });
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Show success message
+      eventStatus.innerText = "Event successfully registered!";
+      eventStatus.classList.add("success");
+      eventStatus.classList.remove("error");
+      console.log(data.status);
+      
+    })
+    .catch(error => {
+      // Display an error message
+      eventStatus.innerText = `Error: ${error.message}`;
+      eventStatus.classList.add("error");
+      eventStatus.classList.remove("success");
+    })
+    .finally(() => {
+      // Remove the show class after a delay
+      setTimeout(() => {
+        eventStatus.classList.remove("show");
+      }, 3000);
+      // hideModal();
+      // Reload the month
+      loadMonth();
+    });
+  }
+}
+
+
+
+
+
+async function deleteEvent(title) {
+  eventsArr = eventsArr.filter(
+    (e) => !(e.day === clicked.day && e.month === clicked.month && e.year === clicked.year && e.title === title)
+  );
+  showModal(clicked.day, clicked.month, clicked.year);
+  await fetch('/events', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      day: clicked.day,
+      month: clicked.month,
+      year: clicked.year,
+      title
+    })
+  });
+}
+
+function prevMonth() {
+  nav--;
+  loadMonth();
+}
+
+function nextMonth() {
+  nav++;
+  loadMonth();
+}
+
+function changeTheme() {
+  if (theme === "light") {
+    theme = "dark";
+    document.body.classList.add("dark");
+  } else {
+    theme = "light";
+    document.body.classList.remove("dark");
+  }
+ }
+
+
+ async function showUserEvents() {
+  const response = await fetch('/fevents', { method: 'GET' });
+  const events = await response.json();
+  const userEventsList = document.getElementById("userEventsList");
+
+  userEventsList.innerHTML = '';
+
+  if (events.length === 0) {
+    userEventsList.innerHTML = '<p class="event-msg">No events found.</p>';
+  } else {
+    userEventsList.innerHTML = '<p class="event-msg">Your events: </p>';
+    events.forEach(event => {
+      const eventElement = document.createElement("div");
+      eventElement.classList.add("event-item");
+
+      const eventDesc = document.createElement("div");
+      eventDesc.classList.add("event-desc");
+
+      const eventSchoolName = document.createElement("p");
+      eventSchoolName.innerText = `School Name: ${event.schoolName}`;
+
+      const eventDistrict = document.createElement("p");
+      eventDistrict.innerText = `District: ${event.district}`;
+
+      const eventMobileNumber = document.createElement("p");
+      eventMobileNumber.innerText = `Mobile Number: ${event.mobileNumber}`;
+
+      const eventEmail = document.createElement("p");
+      eventEmail.innerText = `Email: ${event.email}`;
+
+      const eventDate = document.createElement("p");
+      eventDate.innerText = `Date: ${event.day}-${months[event.month - 1]}-${event.year}`;
+
+      eventDesc.appendChild(eventSchoolName);
+      eventDesc.appendChild(eventDistrict);
+      eventDesc.appendChild(eventMobileNumber);
+      eventDesc.appendChild(eventEmail);
+      eventDesc.appendChild(eventDate);
+      eventElement.appendChild(eventDesc);
+
+      userEventsList.appendChild(eventElement);
+    });
+
+  }
+  userEventsList.style.display = "flex";
+  setTimeout(() => {
+    userEventsList.style.opacity = 1;
+    
+  }, 1000);
+}
+
+function hideUserEvents()
+{
+  const userEventsList = document.getElementById("userEventsList");
+  userEventsList.style.opacity = 0;
+  setTimeout(() => {
+    
+    userEventsList.style.display = "none";
+  }, 1000);
+
+}
+let te = false;
+function toggleUserEvents()
+{
+if(!te)
+{
+  te = true;
+  showUserEvents();
+}
+else{
+  te = false;
+  hideUserEvents();
+}
+}
+    </script>
   </body>
 </html>
