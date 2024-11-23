@@ -4,173 +4,191 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show Records</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/2989da120242593.60adeb7e781fc.gif);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 1px;
-        }
-        .table-container {
-            width: 200%;
-            margin: auto;
-            background: rgb(247, 111, 247);
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            min-width: 1500px;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .table-container h2 {
-            text-align: center;
-        }
-        @media (max-width: 768px) {
-            body {
-                align-items: flex-start;
-                padding: 20px 0;
-            }
-            .table-container {
-                width: 100%;
-                padding: 10px;
-            }
-            table {
-                min-width: 0;
-                font-size: 14px;
-            }
-            th, td {
-                padding: 8px;
-            }
-            .table-container h2 {
-                font-size: 24px;
-            }
-        }
-        @media (max-width: 480px) {
-            th, td {
-                padding: 6px;
-                font-size: 12px;
-            }
-            .table-container h2 {
-                font-size: 20px;
-            }
-        }
-    </style>
+   <style>
+    body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/2989da120242593.60adeb7e781fc.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    opacity: 1;
+}
+
+.table-container {
+    width: 90%;
+    margin: auto;
+    background: rgba(247, 111, 247, 0.193);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    overflow-x: auto;
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h2 {
+    color: #fff;
+    text-shadow: 0 0 10px rgb(41, 7, 14);
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.record {
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-left: 5px solid #f36f6f;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.record:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.record p {
+    margin: 10px 0;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.record p strong {
+    color: #f36f6f;
+}
+
+.record .record-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #444;
+}
+
+.record .record-header span {
+    font-size: 1.1em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        width: 100%;
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 2.2em;
+    }
+
+    .record {
+        padding: 15px;
+        max-width: 90%;
+    }
+
+    .record p {
+        font-size: 1.1em;
+    }
+
+    .record .record-header {
+        font-size: 1.3em;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 1.8em;
+    }
+
+    .record {
+        padding: 10px;
+        max-width: 100%;
+    }
+
+    .record p {
+        font-size: 1em;
+    }
+
+    .record .record-header {
+        font-size: 1.2em;
+    }
+}
+
+   </style>
 </head>
 <body>
     <div class="table-container">
         <h2>Records</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>S.No</th>
-                    <th>State</th>
-                    <th>SPOC from Mikids</th>
-                    <th>Mode of Enquiry</th>
-                    <th>Name of the School</th>
-                    <th>Board</th>
-                    <th>District</th>
-                    <th>Area</th>
-                    <th>Total Strength</th>
-                    <th>Name of Principal</th>
-                    <th>Contact Number</th>
-                    <th>School SPOC</th>
-                    <th>SPOC Contact Number</th>
-                    <th>Demo Given to</th>
-                    <th>Demo Given Date</th>
-                    <th>Follow up Date</th>
-                    <th>Remarks/Status</th>
-                    <th>Infrastructure</th>
-                    <th>Teacher's Quality</th>
-                    <th>Signed for</th>
-                    <th>Signed@</th>
-                </tr>
-            </thead>
-            <tbody id="recordsTableBody">
-                <!-- Data will be dynamically inserted here -->
-            </tbody>
-        </table>
+        <div id="recordsTableBody">
+            <!-- Data will be dynamically inserted here -->
+        </div>
     </div>
 
     <script>
-        // Wait for the DOM to load before executing the script
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Fetch the records from the server
                 const response = await fetch('/fetch');
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
-
-                // Parse the response as JSON
                 const data = await response.json();
                 console.log('Data received from /fetch:', data); // Debug log to check data
-
                 const tableBody = document.getElementById('recordsTableBody');
 
-                // Check if the data is in the expected format (array of records)
                 if (Array.isArray(data) && data.length > 0) {
-                    // Loop through each record and create a row
                     data.forEach(item => {
-                        const row = document.createElement('tr');
+                        const record = document.createElement('div');
+                        record.classList.add('record');
+
                         const formatDate = (dateString) => {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC' };
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', options);
-        };
-                        // Make sure to handle cases where some values might be undefined
-                        row.innerHTML = `
-                            <td>${item.serialNo || 'N/A'}</td>
-                            <td>${item.state || 'N/A'}</td>
-                            <td>${item.spocFromMikids || 'N/A'}</td>
-                            <td>${item.modeOfEnquiry || 'N/A'}</td>
-                            <td>${item.schoolName || 'N/A'}</td>
-                            <td>${item.board || 'N/A'}</td>
-                            <td>${item.district || 'N/A'}</td>
-                            <td>${item.area || 'N/A'}</td>
-                            <td>${item.totalStrength || 'N/A'}</td>
-                            <td>${item.principalName || 'N/A'}</td>
-                            <td>${item.contactNumber || 'N/A'}</td>
-                            <td>${item.schoolSpoc || 'N/A'}</td>
-                            <td>${item.spocContactNumber || 'N/A'}</td>
-                            <td>${item.demoGivenTo || 'N/A'}</td>
-                            <td>${item.demoGivenDate ? new Date(item.demoGivenDate).toLocaleDateString() : 'N/A'}</td>
-                            <td>${item.followUpDate ? new Date(item.followUpDate).toLocaleDateString() : 'N/A'}</td>
-                            <td>${item.remarksStatus || 'N/A'}</td>
-                            <td>${item.infrastructure || 'N/A'}</td>
-                            <td>${item.teachersQuality || 'N/A'}</td>
-                            <td>${item.signedFor || 'N/A'}</td>
-                           <td>${item.signedAt ? formatDate(item.signedAt) : 'N/A'}</td>
+                            const options = { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'UTC' };
+                            const date = new Date(dateString);
+                            return date.toLocaleDateString('en-US', options);
+                        };
+
+                        record.innerHTML = `
+                            <p><strong>S.No:</strong> ${item.serialNo || 'N/A'}</p>
+                            <p><strong>State:</strong> ${item.state || 'N/A'}</p>
+                            <p><strong>SPOC from Mikids:</strong> ${item.spocFromMikids || 'N/A'}</p>
+                            <p><strong>Mode of Enquiry:</strong> ${item.modeOfEnquiry || 'N/A'}</p>
+                            <p><strong>Name of the School:</strong> ${item.schoolName || 'N/A'}</p>
+                            <p><strong>Board:</strong> ${item.board || 'N/A'}</p>
+                            <p><strong>District:</strong> ${item.district || 'N/A'}</p>
+                            <p><strong>Area:</strong> ${item.area || 'N/A'}</p>
+                            <p><strong>Total Strength:</strong> ${item.totalStrength || 'N/A'}</p>
+                            <p><strong>Name of Principal:</strong> ${item.principalName || 'N/A'}</p>
+                            <p><strong>Contact Number:</strong> ${item.contactNumber || 'N/A'}</p>
+                            <p><strong>School SPOC:</strong> ${item.schoolSpoc || 'N/A'}</p>
+                            <p><strong>SPOC Contact Number:</strong> ${item.spocContactNumber || 'N/A'}</p>
+                            <p><strong>Demo Given to:</strong> ${item.demoGivenTo || 'N/A'}</p>
+                            <p><strong>Demo Given Date:</strong> ${item.demoGivenDate ? formatDate(item.demoGivenDate) : 'N/A'}</p>
+                            <p><strong>Follow up Date:</strong> ${item.followUpDate ? formatDate(item.followUpDate) : 'N/A'}</p>
+                            <p><strong>Remarks/Status:</strong> ${item.remarksStatus || 'N/A'}</p>
+                            <p><strong>Infrastructure:</strong> ${item.infrastructure || 'N/A'}</p>
+                            <p><strong>Teacher's Quality:</strong> ${item.teachersQuality || 'N/A'}</p>
+                            <p><strong>Signed for:</strong> ${item.signedFor || 'N/A'}</p>
+                            <p><strong>Signed@:</strong> ${item.signedAt ? formatDate(item.signedAt) : 'N/A'}</p>
                         `;
-                        tableBody.appendChild(row);
+                        tableBody.appendChild(record);
                     });
                 } else {
                     console.error('Invalid data format or empty array received:', data);
-                    // Show a message if no records are found
-                    tableBody.innerHTML = '<tr><td colspan="20">No records found.</td></tr>';
+                    tableBody.innerHTML = '<p>No records found.</p>';
                 }
             } catch (error) {
                 console.error('Error fetching records:', error);
-                // Handle errors (e.g., network issues, server errors)
-                document.getElementById('recordsTableBody').innerHTML = '<tr><td colspan="20">Error fetching data. Please try again later.</td></tr>';
+                document.getElementById('recordsTableBody').innerHTML = '<p>Error fetching data. Please try again later.</p>';
             }
         });
     </script>

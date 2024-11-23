@@ -577,18 +577,40 @@ def update_location():
     return "User not logged in", 403
 # Submit a new record
 
+
 @app.route('/submit', methods=['POST', 'GET'])
 def submit_record():
     try:  
+        # Print incoming JSON data for debugging
         record_data = request.get_json()
+        print('Received record data:', record_data)
+        
+        # Ensure required fields are present in the data
+        if not all(key in record_data for key in ['demoGivenDate', 'followUpDate']):
+            raise ValueError("Missing required fields")
+
+        # Parse dates
         record_data['demoGivenDate'] = datetime.strptime(record_data['demoGivenDate'], '%Y-%m-%d')
         record_data['followUpDate'] = datetime.strptime(record_data['followUpDate'], '%Y-%m-%d')
+        
+        # Add current datetime for 'signedAt' and username from session
         record_data['signedAt'] = datetime.now()
-        record_data["user"]   = session.get("username")
+        record_data["user"] = session.get("username")
+
+        # Insert record into MongoDB
         Record.insert_one(record_data)
+        
         return jsonify({'message': 'Record submitted successfully!'}), 200
+    except ValueError as ve:
+        # Handle missing required fields or invalid data
+        return jsonify({'message': 'Error submitting record.', 'error': str(ve)}), 400
     except Exception as e:
+        # General error handling
+        print('Error:', e)
         return jsonify({'message': 'Error submitting record.', 'error': str(e)}), 500
+
+
+
 
 # Fetch records data
 @app.route('/fetch_records', methods=['GET'])
