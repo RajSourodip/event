@@ -509,7 +509,7 @@ def add_event():
         print(message)
         
         # Send email using yagmail
-        yag = yagmail.SMTP('ghoshraj368@gmail.com', myPASS)
+        yag = yagmail.SMTP('ghoshraj368@gmail.com', "wumwyxwyqfabhetz")
         yag.send(
             to=email,
             subject=subject,
