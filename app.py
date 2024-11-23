@@ -476,13 +476,14 @@ def convert_objectid_to_str(document):
     else:
         return document
 
-@app.route('/events', methods=['POST', "GET"])
+@app.route('/events', methods=['POST', 'GET'])
 def add_event():
     try:
         event_data = request.get_json()
-        username   =  session.get("username")
-        event_data["user"] =  username
+        username = session.get("username")
+        event_data["user"] = username
         print(event_data)
+        
         # Insert the event into MongoDB
         Event.insert_one(event_data)
         
@@ -490,15 +491,17 @@ def add_event():
         day = event_data.get("day")
         month = event_data.get("month")
         year = event_data.get("year")
-        title = event_data.get("title")
-        description = event_data.get("description")
-        recipient_email = event_data.get("recipient_email")
+        school_name = event_data.get("schoolName")
+        district = event_data.get("district")
+        mobile_number = event_data.get("mobileNumber")
+        email = event_data.get("email")
 
-        message = (f"Hello,\n\nYour event '{title}' has been successfully registered!\n\n"
+        message = (f"Hello,\n\nYour event at '{school_name}' has been successfully registered!\n\n"
                    f"Event Details:\n"
                    f"Date: {day}/{month}/{year}\n"
-                   f"Title: {title}\n"
-                   f"Description: {description}\n\n"
+                   f"School Name: {school_name}\n"
+                   f"District: {district}\n"
+                   f"Mobile Number: {mobile_number}\n\n"
                    "Thank you for using our service!")
         
         # Customize subject and content of the email
@@ -508,13 +511,13 @@ def add_event():
         # Send email using yagmail
         yag = yagmail.SMTP('ghoshraj368@gmail.com', myPASS)
         yag.send(
-            to=recipient_email,
+            to=email,
             subject=subject,
             contents=message
         )
         
         # Return the event data with a 201 response
-        return jsonify({"status":"success"}), 201
+        return jsonify({"status": "success"}), 201
     except Exception as e:
         print(e)
         return jsonify({'error': str(e)}), 500

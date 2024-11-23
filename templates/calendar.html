@@ -20,7 +20,7 @@
     <div class="calContainer">
       <div class="row">
         <div class="col">
-          <button class="btn" onclick="showUserEvents()">
+          <button class="btn" onclick="toggleUserEvents()">
             <span class="material-symbols-outlined"> event </span>
           </button>
         </div>
@@ -66,14 +66,21 @@
             </h1>
           </div>
           <div class="modal-form">
-            <label>Event title <b>*</b></label>
-            <input type="text" id="eventName" autocomplete="off" />
-            <label>Description </label>
-            <input type="text" id="eventDesc" autocomplete="off" />
-            <label>Add your Gmail </label>
-            <input type="text" id="eventDes" autocomplete="off" />
+            <label>School name <b>*</b></label>
+            <input type="text" id="schoolName" autocomplete="off" />
+            
+            <label>District <b>*</b></label>
+            <input type="text" id="district" autocomplete="off" />
+            
+            <label>Mobile number <b>*</b></label>
+            <input type="text" id="mobileNumber" autocomplete="off" />
+            
+            <label>Email <b>*</b></label>
+            <input type="email" id="email" autocomplete="off" />
+            
             <button onclick="addEvent()">Add Event</button>
           </div>
+          
           
         </div>
        

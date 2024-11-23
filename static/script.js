@@ -18,8 +18,7 @@ const mDate = document.getElementById("mDate");
 const mMonth = document.getElementById("mMonth");
 const mYear = document.getElementById("mYear");
 const mDay = document.getElementById("mDay");
-const eventName = document.getElementById("eventName");
-const eventDesc = document.getElementById("eventDesc");
+
   const allEvents = document.getElementById("userEventsList");
 
 document.addEventListener("DOMContentLoaded", init);
@@ -138,23 +137,29 @@ function showModal(day, month, year) {
 function hideModal() {
   modal.classList.remove("show-modal");
   modal.classList.add("hide-modal");
-  eventName.value = '';
-  eventDesc.value = '';
+  document.getElementById("schoolName").innerHTML="";
+  document.getElementById("district").innerHTML="";
+  document.getElementById("mobileNumber").innerHTML="";
+  document.getElementById("email").innerHTML="";
  
 }
 
 async function addEvent() {
-  
-  
   const eventStatus = document.getElementById("eventStatus");
-  if (eventName.value.trim()) {
+  const schoolName = document.getElementById("schoolName");
+  const district = document.getElementById("district");
+  const mobileNumber = document.getElementById("mobileNumber");
+  const email = document.getElementById("email");
+
+  if (schoolName.value.trim() && district.value.trim() && mobileNumber.value.trim() && email.value.trim()) {
     const event = {
       day: clicked.day,
       month: clicked.month,
       year: clicked.year,
-      title: eventName.value.trim(),
-      description: eventDesc.value.trim(),
-      recipient_email: document.getElementById("eventDes").value
+      schoolName: schoolName.value.trim(),
+      district: district.value.trim(),
+      mobileNumber: mobileNumber.value.trim(),
+      email: email.value.trim()
     };
     console.log(event);
     
@@ -264,23 +269,59 @@ function changeTheme() {
       const eventDesc = document.createElement("div");
       eventDesc.classList.add("event-desc");
 
-      const eventTitle = document.createElement("p");
-      eventTitle.innerText = `Title: ${event.title}`;
+      const eventSchoolName = document.createElement("p");
+      eventSchoolName.innerText = `School Name: ${event.schoolName}`;
 
-      const eventDescription = document.createElement("p");
-      eventDescription.innerText = `Description: ${event.description}`;
+      const eventDistrict = document.createElement("p");
+      eventDistrict.innerText = `District: ${event.district}`;
+
+      const eventMobileNumber = document.createElement("p");
+      eventMobileNumber.innerText = `Mobile Number: ${event.mobileNumber}`;
+
+      const eventEmail = document.createElement("p");
+      eventEmail.innerText = `Email: ${event.email}`;
 
       const eventDate = document.createElement("p");
       eventDate.innerText = `Date: ${event.day}-${months[event.month - 1]}-${event.year}`;
 
-      eventDesc.appendChild(eventTitle);
-      eventDesc.appendChild(eventDescription);
+      eventDesc.appendChild(eventSchoolName);
+      eventDesc.appendChild(eventDistrict);
+      eventDesc.appendChild(eventMobileNumber);
+      eventDesc.appendChild(eventEmail);
       eventDesc.appendChild(eventDate);
       eventElement.appendChild(eventDesc);
 
       userEventsList.appendChild(eventElement);
-  });
+    });
+
   }
+  userEventsList.style.display = "flex";
+  setTimeout(() => {
+    userEventsList.style.opacity = 1;
+    
+  }, 1000);
+}
 
+function hideUserEvents()
+{
+  const userEventsList = document.getElementById("userEventsList");
+  userEventsList.style.opacity = 0;
+  setTimeout(() => {
+    
+    userEventsList.style.display = "none";
+  }, 1000);
 
+}
+let te = false;
+function toggleUserEvents()
+{
+if(!te)
+{
+  te = true;
+  showUserEvents();
+}
+else{
+  te = false;
+  hideUserEvents();
+}
 }
