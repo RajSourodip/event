@@ -94,9 +94,10 @@
 <body>
   <div class="form-container">
     <h2>Record Form</h2>
-    <form id="recordForm">
-      <input type="number" id="serialNo" name="serialNo" placeholder="S.No" required />
-      <input type="text" id="state" name="state" placeholder="State" required />
+    <!-- <form id="recordForm">
+       <input type="number" id="serialNo" name="serialNo" placeholder="S.No" required /> 
+   
+      <input type="hidden" id="state" name="state" value="Kerala" />
       <input type="text" id="spocFromMikids" name="spocFromMikids" placeholder="SPOC from Mikids" required />
       <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" required />
       <input type="text" id="schoolName" name="schoolName" placeholder="Name of the School" required />
@@ -125,84 +126,165 @@
         <button type="button" class="show-button" id="dashButton">Dashboard</button>
         <button type="button" class="show-button" id="trackButton">Track Your Location</button>
       </div>
+    </form>  -->
+
+
+
+    <form id="recordForm">
+      <input type="hidden" id="serialNo" name="serialNo" />
+      <input type="hidden" id="state" name="state" value="Kerala" />
+      <input type="text" id="spocFromMikids" name="spocFromMikids" placeholder="SPOC from Mikids" />
+      <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" />
+      <input type="text" id="schoolName" name="schoolName" placeholder="Name of the School" />
+      <input type="text" id="board" name="board" placeholder="Board" />
+      <!-- <input type="text" id="district" name="district" placeholder="District" /> -->
+      <select id="district" name="district" required>
+        <option value="" disabled selected>Select District</option>
+        <option value="Nilgiris">Nilgiris</option>
+        <option value="Kasaragod">Kasaragod</option>
+        <option value="Kannur">Kannur</option>
+        <option value="Calicut">Calicut</option>
+        <option value="Wayanad">Wayanad</option>
+        <option value="Malappuram">Malappuram</option>
+        <option value="Palakkad">Palakkad</option>
+        <option value="Trichur">Trichur</option>
+        <option value="Ernakulam">Ernakulam</option>
+        <option value="Kotayam">Kotayam</option>
+        <option value="Idukki">Idukki</option>
+        <option value="Alleppey">Alleppey</option>
+        <option value="Kollam">Kollam</option>
+        <option value="Pathanamthitta">Pathanamthitta</option>
+        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+    </select>
+      <input type="text" id="area" name="area" placeholder="Area" />
+      <input type="text" id="totalStrength" name="totalStrength" placeholder="Total Strength" />
+      <input type="text" id="principalName" name="principalName" placeholder="Name of Principal" />
+      <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" />
+      <input type="text" id="schoolSpoc" name="schoolSpoc" placeholder="School SPOC" />
+      <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" />
+      <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" />
+      <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" />
+      <input type="date" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
+      <input type="date" id="followUpDate" name="followUpDate" placeholder="Follow up Date" />
+      <textarea id="remarksStatus" name="remarksStatus" placeholder="Remarks/Status"></textarea>
+      <input type="text" id="infrastructure" name="infrastructure" placeholder="Infrastructure" />
+      <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" />
+      <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" />
+    
+      <div>
+        <button type="submit" id="submitBTN">Submit</button>
+        <button type="button" class="show-button" id="showButton">Show Records</button>
+        <button type="button" class="down-button" id="downloadButton">Download Record</button>
+        <button type="button" class="show-button" id="calButton">Show Calendar</button>
+        <button type="button" class="show-button" id="dashButton">Dashboard</button>
+        <button type="button" class="show-button" id="trackButton">Track Your Location</button>
+      </div>
     </form>
+
+
   </div>
 
   <script>
-    document.getElementById("submitBTN").addEventListener("click", async function (event) {
-      event.preventDefault(); // Prevent the default form submission
+document.addEventListener('DOMContentLoaded', function () {
+  // Automatically set state to Kerala
+  document.getElementById('state').value = 'Kerala';
 
-      const formData = {
-        serialNo: document.getElementById('serialNo').value,
-        state: document.getElementById('state').value,
-        spocFromMikids: document.getElementById('spocFromMikids').value,
-        modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
-        schoolName: document.getElementById('schoolName').value,
-        board: document.getElementById('board').value,
-        district: document.getElementById('district').value,
-        area: document.getElementById('area').value,
-        totalStrength: document.getElementById('totalStrength').value,
-        principalName: document.getElementById('principalName').value,
-        contactNumber: document.getElementById('contactNumber').value,
-        schoolSpoc: document.getElementById('schoolSpoc').value,
-        spocContactNumber: document.getElementById('spocContactNumber').value,
-        demoGivenTo: document.getElementById('demoGivenTo').value,
-        demoGivenDate: document.getElementById('demoGivenDate').value,
-        followUpDate: document.getElementById('followUpDate').value,
-        remarksStatus: document.getElementById('remarksStatus').value,
-        infrastructure: document.getElementById('infrastructure').value,
-        teachersQuality: document.getElementById('teachersQuality').value,
-        signedFor: document.getElementById('signedFor').value,
- 
-      };
+  // Function to generate the next serial number
+  function generateSerialNumber() {
+    // Retrieve the last serial number from local storage
+    let lastSerialNo = localStorage.getItem('lastSerialNo');
+    if (lastSerialNo === null) {
+      lastSerialNo = 0; // If no serial number is found, start with 0
+    }
+    // Increment the last serial number to get the new serial number
+    const newSerialNo = parseInt(lastSerialNo) + 1;
+    // Store the new serial number back in local storage
+    localStorage.setItem('lastSerialNo', newSerialNo);
+    return newSerialNo;
+  }
 
-      const response = await fetch('/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+  document.getElementById('recordForm').addEventListener('submit', function (event) {
+    // Set the serial number
+    document.getElementById('serialNo').value = generateSerialNumber();
+  });
 
-      if (response.ok) {
-        alert('Record submitted successfully!');
-        document.getElementById('recordForm').reset();
-      } else {
-        alert('Error submitting record.');
-      }
+  document.getElementById("submitBTN").addEventListener("click", async function (event) {
+    event.preventDefault(); // Prevent the default form submission
+    const newSerialNo = generateSerialNumber();
+    document.getElementById('serialNo').value = newSerialNo;
+    
+    const formData = {
+      serialNo: newSerialNo,
+      state: document.getElementById('state').value,
+      spocFromMikids: document.getElementById('spocFromMikids').value,
+      modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
+      schoolName: document.getElementById('schoolName').value,
+      board: document.getElementById('board').value,
+      district: document.getElementById('district').value,
+      area: document.getElementById('area').value,
+      totalStrength: document.getElementById('totalStrength').value,
+      principalName: document.getElementById('principalName').value,
+      contactNumber: document.getElementById('contactNumber').value,
+      schoolSpoc: document.getElementById('schoolSpoc').value,
+      spocContactNumber: document.getElementById('spocContactNumber').value,
+      demoGivenTo: document.getElementById('demoGivenTo').value,
+      demoGivenDate: document.getElementById('demoGivenDate').value,
+      followUpDate: document.getElementById('followUpDate').value,
+      remarksStatus: document.getElementById('remarksStatus').value,
+      infrastructure: document.getElementById('infrastructure').value,
+      teachersQuality: document.getElementById('teachersQuality').value,
+      signedFor: document.getElementById('signedFor').value,
+    };
+
+    const response = await fetch('/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
     });
 
-    document.getElementById('downloadButton').addEventListener('click', function() {
-      fetch('/downloads')
-        .then(response => response.blob())
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = url;
-          a.download = 'data.xlsx';
-          document.body.appendChild(a);
-          a.click();
-          window.URL.revokeObjectURL(url);
-        })
-        .catch(error => console.error('Error downloading the file:', error));
-    });
+    if (response.ok) {
+      alert('Record submitted successfully!');
+      document.getElementById('recordForm').reset();
+    } else {
+      alert('Error submitting record.');
+    }
+  });
 
-    document.getElementById("showButton").addEventListener("click", function () {
-      window.location.href = "/show";
-    });
+  document.getElementById('downloadButton').addEventListener('click', function () {
+    fetch('/downloads')
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'data.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(error => console.error('Error downloading the file:', error));
+  });
 
-    document.getElementById("calButton").addEventListener("click", function () {
-      window.location.href = "/calendar";
-    });
+  document.getElementById("showButton").addEventListener("click", function () {
+    window.location.href = "/show";
+  });
 
-    document.getElementById("dashButton").addEventListener("click", function () {
-      window.location.href = "/dashboard";
-    });
+  document.getElementById("calButton").addEventListener("click", function () {
+    window.location.href = "/calendar";
+  });
 
-    document.getElementById("trackButton").addEventListener("click", function () {
-      window.location.href = "/tracker";
-    });
+  document.getElementById("dashButton").addEventListener("click", function () {
+    window.location.href = "/dashboard";
+  });
+
+  document.getElementById("trackButton").addEventListener("click", function () {
+    window.location.href = "/tracker";
+  });
+});
+
   </script>
 </body>
 </html>
