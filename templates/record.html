@@ -134,9 +134,24 @@
       <input type="hidden" id="serialNo" name="serialNo" />
       <input type="hidden" id="state" name="state" value="Kerala" />
       <input type="text" id="spocFromMikids" name="spocFromMikids" placeholder="SPOC from Mikids" />
-      <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" />
+      <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
+      <select id="modeOfEnquiry" name="modeOfEnquiry" required>
+        <option value="" disabled selected>Select Mode of Enquiry</option>
+        <option value="LY">LY</option>
+        <option value="Direct">Direct</option>
+        <option value="Survey">Survey</option>
+        <option value="Reference">Reference</option>
+        <option value="Distributor">Distributor</option>
+      </select>
       <input type="text" id="schoolName" name="schoolName" placeholder="Name of the School" />
-      <input type="text" id="board" name="board" placeholder="Board" />
+      <!-- <input type="text" id="board" name="board" placeholder="Board" /> -->
+      <select id="board" name="board" required>
+        <option value="" disabled selected>Select Board</option>
+        <option value="Matric">Matric</option>
+        <option value="State">State</option>
+        <option value="CBSE">CBSE</option>
+        <option value="ICSE">ICSE</option>
+      </select>
       <!-- <input type="text" id="district" name="district" placeholder="District" /> -->
       <select id="district" name="district" required>
         <option value="" disabled selected>Select District</option>
@@ -162,7 +177,7 @@
       <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" />
       <input type="text" id="schoolSpoc" name="schoolSpoc" placeholder="School SPOC" />
       <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" />
-      <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" />
+      <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
       <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" />
       <input type="date" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
       <input type="date" id="followUpDate" name="followUpDate" placeholder="Follow up Date" />
