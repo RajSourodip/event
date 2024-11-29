@@ -23,8 +23,8 @@ cors =  CORS(app)
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
 # MongoDB connection
-app.config["MONGO_URI"] = "mongodb+srv://sourodip:rajghosh@first.ff1ia.mongodb.net/first?retryWrites=true&w=majority"
-client = MongoClient(app.config["MONGO_URI"])
+# app.config["MONGO_URI"] = "mongodb+srv://sourodip:rajghosh@first.ff1ia.mongodb.net/first?retryWrites=true&w=majority"
+client = MongoClient("mongodb+srv://sourodip:rajghosh@first.ff1ia.mongodb.net/first?retryWrites=true&w=majority")
 bcrypt = Bcrypt()
 # Schemas: MongoDB collections
 User = client.first.login
@@ -186,29 +186,28 @@ def individual_records():
 @app.route('/get_permissions', methods=['GET'])
 def get_permissions():
     try:
+        print("Trying to get in")
         # Fetch all permission requests from the 'permissions' collection
-        # We are fetching only 'pending' requests, but you can modify this as needed
-        permissions = Permit.find({'status': 'pending'})
-        
+        permissions_cursor = Permit.find({'status': 'pending'})
+        print(permissions_cursor)
         # Create a list to hold the permission data
         permissions_list = []
+#        
         
         # Iterate over each permission request and format the response
-        for permission in permissions:
+        for permission in permissions_cursor:
             permissions_list.append({
                 'user': permission['user'],
                 'request_date': permission['request_date'],
                 'status': permission['status']
             })
-        print(permissions_list)
-
-
         
+        print("Printing:", permissions_list)  # Correct way to print the list
         # Return the list of permission requests as a JSON response
-        print(permissions_list)
         return jsonify(permissions_list)
     
     except Exception as e:
+        print(e)
         return jsonify({'message': 'Error fetching permissions', 'error': str(e)}), 500
 
 
@@ -281,7 +280,7 @@ def update_permission():
         status = request.json.get('status')  # Expected values: 'granted' or 'rejected'
         
         # Validate the input
-        if status not in ['granted']:
+        if status not in ['granted', 'rejected']:
             return jsonify({'message': 'Invalid status. Use "granted" or "rejected".'}), 400
         
         # Update the permission status in the 'permissions' collection

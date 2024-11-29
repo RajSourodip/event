@@ -21,12 +21,12 @@
         background-attachment: fixed;
         opacity: 1;
       }
-        #adminLogin{
-          color: white;
-        }
-        #adminLogin a{
-          color: rgb(16, 223, 61);
-        }
+      #adminLogin {
+        color: white;
+      }
+      #adminLogin a {
+        color: rgb(16, 223, 61);
+      }
       .login-box {
         width: 80%;
         max-width: 400px;
@@ -40,37 +40,42 @@
         background-position: center;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
       }
-
       form {
         position: relative;
         margin: 0 auto;
         text-align: center;
         width: 100%;
       }
-
       .login-box h2 {
         color: white;
         font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
         font-size: 40px;
         margin-bottom: 20px;
       }
-
       div {
         margin-bottom: 15px;
       }
-
       label {
         display: block;
         margin-bottom: 5px;
       }
-
+      .input-container {
+        position: relative;
+        width: 100%;
+      }
       input {
         width: 100%;
         padding: 12px;
         box-sizing: border-box;
         box-shadow: 10 8px 15px rgba(0, 0, 0, 0.5);
       }
-
+      .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+      }
       button {
         width: 100%;
         padding: 10px;
@@ -85,23 +90,20 @@
         top: 10px;
         transition: background 0.3s;
       }
-      .login-box p{
+      .login-box p {
         position: relative;
         top: 20px;
         color: black;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
         font-size: large;
       }
       button:hover {
         background: #ff374f;
       }
-
-
       #message {
         margin-top: 20px;
         color: red;
       }
-      
       @media (min-width: 768px) {
         .login-box {
           width: 40%;
@@ -118,19 +120,39 @@
       <h2>LOGIN</h2>
       <form id="loginForm">
         <input type="text" id="username" placeholder="Username" required />
-        <input type="password" id="password" placeholder="Password" required />
+        <div class="input-container">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <span class="toggle-password" onclick="togglePassword()">👁️</span>
+        </div>
         <button type="submit">Login as User</button>
       </form>
-      <p id="adminLogin">Login as Admin <a href="/admin" onclick="adminLogin()">Login</a></p>
+      <p id="adminLogin">
+        Login as Admin <a href="/admin" onclick="adminLogin()">Login</a>
+      </p>
     </div>
     <script>
+      function togglePassword() {
+        const passwordField = document.getElementById("password");
+        const togglePasswordButton = document.querySelector(".toggle-password");
+        if (passwordField.type === "password") {
+          passwordField.type = "text";
+          togglePasswordButton.textContent = "🔒"; // Change the icon to indicate visibility
+        } else {
+          passwordField.type = "password";
+          togglePasswordButton.textContent = "👁️"; // Change the icon back to eye
+        }
+      }
       document
         .getElementById("loginForm")
         .addEventListener("submit", async function (e) {
           e.preventDefault();
           const username = document.getElementById("username").value;
           const password = document.getElementById("password").value;
-
           const response = await fetch("/login", {
             method: "POST",
             headers: {
@@ -138,7 +160,6 @@
             },
             body: JSON.stringify({ username, password }),
           });
-
           const result = await response.json();
           if (response.ok) {
             window.location.href = "/record";
