@@ -171,6 +171,21 @@
         <option value="Pathanamthitta">Pathanamthitta</option>
         <option value="Thiruvananthapuram">Thiruvananthapuram</option>
     </select>
+      <!-- <input type="text" id="area" name="area" placeholder="Area" />
+      <input type="text" id="totalStrength" name="totalStrength" placeholder="Total Strength" />
+      <input type="text" id="principalName" name="principalName" placeholder="Name of Principal" />
+      <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" />
+      <input type="text" id="schoolSpoc" name="schoolSpoc" placeholder="School SPOC" />
+      <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" />
+      
+      <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" />
+      <input type="date" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
+      <input type="date" id="followUpDate" name="followUpDate" placeholder="Follow up Date" />
+      <textarea id="remarksStatus" name="remarksStatus" placeholder="Remarks/Status"></textarea>
+      <input type="text" id="infrastructure" name="infrastructure" placeholder="Infrastructure" />
+      <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" />
+      <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" /> -->
+
       <input type="text" id="area" name="area" placeholder="Area" />
       <input type="text" id="totalStrength" name="totalStrength" placeholder="Total Strength" />
       <input type="text" id="principalName" name="principalName" placeholder="Name of Principal" />
@@ -179,12 +194,14 @@
       <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" />
       <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
       <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" />
-      <input type="date" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
-      <input type="date" id="followUpDate" name="followUpDate" placeholder="Follow up Date" />
+      <input type="text" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
+      <input type="text" id="followUpDate" name="followUpDate" placeholder="Follow Up Date" />
       <textarea id="remarksStatus" name="remarksStatus" placeholder="Remarks/Status"></textarea>
       <input type="text" id="infrastructure" name="infrastructure" placeholder="Infrastructure" />
       <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" />
       <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" />
+    
+
     
       <div>
         <button type="submit" id="submitBTN">Submit</button>
@@ -200,6 +217,38 @@
   </div>
 
   <script>
+ function setupDateInputs() {
+      const demoGivenDateInput = document.getElementById('demoGivenDate');
+      const followUpDateInput = document.getElementById('followUpDate');
+      
+      demoGivenDateInput.placeholder = "Demo Given Date";
+      followUpDateInput.placeholder = "Follow Up Date";
+      
+      demoGivenDateInput.addEventListener('focus', function() {
+        this.type = 'date';
+      });
+      demoGivenDateInput.addEventListener('blur', function() {
+        if (this.value === '') {
+          this.type = 'text';
+        }
+      });
+      
+      followUpDateInput.addEventListener('focus', function() {
+        this.type = 'date';
+      });
+      followUpDateInput.addEventListener('blur', function() {
+        if (this.value === '') {
+          this.type = 'text';
+        }
+      });
+    }
+    
+    window.onload = setupDateInputs;
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
   // Automatically set state to Kerala
   document.getElementById('state').value = 'Kerala';
