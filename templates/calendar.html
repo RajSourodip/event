@@ -670,7 +670,7 @@ tr:hover td {
               <span id="mDay"></span>
             </h1>
           </div>
-          <div class="modal-form">
+          <!-- <div class="modal-form">
             <label>School name <b>*</b></label>
             <input type="text" id="schoolName" autocomplete="off" />
             
@@ -683,9 +683,33 @@ tr:hover td {
             <label>Email <b>*</b></label>
             <input type="email" id="email" autocomplete="off" />
             
+            <label>Admin 's Email <b>*</b></label>
+            <input type="admin_email" id="admin_email" autocomplete="off" />
+            
             <button onclick="addEvent()">Add Event</button>
           </div>
-          
+           -->
+           <div class="modal-form">
+            <label>School name <b>*</b></label>
+            <input type="text" id="schoolName" autocomplete="off" />
+            
+            <label>District <b>*</b></label>
+            <input type="text" id="district" autocomplete="off" />
+            
+            <label>Mobile number <b>*</b></label>
+            <input type="text" id="mobileNumber" autocomplete="off" />
+            
+            <label>Email <b>*</b></label>
+            <input type="email" id="email" autocomplete="off" />
+            
+            <label>Admin's Email <b>*</b></label>
+            <input type="email" id="admin_email" autocomplete="off" />
+            
+            <button onclick="addEvent()">Add Event</button>
+        </div>
+        
+         
+        
           
         </div>
        
@@ -845,67 +869,139 @@ function hideModal() {
  
 }
 
-async function addEvent() {
-  const eventStatus = document.getElementById("eventStatus");
-  const schoolName = document.getElementById("schoolName");
-  const district = document.getElementById("district");
-  const mobileNumber = document.getElementById("mobileNumber");
-  const email = document.getElementById("email");
+// async function addEvent() {
+//   const eventStatus = document.getElementById("eventStatus");
+//   const schoolName = document.getElementById("schoolName");
+//   const district = document.getElementById("district");
+//   const mobileNumber = document.getElementById("mobileNumber");
+//   const email = document.getElementById("email");
+//   const admin_email = document.getElementById("admin_email");
 
-  if (schoolName.value.trim() && district.value.trim() && mobileNumber.value.trim() && email.value.trim()) {
-    const event = {
-      day: clicked.day,
-      month: clicked.month,
-      year: clicked.year,
-      schoolName: schoolName.value.trim(),
-      district: district.value.trim(),
-      mobileNumber: mobileNumber.value.trim(),
-      email: email.value.trim()
-    };
-    console.log(event);
+//   if (schoolName.value.trim() && district.value.trim() && mobileNumber.value.trim() && email.value.trim()) {
+//     const event = {
+//       day: clicked.day,
+//       month: clicked.month,
+//       year: clicked.year,
+//       schoolName: schoolName.value.trim(),
+//       district: district.value.trim(),
+//       mobileNumber: mobileNumber.value.trim(),
+//       email: email.value.trim()
+//     };
+//     console.log(event);
     
-    // Show "registering event" message
-    eventStatus.innerText = "Registering event...";
-    eventStatus.classList.add("show");
-    eventStatus.classList.remove("success", "error");
-    hideModal();
-    await fetch('/events', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(event)
-    })
-    .then(response => {
-      if (!response.ok) {
-        return response.json().then(data => { throw new Error(data.error || 'Failed to register event'); });
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Show success message
-      eventStatus.innerText = "Event successfully registered!";
-      eventStatus.classList.add("success");
-      eventStatus.classList.remove("error");
-      console.log(data.status);
+//     // Show "registering event" message
+//     eventStatus.innerText = "Registering event...";
+//     eventStatus.classList.add("show");
+//     eventStatus.classList.remove("success", "error");
+//     hideModal();
+//     await fetch('/events', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(event)
+//     })
+//     .then(response => {
+//       if (!response.ok) {
+//         return response.json().then(data => { throw new Error(data.error || 'Failed to register event'); });
+//       }
+//       return response.json();
+//     })
+//     .then(data => {
+//       // Show success message
+//       eventStatus.innerText = "Event successfully registered!";
+//       eventStatus.classList.add("success");
+//       eventStatus.classList.remove("error");
+//       console.log(data.status);
       
-    })
-    .catch(error => {
-      // Display an error message
-      eventStatus.innerText = `Error: ${error.message}`;
-      eventStatus.classList.add("error");
-      eventStatus.classList.remove("success");
-    })
-    .finally(() => {
-      // Remove the show class after a delay
-      setTimeout(() => {
-        eventStatus.classList.remove("show");
-      }, 3000);
-      // hideModal();
-      // Reload the month
-      loadMonth();
-    });
-  }
+//     })
+//     .catch(error => {
+//       // Display an error message
+//       eventStatus.innerText = `Error: ${error.message}`;
+//       eventStatus.classList.add("error");
+//       eventStatus.classList.remove("success");
+//     })
+//     .finally(() => {
+//       // Remove the show class after a delay
+//       setTimeout(() => {
+//         eventStatus.classList.remove("show");
+//       }, 3000);
+//       // hideModal();
+//       // Reload the month
+//       loadMonth();
+//     });
+//   }
+// }
+
+
+async function addEvent() {
+    const eventStatus = document.getElementById("eventStatus");
+    const schoolName = document.getElementById("schoolName");
+    const district = document.getElementById("district");
+    const mobileNumber = document.getElementById("mobileNumber");
+    const email = document.getElementById("email");
+    const admin_email = document.getElementById("admin_email");
+
+    if (schoolName.value.trim() && district.value.trim() && mobileNumber.value.trim() && email.value.trim() && admin_email.value.trim()) {
+        const event = {
+            day: clicked.day,
+            month: clicked.month,
+            year: clicked.year,
+            schoolName: schoolName.value.trim(),
+            district: district.value.trim(),
+            mobileNumber: mobileNumber.value.trim(),
+            email: email.value.trim(),
+            admin_email: admin_email.value.trim()
+        };
+        console.log(event);
+        
+        // Show "registering event" message
+        eventStatus.innerText = "Registering event...";
+        eventStatus.classList.add("show");
+        eventStatus.classList.remove("success", "error");
+        hideModal();
+        await fetch('/events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(event)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => { throw new Error(data.error || 'Failed to register event'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Show success message
+            eventStatus.innerText = "Event successfully registered!";
+            eventStatus.classList.add("success");
+            eventStatus.classList.remove("error");
+            console.log(data.status);
+        })
+        .catch(error => {
+            // Display an error message
+            eventStatus.innerText = `Error: ${error.message}`;
+            eventStatus.classList.add("error");
+            eventStatus.classList.remove("success");
+        })
+        .finally(() => {
+            // Remove the show class after a delay
+            setTimeout(() => {
+                eventStatus.classList.remove("show");
+            }, 3000);
+            // Reload the month
+            loadMonth();
+        });
+    } else {
+        eventStatus.innerText = "Please fill in all required fields.";
+        eventStatus.classList.add("error");
+        eventStatus.classList.remove("success");
+        setTimeout(() => {
+            eventStatus.classList.remove("show");
+        }, 3000);
+    }
 }
 
 
