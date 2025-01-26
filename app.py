@@ -104,22 +104,57 @@ def download_records():
 def get_report():
     if "username" in session:
         username = session["username"]
-        
-        # Query the database for records that match the user's username
-        reports = Dash.find({"user": username})
 
-        # Convert the reports to a list and replace ObjectId with string
+        # Get today's date and the start of the current month
+        today = datetime.now().date()
+        start_of_month = today.replace(day=1)
+
+        # Query the database for all reports by the logged-in user
+        user_reports = Record.find({"user": username})
+        
+        # Prepare the reports data
         reports_data = []
-        for report in reports:
-            # Convert ObjectId to string in the report
-            report['_id'] = str(report['_id'])
+        for report in user_reports:
+            # Convert ObjectId to string for compatibility
+            report["_id"] = str(report["_id"])
+            
+            # Convert datetime fields to string for JSON serialization
+            for key in ["demoGivenDate", "followUpDate", "signedAt"]:
+                if key in report:
+                    report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
+            
+            # Calculate PD Done Today for this report
+            pd_done_today = Record.count_documents({
+                "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(today, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            
+            # Calculate SMD Done Today for this report
+            smd_done_today = Record.count_documents({
+                "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            
+            # Add the calculated fields to the report
+            report["pdDoneToday"] = pd_done_today
+            report["smdDoneToday"] = smd_done_today
+            
+            # Append the enriched report to the list
             reports_data.append(report)
-        print(report)
-        # Return the reports as JSON
+            print(reports_data)
+        # Return the enriched reports
         return jsonify({"status": "success", "data": reports_data}), 200
+
     else:
         return jsonify({"status": "error", "message": "User not logged in"}), 401
-
 
 @app.route('/report_form', methods=['GET'])
 def report_form():

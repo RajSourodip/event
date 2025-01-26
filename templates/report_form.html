@@ -367,6 +367,7 @@
       .report_form{
         position: relative;
         top: 30px;
+        
       }
       .submit-container {
           display: flex;
@@ -427,6 +428,9 @@
       #message {
           color: green;
           display: none;
+      }
+      #reportForm, h2{
+        display: none;
       }
   </style>
 </head>
@@ -502,8 +506,8 @@
           </select>
       
           <button type="submit" class="submit-btn">Submit</button>
-          <button id="download-btn" type="button">Download</button>
-      </form>
+        </form>
+        <button id="download-btn" type="button">Download</button>
       
         <p id="message" style="color: green; display: none">The record has been submitted!</p>
     </div>

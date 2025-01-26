@@ -6,90 +6,108 @@
   <title>Record Form</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/38094b95235473.5e92ecc4409a8.gif);
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      opacity: 1px;
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-image: url(https://mir-s3-cdn-cf.behance.net/project_modules/disp/38094b95235473.5e92ecc4409a8.gif);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        opacity: 1px;
     }
     .form-container {
-      background: white;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 80%;
-      background: fixed;
-      margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        background: fixed;
+        margin: auto;
     }
     .form-container h2 {
-      margin-bottom: 20px;
-      font-size: xx-large;
-      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-      color: white;
+        margin-bottom: 20px;
+        font-size: xx-large;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        color: white;
     }
     .form-container input,
     .form-container textarea {
-      width: calc(50% - 20px);
-      padding: 10px;
-      margin: 10px 10px 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
+        width: calc(50% - 20px);
+        padding: 10px;
+        margin: 10px 10px 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
     }
     .form-container input[type="date"] {
-      width: calc(50% - 20px);
+        width: calc(50% - 20px);
     }
     .form-container button {
-      padding: 10px 20px;
-      border: none;
-      background: red;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-right: 10px;
+        padding: 10px 20px;
+        border: none;
+        background: red;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
     }
     .form-container button:hover {
-      background-color: black;
+        background-color: black;
     }
     .form-container .show-button {
-      background: rgb(221, 67, 221);
+        background: rgb(221, 67, 221);
     }
     .form-container .show-button:hover {
-      background-color: black;
+        background-color: black;
     }
     .form-container .down-button {
-      background: rgb(221, 67, 221);
+        background: rgb(221, 67, 221);
     }
     .form-container .down-button:hover {
-      background-color: black;
+        background-color: black;
     }
     .form-container h2 {
-      text-align: center;
-      position: relative;
-      top: 15px;
+        text-align: center;
+        position: relative;
+        top: 15px;
     }
     .form-container .button-container {
-      text-align: center;
+        text-align: center;
     }
     @media (max-width: 768px) {
-      .form-container input,
-      .form-container textarea {
-        width: calc(100% - 20px);
-        margin: 10px 0;
-      }
-      .form-container button {
-        width: calc(100% - 20px);
-        margin: 10px 0;
-      }
+        .form-container input,
+        .form-container textarea {
+            width: calc(100% - 20px);
+            margin: 10px 0;
+        }
+        .form-container button {
+            width: calc(100% - 20px);
+            margin: 10px 0;
+        }
     }
-  </style>
+    .form-group {
+        margin-bottom: 15px;
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    label {
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+    }
+    input[type="checkbox"] {
+        margin-right: 5px;
+    }
+</style>
 </head>
 <body>
   <div class="form-container">
@@ -152,6 +170,19 @@
         <option value="CBSE">CBSE</option>
         <option value="ICSE">ICSE</option>
       </select>
+          <select id="weekSelect" name="weekSelect" required>
+            <option value="" disabled selected>Select Week</option>
+              <option value="week1">Week 1</option>
+              <option value="week2">Week 2</option>
+              <option value="week3">Week 3</option>
+              <option value="week4">Week 4</option>
+              <option value="week5">Week 5</option>
+          </select>
+          <select id="surveyDone" name="surveyDone" required>
+            <option value="" disabled selected>Survey Done</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+          </select>
       <!-- <input type="text" id="district" name="district" placeholder="District" /> -->
       <select id="district" name="district" required>
         <option value="" disabled selected>Select District</option>
@@ -193,16 +224,42 @@
       <input type="text" id="schoolSpoc" name="schoolSpoc" placeholder="School SPOC" />
       <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" />
       <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
-      <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" />
+      <!-- <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" /> -->
+      <div class="form-group">
+        <label for="demoOptions">Demo Given To:</label>
+        <label>
+            <input type="checkbox" name="options" value="PD"> PD
+        </label>
+        <label>
+            <input type="checkbox" name="options" value="TD"> TD
+        </label>
+        <label>
+            <input type="checkbox" name="options" value="SMD"> SMD
+        </label>
+    </div>
       <input type="text" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
       <input type="text" id="followUpDate" name="followUpDate" placeholder="Follow Up Date" />
       <textarea id="remarksStatus" name="remarksStatus" placeholder="Remarks/Status"></textarea>
+      <!-- <label for="remarksOptions">Select Remarks/Status</label> -->
+      <select id="remarksOptions" onchange="updateTextarea()">
+        <option value="" disabled selected>Select Remarks/Status</option>
+        <option value="PD Follow Up">PD Follow Up</option>
+        <option value="TD Follow Up">TD Follow Up</option>
+        <option value="SMD Follow Up">SMD Follow Up</option>
+        <option value="Proposal Given">Proposal Given</option>
+        <option value="Sign Up follow up">Sign Up follow up</option>
+        <option value="Signed">Signed</option>
+        <option value="Follow up Next Year">Follow up Next Year</option>
+        <option value="Approached">Approached</option>
+        <option value="PD appointments">PD appointments</option>
+        <option value="PD feedback form collected">PD feedback form collected</option>
+        <option value="Sign up done">Sign up done</option>
+        <option value="Hot Follow up">Hot Follow up</option>
+        <option value="NI">NI</option>
+      </select>
       <input type="text" id="infrastructure" name="infrastructure" placeholder="Infrastructure" />
       <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" />
       <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" />
-    
-
-    
       <div>
         <button type="submit" id="submitBTN">Submit</button>
         <button type="button" class="show-button" id="showButton">Show Records</button>
@@ -212,11 +269,13 @@
         <button type="button" class="show-button" id="trackButton">Track Your Location</button>
       </div>
     </form>
-
-
   </div>
-
   <script>
+    function updateTextarea() {
+      const select = document.getElementById("remarksOptions");
+      const textarea = document.getElementById("remarksStatus");
+      textarea.value = select.value;
+    }
  function setupDateInputs() {
       const demoGivenDateInput = document.getElementById('demoGivenDate');
       const followUpDateInput = document.getElementById('followUpDate');
@@ -241,14 +300,8 @@
           this.type = 'text';
         }
       });
-    }
-    
+    } 
     window.onload = setupDateInputs;
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', function () {
   // Automatically set state to Kerala
   document.getElementById('state').value = 'Kerala';
@@ -276,7 +329,8 @@ document.addEventListener('DOMContentLoaded', function () {
     event.preventDefault(); // Prevent the default form submission
     const newSerialNo = generateSerialNumber();
     document.getElementById('serialNo').value = newSerialNo;
-    
+    const checkboxes = document.querySelectorAll('input[name="options"]:checked');
+            const selectedOptions = Array.from(checkboxes).map(cb => cb.value);
     const formData = {
       serialNo: newSerialNo,
       state: document.getElementById('state').value,
@@ -284,6 +338,8 @@ document.addEventListener('DOMContentLoaded', function () {
       modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
       schoolName: document.getElementById('schoolName').value,
       board: document.getElementById('board').value,
+      surveyDone: document.getElementById('surveyDone').value,
+      weekSelect: document.getElementById('weekSelect').value,
       district: document.getElementById('district').value,
       area: document.getElementById('area').value,
       totalStrength: document.getElementById('totalStrength').value,
@@ -291,7 +347,10 @@ document.addEventListener('DOMContentLoaded', function () {
       contactNumber: document.getElementById('contactNumber').value,
       schoolSpoc: document.getElementById('schoolSpoc').value,
       spocContactNumber: document.getElementById('spocContactNumber').value,
-      demoGivenTo: document.getElementById('demoGivenTo').value,
+     // demoGivenTo: document.getElementById('demoGivenTo').value,
+      PD: selectedOptions.includes('PD') ? true : false,
+      TD: selectedOptions.includes('TD') ? true : false,
+      SMD: selectedOptions.includes('SMD') ? true : false,
       demoGivenDate: document.getElementById('demoGivenDate').value,
       followUpDate: document.getElementById('followUpDate').value,
       remarksStatus: document.getElementById('remarksStatus').value,
@@ -306,6 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(formData)
+      
     });
 
     if (response.ok) {
@@ -324,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const a = document.createElement('a');
         a.style.display = 'none';
         a.href = url;
-        a.download = 'data.xlsx';
+        a.download = 'lead tracker.xlsx';
         document.body.appendChild(a);
         a.click();
         window.URL.revokeObjectURL(url);
