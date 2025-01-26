@@ -1,11 +1,11 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Record Form</title>
-  <style>
-    body {
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Record Form</title>
+    <style>
+      body {
         font-family: Arial, sans-serif;
         display: flex;
         justify-content: center;
@@ -18,8 +18,8 @@
         background-position: center;
         background-attachment: fixed;
         opacity: 1px;
-    }
-    .form-container {
+      }
+      .form-container {
         background: white;
         padding: 20px;
         border-radius: 5px;
@@ -27,26 +27,26 @@
         width: 80%;
         background: fixed;
         margin: auto;
-    }
-    .form-container h2 {
+      }
+      .form-container h2 {
         margin-bottom: 20px;
         font-size: xx-large;
-        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
         color: white;
-    }
-    .form-container input,
-    .form-container textarea {
+      }
+      .form-container input,
+      .form-container textarea {
         width: calc(50% - 20px);
         padding: 10px;
         margin: 10px 10px 10px 0;
         border: 1px solid #ccc;
         border-radius: 5px;
         box-sizing: border-box;
-    }
-    .form-container input[type="date"] {
+      }
+      .form-container input[type="date"] {
         width: calc(50% - 20px);
-    }
-    .form-container button {
+      }
+      .form-container button {
         padding: 10px 20px;
         border: none;
         background: red;
@@ -54,42 +54,45 @@
         border-radius: 5px;
         cursor: pointer;
         margin-right: 10px;
-    }
-    .form-container button:hover {
+      }
+      .form-container button:hover {
         background-color: black;
-    }
-    .form-container .show-button {
+      }
+      .form-container .show-button {
         background: rgb(221, 67, 221);
-    }
-    .form-container .show-button:hover {
+      }
+      .form-container .show-button:hover {
         background-color: black;
-    }
-    .form-container .down-button {
+      }
+      .form-container .down-button {
         background: rgb(221, 67, 221);
-    }
-    .form-container .down-button:hover {
+      }
+      .form-container .down-button:hover {
         background-color: black;
-    }
-    .form-container h2 {
+      }
+      .form-container h2 {
         text-align: center;
         position: relative;
         top: 15px;
-    }
-    .form-container .button-container {
+      }
+      #remarksStatus {
+        background-color: #fff;
+      }
+      .form-container .button-container {
         text-align: center;
-    }
-    @media (max-width: 768px) {
+      }
+      @media (max-width: 768px) {
         .form-container input,
         .form-container textarea {
-            width: calc(100% - 20px);
-            margin: 10px 0;
+          width: calc(100% - 20px);
+          margin: 10px 0;
         }
         .form-container button {
-            width: calc(100% - 20px);
-            margin: 10px 0;
+          width: calc(100% - 20px);
+          margin: 10px 0;
         }
-    }
-    .form-group {
+      }
+      .form-group {
         margin-bottom: 15px;
         background: white;
         padding: 20px;
@@ -98,21 +101,21 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
-    }
-    label {
+      }
+      label {
         margin-right: 10px;
         display: flex;
         align-items: center;
-    }
-    input[type="checkbox"] {
+      }
+      input[type="checkbox"] {
         margin-right: 5px;
-    }
-</style>
-</head>
-<body>
-  <div class="form-container">
-    <h2>Record Form</h2>
-    <!-- <form id="recordForm">
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>Record Form</h2>
+      <!-- <form id="recordForm">
        <input type="number" id="serialNo" name="serialNo" placeholder="S.No" required /> 
    
       <input type="hidden" id="state" name="state" value="Kerala" />
@@ -146,63 +149,71 @@
       </div>
     </form>  -->
 
-
-
-    <form id="recordForm">
-      <input type="hidden" id="serialNo" name="serialNo" />
-      <input type="hidden" id="state" name="state" value="Kerala" />
-      <input type="text" id="spocFromMikids" name="spocFromMikids" placeholder="SPOC from Mikids" />
-      <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
-      <select id="modeOfEnquiry" name="modeOfEnquiry" required>
-        <option value="" disabled selected>Select Mode of Enquiry</option>
-        <option value="LY">LY</option>
-        <option value="Direct">Direct</option>
-        <option value="Survey">Survey</option>
-        <option value="Reference">Reference</option>
-        <option value="Distributor">Distributor</option>
-      </select>
-      <input type="text" id="schoolName" name="schoolName" placeholder="Name of the School" />
-      <!-- <input type="text" id="board" name="board" placeholder="Board" /> -->
-      <select id="board" name="board" required>
-        <option value="" disabled selected>Select Board</option>
-        <option value="Matric">Matric</option>
-        <option value="State">State</option>
-        <option value="CBSE">CBSE</option>
-        <option value="ICSE">ICSE</option>
-      </select>
-          <select id="weekSelect" name="weekSelect" required>
-            <option value="" disabled selected>Select Week</option>
-              <option value="week1">Week 1</option>
-              <option value="week2">Week 2</option>
-              <option value="week3">Week 3</option>
-              <option value="week4">Week 4</option>
-              <option value="week5">Week 5</option>
-          </select>
-          <select id="surveyDone" name="surveyDone" required>
-            <option value="" disabled selected>Survey Done</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-          </select>
-      <!-- <input type="text" id="district" name="district" placeholder="District" /> -->
-      <select id="district" name="district" required>
-        <option value="" disabled selected>Select District</option>
-        <option value="Nilgiris">Nilgiris</option>
-        <option value="Kasaragod">Kasaragod</option>
-        <option value="Kannur">Kannur</option>
-        <option value="Calicut">Calicut</option>
-        <option value="Wayanad">Wayanad</option>
-        <option value="Malappuram">Malappuram</option>
-        <option value="Palakkad">Palakkad</option>
-        <option value="Trichur">Trichur</option>
-        <option value="Ernakulam">Ernakulam</option>
-        <option value="Kotayam">Kotayam</option>
-        <option value="Idukki">Idukki</option>
-        <option value="Alleppey">Alleppey</option>
-        <option value="Kollam">Kollam</option>
-        <option value="Pathanamthitta">Pathanamthitta</option>
-        <option value="Thiruvananthapuram">Thiruvananthapuram</option>
-    </select>
-      <!-- <input type="text" id="area" name="area" placeholder="Area" />
+      <form id="recordForm">
+        <input type="hidden" id="serialNo" name="serialNo" />
+        <input type="hidden" id="state" name="state" value="Kerala" />
+        <input
+          type="text"
+          id="spocFromMikids"
+          name="spocFromMikids"
+          placeholder="SPOC from Mikids"
+        />
+        <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
+        <select id="modeOfEnquiry" name="modeOfEnquiry" required>
+          <option value="" disabled selected>Select Mode of Enquiry</option>
+          <option value="LY">LY</option>
+          <option value="Direct">Direct</option>
+          <option value="Survey">Survey</option>
+          <option value="Reference">Reference</option>
+          <option value="Distributor">Distributor</option>
+        </select>
+        <input
+          type="text"
+          id="schoolName"
+          name="schoolName"
+          placeholder="Name of the School"
+        />
+        <!-- <input type="text" id="board" name="board" placeholder="Board" /> -->
+        <select id="board" name="board" required>
+          <option value="" disabled selected>Select Board</option>
+          <option value="Matric">Matric</option>
+          <option value="State">State</option>
+          <option value="CBSE">CBSE</option>
+          <option value="ICSE">ICSE</option>
+        </select>
+        <select id="weekSelect" name="weekSelect" required>
+          <option value="" disabled selected>Select Week</option>
+          <option value="week1">Week 1</option>
+          <option value="week2">Week 2</option>
+          <option value="week3">Week 3</option>
+          <option value="week4">Week 4</option>
+          <option value="week5">Week 5</option>
+        </select>
+        <select id="surveyDone" name="surveyDone" required>
+          <option value="" disabled selected>Survey Done</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+        <!-- <input type="text" id="district" name="district" placeholder="District" /> -->
+        <select id="district" name="district" required>
+          <option value="" disabled selected>Select District</option>
+          <option value="Nilgiris">Nilgiris</option>
+          <option value="Kasaragod">Kasaragod</option>
+          <option value="Kannur">Kannur</option>
+          <option value="Calicut">Calicut</option>
+          <option value="Wayanad">Wayanad</option>
+          <option value="Malappuram">Malappuram</option>
+          <option value="Palakkad">Palakkad</option>
+          <option value="Trichur">Trichur</option>
+          <option value="Ernakulam">Ernakulam</option>
+          <option value="Kotayam">Kotayam</option>
+          <option value="Idukki">Idukki</option>
+          <option value="Alleppey">Alleppey</option>
+          <option value="Kollam">Kollam</option>
+          <option value="Pathanamthitta">Pathanamthitta</option>
+          <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+        </select>
+        <!-- <input type="text" id="area" name="area" placeholder="Area" />
       <input type="text" id="totalStrength" name="totalStrength" placeholder="Total Strength" />
       <input type="text" id="principalName" name="principalName" placeholder="Name of Principal" />
       <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" />
@@ -217,198 +228,284 @@
       <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" />
       <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" /> -->
 
-      <input type="text" id="area" name="area" placeholder="Area" />
-      <input type="text" id="totalStrength" name="totalStrength" placeholder="Total Strength" />
-      <input type="text" id="principalName" name="principalName" placeholder="Name of Principal" />
-      <input type="text" id="contactNumber" name="contactNumber" placeholder="Contact Number" />
-      <input type="text" id="schoolSpoc" name="schoolSpoc" placeholder="School SPOC" />
-      <input type="text" id="spocContactNumber" name="spocContactNumber" placeholder="SPOC Contact Number" />
-      <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
-      <!-- <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" /> -->
-      <div class="form-group">
-        <label for="demoOptions">Demo Given To:</label>
-        <label>
-            <input type="checkbox" name="options" value="PD"> PD
-        </label>
-        <label>
-            <input type="checkbox" name="options" value="TD"> TD
-        </label>
-        <label>
-            <input type="checkbox" name="options" value="SMD"> SMD
-        </label>
+        <input type="text" id="area" name="area" placeholder="Area" />
+        <input
+          type="text"
+          id="totalStrength"
+          name="totalStrength"
+          placeholder="Total Strength"
+        />
+        <input
+          type="text"
+          id="principalName"
+          name="principalName"
+          placeholder="Name of Principal"
+        />
+        <input
+          type="text"
+          id="contactNumber"
+          name="contactNumber"
+          placeholder="Contact Number"
+        />
+        <input
+          type="text"
+          id="schoolSpoc"
+          name="schoolSpoc"
+          placeholder="School SPOC"
+        />
+        <input
+          type="text"
+          id="spocContactNumber"
+          name="spocContactNumber"
+          placeholder="SPOC Contact Number"
+        />
+        <!-- <input type="text" id="modeOfEnquiry" name="modeOfEnquiry" placeholder="Mode of Enquiry" /> -->
+        <!-- <input type="text" id="demoGivenTo" name="demoGivenTo" placeholder="Demo Given to" /> -->
+        <div class="form-group">
+          <label for="demoOptions">Demo Given To:</label>
+          <label>
+            <input type="checkbox" name="options" value="PD" /> PD
+          </label>
+          <label>
+            <input type="checkbox" name="options" value="TD" /> TD
+          </label>
+          <label>
+            <input type="checkbox" name="options" value="SMD" /> SMD
+          </label>
+        </div>
+        <input
+          type="text"
+          id="demoGivenDate"
+          name="demoGivenDate"
+          placeholder="Demo Given Date"
+        />
+        <input
+          type="text"
+          id="followUpDate"
+          name="followUpDate"
+          placeholder="Follow Up Date"
+        />
+        <textarea
+          disabled
+          id="remarksStatus"
+          name="remarksStatus"
+          placeholder="Remarks/Status"
+        ></textarea>
+        <!-- <label for="remarksOptions">Select Remarks/Status</label> -->
+        <select id="remarksOptions" onchange="updateTextarea()">
+          <option value="" disabled selected>Select Remarks/Status</option>
+          <option value="PD Follow Up">PD Follow Up</option>
+          <option value="TD Follow Up">TD Follow Up</option>
+          <option value="SMD Follow Up">SMD Follow Up</option>
+          <option value="Proposal Given">Proposal Given</option>
+          <option value="Sign Up follow up">Sign Up follow up</option>
+          <option value="Signed">Signed</option>
+          <option value="Follow up Next Year">Follow up Next Year</option>
+          <option value="Approached">Approached</option>
+          <option value="PD appointments">PD appointments</option>
+          <option value="PD feedback form collected">
+            PD feedback form collected
+          </option>
+          <option value="Sign up done">Sign up done</option>
+          <option value="Hot Follow up">Hot Follow up</option>
+          <option value="NI">NI</option>
+        </select>
+        <input
+          type="text"
+          id="infrastructure"
+          name="infrastructure"
+          placeholder="Infrastructure"
+        />
+        <input
+          type="text"
+          id="teachersQuality"
+          name="teachersQuality"
+          placeholder="Teacher's Quality"
+        />
+        <input
+          type="text"
+          id="signedFor"
+          name="signedFor"
+          placeholder="Signed for"
+        />
+        <div>
+          <button type="submit" id="submitBTN">Submit</button>
+          <button type="button" class="show-button" id="showButton">
+            Show Records
+          </button>
+          <button type="button" class="down-button" id="downloadButton">
+            Download Record
+          </button>
+          <button type="button" class="show-button" id="calButton">
+            Show Calendar
+          </button>
+          <button type="button" class="show-button" id="dashButton">
+            Dashboard
+          </button>
+          <button type="button" class="show-button" id="trackButton">
+            Track Your Location
+          </button>
+        </div>
+      </form>
     </div>
-      <input type="text" id="demoGivenDate" name="demoGivenDate" placeholder="Demo Given Date" />
-      <input type="text" id="followUpDate" name="followUpDate" placeholder="Follow Up Date" />
-      <textarea id="remarksStatus" name="remarksStatus" placeholder="Remarks/Status"></textarea>
-      <!-- <label for="remarksOptions">Select Remarks/Status</label> -->
-      <select id="remarksOptions" onchange="updateTextarea()">
-        <option value="" disabled selected>Select Remarks/Status</option>
-        <option value="PD Follow Up">PD Follow Up</option>
-        <option value="TD Follow Up">TD Follow Up</option>
-        <option value="SMD Follow Up">SMD Follow Up</option>
-        <option value="Proposal Given">Proposal Given</option>
-        <option value="Sign Up follow up">Sign Up follow up</option>
-        <option value="Signed">Signed</option>
-        <option value="Follow up Next Year">Follow up Next Year</option>
-        <option value="Approached">Approached</option>
-        <option value="PD appointments">PD appointments</option>
-        <option value="PD feedback form collected">PD feedback form collected</option>
-        <option value="Sign up done">Sign up done</option>
-        <option value="Hot Follow up">Hot Follow up</option>
-        <option value="NI">NI</option>
-      </select>
-      <input type="text" id="infrastructure" name="infrastructure" placeholder="Infrastructure" />
-      <input type="text" id="teachersQuality" name="teachersQuality" placeholder="Teacher's Quality" />
-      <input type="text" id="signedFor" name="signedFor" placeholder="Signed for" />
-      <div>
-        <button type="submit" id="submitBTN">Submit</button>
-        <button type="button" class="show-button" id="showButton">Show Records</button>
-        <button type="button" class="down-button" id="downloadButton">Download Record</button>
-        <button type="button" class="show-button" id="calButton">Show Calendar</button>
-        <button type="button" class="show-button" id="dashButton">Dashboard</button>
-        <button type="button" class="show-button" id="trackButton">Track Your Location</button>
-      </div>
-    </form>
-  </div>
-  <script>
-    function updateTextarea() {
-      const select = document.getElementById("remarksOptions");
-      const textarea = document.getElementById("remarksStatus");
-      textarea.value = select.value;
-    }
- function setupDateInputs() {
-      const demoGivenDateInput = document.getElementById('demoGivenDate');
-      const followUpDateInput = document.getElementById('followUpDate');
-      
-      demoGivenDateInput.placeholder = "Demo Given Date";
-      followUpDateInput.placeholder = "Follow Up Date";
-      
-      demoGivenDateInput.addEventListener('focus', function() {
-        this.type = 'date';
-      });
-      demoGivenDateInput.addEventListener('blur', function() {
-        if (this.value === '') {
-          this.type = 'text';
+    <script>
+      function updateTextarea() {
+        const select = document.getElementById("remarksOptions");
+        const textarea = document.getElementById("remarksStatus");
+        textarea.value = select.value;
+      }
+      function setupDateInputs() {
+        const demoGivenDateInput = document.getElementById("demoGivenDate");
+        const followUpDateInput = document.getElementById("followUpDate");
+
+        demoGivenDateInput.placeholder = "Demo Given Date";
+        followUpDateInput.placeholder = "Follow Up Date";
+
+        demoGivenDateInput.addEventListener("focus", function () {
+          this.type = "date";
+        });
+        demoGivenDateInput.addEventListener("blur", function () {
+          if (this.value === "") {
+            this.type = "text";
+          }
+        });
+
+        followUpDateInput.addEventListener("focus", function () {
+          this.type = "date";
+        });
+        followUpDateInput.addEventListener("blur", function () {
+          if (this.value === "") {
+            this.type = "text";
+          }
+        });
+      }
+      window.onload = setupDateInputs;
+      document.addEventListener("DOMContentLoaded", function () {
+        // Automatically set state to Kerala
+        document.getElementById("state").value = "Kerala";
+
+        // Function to generate the next serial number
+        function generateSerialNumber() {
+          // Retrieve the last serial number from local storage
+          let lastSerialNo = localStorage.getItem("lastSerialNo");
+          if (lastSerialNo === null) {
+            lastSerialNo = 0; // If no serial number is found, start with 0
+          }
+          // Increment the last serial number to get the new serial number
+          const newSerialNo = parseInt(lastSerialNo) + 1;
+          // Store the new serial number back in local storage
+          localStorage.setItem("lastSerialNo", newSerialNo);
+          return newSerialNo;
         }
+
+        document
+          .getElementById("recordForm")
+          .addEventListener("submit", function (event) {
+            // Set the serial number
+            document.getElementById("serialNo").value = generateSerialNumber();
+          });
+
+        document
+          .getElementById("submitBTN")
+          .addEventListener("click", async function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            const newSerialNo = generateSerialNumber();
+            document.getElementById("serialNo").value = newSerialNo;
+            const checkboxes = document.querySelectorAll(
+              'input[name="options"]:checked'
+            );
+            const selectedOptions = Array.from(checkboxes).map(
+              (cb) => cb.value
+            );
+            const formData = {
+              serialNo: newSerialNo,
+              state: document.getElementById("state").value,
+              spocFromMikids: document.getElementById("spocFromMikids").value,
+              modeOfEnquiry: document.getElementById("modeOfEnquiry").value,
+              schoolName: document.getElementById("schoolName").value,
+              board: document.getElementById("board").value,
+              surveyDone: document.getElementById("surveyDone").value,
+              weekSelect: document.getElementById("weekSelect").value,
+              district: document.getElementById("district").value,
+              area: document.getElementById("area").value,
+              totalStrength: document.getElementById("totalStrength").value,
+              principalName: document.getElementById("principalName").value,
+              contactNumber: document.getElementById("contactNumber").value,
+              schoolSpoc: document.getElementById("schoolSpoc").value,
+              spocContactNumber:
+                document.getElementById("spocContactNumber").value,
+              // demoGivenTo: document.getElementById('demoGivenTo').value,
+              PD: selectedOptions.includes("PD") ? true : false,
+              TD: selectedOptions.includes("TD") ? true : false,
+              SMD: selectedOptions.includes("SMD") ? true : false,
+              demoGivenDate: document.getElementById("demoGivenDate").value,
+              followUpDate: document.getElementById("followUpDate").value,
+              remarksStatus: document.getElementById("remarksStatus").value,
+              infrastructure: document.getElementById("infrastructure").value,
+              teachersQuality: document.getElementById("teachersQuality").value,
+              signedFor: document.getElementById("signedFor").value,
+            };
+
+            const response = await fetch("/submit", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+              alert("Record submitted successfully!");
+              document.getElementById("recordForm").reset();
+            } else {
+              alert("Error submitting record.");
+            }
+          });
+
+        document
+          .getElementById("downloadButton")
+          .addEventListener("click", function () {
+            fetch("/downloads")
+              .then((response) => response.blob())
+              .then((blob) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = "lead tracker.xlsx";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+              })
+              .catch((error) =>
+                console.error("Error downloading the file:", error)
+              );
+          });
+
+        document
+          .getElementById("showButton")
+          .addEventListener("click", function () {
+            window.location.href = "/show";
+          });
+
+        document
+          .getElementById("calButton")
+          .addEventListener("click", function () {
+            window.location.href = "/calendar";
+          });
+
+        document
+          .getElementById("dashButton")
+          .addEventListener("click", function () {
+            window.location.href = "/dashboard";
+          });
+
+        document
+          .getElementById("trackButton")
+          .addEventListener("click", function () {
+            window.location.href = "/tracker";
+          });
       });
-      
-      followUpDateInput.addEventListener('focus', function() {
-        this.type = 'date';
-      });
-      followUpDateInput.addEventListener('blur', function() {
-        if (this.value === '') {
-          this.type = 'text';
-        }
-      });
-    } 
-    window.onload = setupDateInputs;
-document.addEventListener('DOMContentLoaded', function () {
-  // Automatically set state to Kerala
-  document.getElementById('state').value = 'Kerala';
-
-  // Function to generate the next serial number
-  function generateSerialNumber() {
-    // Retrieve the last serial number from local storage
-    let lastSerialNo = localStorage.getItem('lastSerialNo');
-    if (lastSerialNo === null) {
-      lastSerialNo = 0; // If no serial number is found, start with 0
-    }
-    // Increment the last serial number to get the new serial number
-    const newSerialNo = parseInt(lastSerialNo) + 1;
-    // Store the new serial number back in local storage
-    localStorage.setItem('lastSerialNo', newSerialNo);
-    return newSerialNo;
-  }
-
-  document.getElementById('recordForm').addEventListener('submit', function (event) {
-    // Set the serial number
-    document.getElementById('serialNo').value = generateSerialNumber();
-  });
-
-  document.getElementById("submitBTN").addEventListener("click", async function (event) {
-    event.preventDefault(); // Prevent the default form submission
-    const newSerialNo = generateSerialNumber();
-    document.getElementById('serialNo').value = newSerialNo;
-    const checkboxes = document.querySelectorAll('input[name="options"]:checked');
-            const selectedOptions = Array.from(checkboxes).map(cb => cb.value);
-    const formData = {
-      serialNo: newSerialNo,
-      state: document.getElementById('state').value,
-      spocFromMikids: document.getElementById('spocFromMikids').value,
-      modeOfEnquiry: document.getElementById('modeOfEnquiry').value,
-      schoolName: document.getElementById('schoolName').value,
-      board: document.getElementById('board').value,
-      surveyDone: document.getElementById('surveyDone').value,
-      weekSelect: document.getElementById('weekSelect').value,
-      district: document.getElementById('district').value,
-      area: document.getElementById('area').value,
-      totalStrength: document.getElementById('totalStrength').value,
-      principalName: document.getElementById('principalName').value,
-      contactNumber: document.getElementById('contactNumber').value,
-      schoolSpoc: document.getElementById('schoolSpoc').value,
-      spocContactNumber: document.getElementById('spocContactNumber').value,
-     // demoGivenTo: document.getElementById('demoGivenTo').value,
-      PD: selectedOptions.includes('PD') ? true : false,
-      TD: selectedOptions.includes('TD') ? true : false,
-      SMD: selectedOptions.includes('SMD') ? true : false,
-      demoGivenDate: document.getElementById('demoGivenDate').value,
-      followUpDate: document.getElementById('followUpDate').value,
-      remarksStatus: document.getElementById('remarksStatus').value,
-      infrastructure: document.getElementById('infrastructure').value,
-      teachersQuality: document.getElementById('teachersQuality').value,
-      signedFor: document.getElementById('signedFor').value,
-    };
-
-    const response = await fetch('/submit', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-      
-    });
-
-    if (response.ok) {
-      alert('Record submitted successfully!');
-      document.getElementById('recordForm').reset();
-    } else {
-      alert('Error submitting record.');
-    }
-  });
-
-  document.getElementById('downloadButton').addEventListener('click', function () {
-    fetch('/downloads')
-      .then(response => response.blob())
-      .then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = 'lead tracker.xlsx';
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-      })
-      .catch(error => console.error('Error downloading the file:', error));
-  });
-
-  document.getElementById("showButton").addEventListener("click", function () {
-    window.location.href = "/show";
-  });
-
-  document.getElementById("calButton").addEventListener("click", function () {
-    window.location.href = "/calendar";
-  });
-
-  document.getElementById("dashButton").addEventListener("click", function () {
-    window.location.href = "/dashboard";
-  });
-
-  document.getElementById("trackButton").addEventListener("click", function () {
-    window.location.href = "/tracker";
-  });
-});
-
-  </script>
-</body>
+    </script>
+  </body>
 </html>

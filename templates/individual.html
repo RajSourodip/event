@@ -4,127 +4,123 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Individual Report</title>
-    <div class="rep"> Individual Reports</div>
+    <div class="rep">Individual Reports</div>
     <style>
-  body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: fixed;
-  background-image: url(https://media0.giphy.com/media/U3qYN8S0j3bpK/200w.gif?cid=6c09b952wjzwluau84k91ojbz90zsztdo7x6banqrjspxbn7&ep=v1_gifs_search&rid=200w.gif&ct=g);
-}
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: fixed;
+        background-image: url(https://media0.giphy.com/media/U3qYN8S0j3bpK/200w.gif?cid=6c09b952wjzwluau84k91ojbz90zsztdo7x6banqrjspxbn7&ep=v1_gifs_search&rid=200w.gif&ct=g);
+      }
 
-.report-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  position: relative;
-  top: 90px;
+      .report-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        position: relative;
+        top: 90px;
+      }
 
-}
+      .rep {
+        position: relative;
+        font-size: xx-large;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        display: flex;
+        align-items: center;
+        color: white;
+        position: relative;
+        top: 50px;
+        left: 10%;
+      }
 
-.rep {
-  position: relative;
-  font-size: xx-large;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  color: white;
-  position: relative;
-  top: 50px;
-  left: 10%;
+      .report {
+        background-color: #ffffff;
+        padding: 0px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        width: fit-content;
 
+        transition: transform 0.2s, box-shadow 0.2s;
+        background-color: #333;
+        box-shadow: 0 0 10px cyan;
+      }
 
-}
+      .report:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
 
-.report {
-  background-color: #ffffff;
-  padding: 0px;
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  width: fit-content;
-  
-  transition: transform 0.2s, box-shadow 0.2s;
-  background-color: #333;
-  box-shadow: 0 0 10px cyan;
-}
+      .report h3 {
+        margin: 0 0 10px 0;
+        color: white;
+        text-align: center;
+        width: fit-content;
+        font-size: 1.2em;
+      }
 
-.report:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
+      .report p {
+        margin: 5px 0;
+        color: cyan;
+        line-height: 1.5;
+      }
 
-.report h3 {
-  margin: 0 0 10px 0;
-  color: white;
-  text-align: center;
-  width: fit-content;
-  font-size: 1.2em;
-}
+      /* Add specific CSS rule for PD Date */
+      .report p strong {
+        color: rgb(57, 117, 207);
+      }
 
-.report p {
-  margin: 5px 0;
-  color: cyan;
-  line-height: 1.5;
-}
+      .report p strong + span {
+        background-color: rgb(9, 235, 9); /* Green highlight */
+        padding: 5px;
+        border-radius: 5px;
+      }
 
-/* Add specific CSS rule for PD Date */
-.report p strong {
-  color: rgb(57, 117, 207);
-}
+      @media (min-width: 600px) {
+        .report-container {
+          justify-content: flex-start;
+        }
 
-.report p strong + span {
-  background-color: rgb(9, 235, 9);  /* Green highlight */
-  padding: 5px;
-  border-radius: 5px;
-}
+        .report {
+          width: calc(50% - 40px);
+        }
+      }
 
-@media (min-width: 600px) {
-  .report-container {
-    justify-content: flex-start;
-  }
+      @media (min-width: 900px) {
+        .report {
+          width: calc(33.33% - 40px);
+        }
+      }
 
-  .report {
-    width: calc(50% - 40px);
-  }
-}
+      @media (min-width: 1200px) {
+        .report {
+          width: calc(25% - 40px);
+        }
+      }
 
-@media (min-width: 900px) {
-  .report {
-    width: calc(33.33% - 40px);
-  }
-}
+      @media (max-width: 599px) {
+        .report-container {
+          flex-direction: column;
+          align-items: center;
+        }
 
-@media (min-width: 1200px) {
-  .report {
-    width: calc(25% - 40px);
-  }
-}
+        .report {
+          width: 100%;
+          max-width: none;
+          margin: 10px 0;
+        }
 
-@media (max-width: 599px) {
-  .report-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .report {
-    width: 100%;
-    max-width: none;
-    margin: 10px 0;
-  }
-
-  .rep {
-    font-size: xx-large;
-    text-align: center;
-    left: 0;
-    top: 20px;
-  }
-}
-
-    </style>    
+        .rep {
+          font-size: xx-large;
+          text-align: center;
+          left: 0;
+          top: 20px;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="report-container" id="reports">
@@ -173,13 +169,12 @@
                   <p><strong>Signed At:</strong>  ${report.signedAt} </span></p>
                   <p><strong>MTD Approached:</strong> ${report.mtdApproached}</p>
                   <p><strong>MTD PD Appointments:</strong> ${report.mtdPdAppointments}</p>
-                  <p><strong>MTD PD Done:</strong> ${report.mtdPdDone}</p>
+                  <p><strong>MTD PD Done:</strong> ${report.MTDpdDone}</p>
                   <p><strong>MTD PD Feedback Form Collected:</strong> ${report.mtdPdFeedbackFormCollected}</p>
-                  <p><strong>MTD SMD Done:</strong> ${report.mtdSmdDone}</p>
+                  <p><strong>MTD SMD Done:</strong> ${report.MTDsmdDone}</p>
                   <p><strong>MTD Signup Done:</strong> ${report.mtdSignupDone}</p>
                   <p><strong>Week No:</strong> ${report.weekSelect}</p>
               `;
-
 
                 reportsContainer.appendChild(reportDiv);
               });
