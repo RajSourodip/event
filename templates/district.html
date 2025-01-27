@@ -1,165 +1,177 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>District Reports</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: fixed;
-            background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            opacity: 1;
-            min-height: 100vh;
-            max-height: fit-content;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-bottom: 20px;
-            font-size: 2em;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: center;
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: fixed;
+        background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        opacity: 1;
+        min-height: 100vh;
+        max-height: fit-content;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+        font-size: 2em;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+      }
+      th {
+        background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
+        color: white;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      tr {
+        background-color: white;
+      }
+      td {
+        color: black;
+      }
+      h1 {
+        color: white;
+        font-size: 2.5em;
+        font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+        text-align: center;
+        margin: auto;
+        margin-bottom: 10%;
+        width: fit-content;
+      }
+
+      @media (max-width: 768px) {
+        table,
+        thead,
+        tbody,
+        th,
+        td,
+        tr {
+          display: block;
         }
         th {
-            background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+          background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
+          color: white;
+          position: sticky;
+          top: 0;
         }
         tr {
-            background-color: white;
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 10px;
+          border: 1px solid #ddd;
+          background-color: white;
         }
         td {
-            color: black;
+          text-align: left;
+          padding-left: 50%;
+          position: relative;
         }
-        h1 {
-            color: white;
-            font-size: 2.5em;
-            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-            text-align: center;
-            margin: auto;
-            margin-bottom: 10%;
-            width: fit-content;
+        td::before {
+          content: attr(data-label);
+          position: absolute;
+          left: 10px;
+          width: 50%;
+          padding-left: 10px;
+          font-weight: bold;
+          text-align: left;
+          background-color: #f2f2f2;
+          border-right: 1px solid #ddd;
+          box-sizing: border-box;
         }
-
-        @media (max-width: 768px) {
-            table, thead, tbody, th, td, tr {
-                display: block;
-            }
-            th {
-                background-image: url(https://i.pinimg.com/originals/62/39/4d/62394d753859943e6a1a36443ef78795.gif);
-                color: white;
-                position: sticky;
-                top: 0;
-            }
-            tr {
-                display: flex;
-                flex-direction: column;
-                margin-bottom: 10px;
-                border: 1px solid #ddd;
-                background-color: white;
-            }
-            td {
-                text-align: left;
-                padding-left: 50%;
-                position: relative;
-            }
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 10px;
-                width: 50%;
-                padding-left: 10px;
-                font-weight: bold;
-                text-align: left;
-                background-color: #f2f2f2;
-                border-right: 1px solid #ddd;
-                box-sizing: border-box;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>District Reports</h1>
     <table id="reportsTable">
-        <thead>
-            <tr>
-                <th>District</th>
-                <th>Schools</th>
-                <th>PD (Principal Demo)</th>
-                <th>SMD (Senior Management Demo)</th>
-                <th>Signed</th>
-                <th>SMD (Senior Management Demo) to Sign Up Follow Up</th>
-                <th>Hot Follow Up</th>
-                <th>NI</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
+      <thead>
+        <tr>
+          <th>District</th>
+          <th>Schools</th>
+          <th>PD (Principal Demo)</th>
+          <th>SMD (Senior Management Demo)</th>
+          <th>Signed</th>
+          <th>SMD (Senior Management Demo) to Sign Up Follow Up</th>
+          <th>Hot Follow Up</th>
+          <th>NI</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
     </table>
-    
+
     <script>
-        // Function to create the table rows and cells
-        function createTable(data) {
-            const tbody = document.getElementById('reportsTable').getElementsByTagName('tbody')[0];
-            const districts = Object.keys(data);
-            const totals = {
-                schools: 0,
-                pd: 0,
-                smd: 0,
-                signed: 0,
-                smdToSignUpFollowUp: 0,
-                hotFollowUp: 0,
-                ni: 0
-            };
+      // Function to create the table rows and cells
+      function createTable(data) {
+        const tbody = document
+          .getElementById("reportsTable")
+          .getElementsByTagName("tbody")[0];
+        const districts = Object.keys(data);
+        const totals = {
+          schools: 0,
+          pd: 0,
+          smd: 0,
+          signed: 0,
+          smdToSignUpFollowUp: 0,
+          hotFollowUp: 0,
+          ni: 0,
+        };
 
-            districts.forEach(district => {
-                const reports = data[district];
-                const districtRow = document.createElement('tr');
+        districts.forEach((district) => {
+          const reports = data[district];
 
-                const districtCell = document.createElement('td');
-                districtCell.innerText = district;
-                districtRow.appendChild(districtCell);
+          const districtRow = document.createElement("tr");
 
-                const stats = {
-                    schools: 0,
-                    pd: 0,
-                    smd: 0,
-                    signed: 0,
-                    smdToSignUpFollowUp: 0,
-                    hotFollowUp: 0,
-                    ni: 0
-                };
+          const districtCell = document.createElement("td");
+          districtCell.innerText = district;
+          districtRow.appendChild(districtCell);
 
-                reports.forEach(report => {
-                    stats.schools += parseInt(report.schoolsApproached);
-                    stats.pd += parseInt(report.pdDoneToday);
-                    stats.smd += parseInt(report.smdDoneToday);
-                    stats.signed += parseInt(report.signed);  // Assuming signed is a numeric value; adjust if it's a time
-                    stats.smdToSignUpFollowUp += parseInt(report.mtdSignupDone);  // Assuming SMD to Sign Up Follow Up is MTD Signup Done
-                    stats.hotFollowUp += parseInt(report.mtdPdAppointments);  // Assuming hot follow-up is related to MTD PD Appointments
-                    stats.ni += parseInt(report.mtdPdFeedbackFormCollected);  // Assuming NI is related to MTD PD Feedback Form Collected
-                });
+          const stats = {
+            schools: 0,
+            pd: 0,
+            smd: 0,
+            signed: 0,
+            smdToSignUpFollowUp: 0,
+            hotFollowUp: 0,
+            ni: 0,
+          };
 
-                totals.schools += stats.schools;
-                totals.pd += stats.pd;
-                totals.smd += stats.smd;
-                totals.signed += stats.signed;
-                totals.smdToSignUpFollowUp += stats.smdToSignUpFollowUp;
-                totals.hotFollowUp += stats.hotFollowUp;
-                totals.ni += stats.ni;
+          reports.forEach((report) => {
+            stats.schools += parseInt(reports.length);
+            stats.pd += parseInt(report.PD ? 1 : 0);
+            stats.smd += parseInt(report.SMD ? 1 : 0);
+            stats.signed += parseInt(report.remarksStatus === "Signed" ? 1 : 0); // Assuming signed is a numeric value; adjust if it's a time
+            stats.smdToSignUpFollowUp += parseInt(
+              report.remarksStatus === "SMD Follow UP" ? 1 : 0
+            ); // Assuming SMD to Sign Up Follow Up is MTD Signup Done
+            stats.hotFollowUp += parseInt(
+              report.remarksStatus === "Hot Follow Up" ? 1 : 0
+            ); // Assuming hot follow-up is related to MTD PD Appointments
+            stats.ni += parseInt(report.remarksStatus === "NI" ? 1 : 0); // Assuming NI is related to MTD PD Feedback Form Collected
+          });
 
-                districtRow.innerHTML += `
+          totals.schools += stats.schools;
+          totals.pd += stats.pd;
+          totals.smd += stats.smd;
+          totals.signed += stats.signed;
+          totals.smdToSignUpFollowUp += stats.smdToSignUpFollowUp;
+          totals.hotFollowUp += stats.hotFollowUp;
+          totals.ni += stats.ni;
+
+          districtRow.innerHTML += `
                     <td>${stats.schools}</td>
                     <td>${stats.pd}</td>
                     <td>${stats.smd}</td>
@@ -169,11 +181,11 @@
                     <td>${stats.ni}</td>
                 `;
 
-                tbody.appendChild(districtRow);
-            });
+          tbody.appendChild(districtRow);
+        });
 
-            const totalRow = document.createElement('tr');
-            totalRow.innerHTML = `
+        const totalRow = document.createElement("tr");
+        totalRow.innerHTML = `
                 <td>Total</td>
                 <td>${totals.schools}</td>
                 <td>${totals.pd}</td>
@@ -183,32 +195,34 @@
                 <td>${totals.hotFollowUp}</td>
                 <td>${totals.ni}</td>
             `;
-            tbody.appendChild(totalRow);
-        }
+        tbody.appendChild(totalRow);
+      }
 
-        // Function to fetch data from the backend
-        function fetchData() {
-            fetch('/getReportsByDistrict')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        createTable(data.data);
-                    } else {
-                        console.error('Error fetching data:', data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                });
-        }
+      // Function to fetch data from the backend
+      function fetchData() {
+        fetch("/getReportsByDistrict")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.status === "success") {
+              createTable(data.data);
+            } else {
+              console.error("Error fetching data:", data.message);
+            }
+          })
+          .catch((error) => {
+            console.error("Fetch error:", error);
+          });
+      }
 
-        // Fetch data when the page loads
-        window.onload = fetchData;
+      // Fetch data when the page loads
+      window.onload = fetchData;
     </script>
-</body>
+  </body>
 </html>

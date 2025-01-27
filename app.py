@@ -239,7 +239,7 @@ def get_reports_by_district():
     print(f"Query to fetch reports: {query}")  # Debugging: Print the query to see if it's correct
 
     try:
-        reports_data = list(Dash.find(query))  # Fetch reports from the database
+        reports_data = list(Record.find(query))  # Fetch reports from the database
         print(reports_data)
     except Exception as e:
         print(f"Error while fetching reports: {str(e)}")  # Log any database fetching errors
