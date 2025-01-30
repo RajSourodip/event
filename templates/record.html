@@ -285,13 +285,13 @@
           name="followUpDate"
           placeholder="Follow Up Date"
         />
-        <!-- <textarea
+         <!-- <textarea
           disabled
           id="remarksStatus"
           name="remarksStatus"
           placeholder="Remarks/Status"
         ></textarea> -->
-        <!-- <label for="remarksOptions">Select Remarks/Status</label> -->
+         <!-- <label for="remarksOptions">Select Remarks/Status</label>  -->
         <select id="remarksOptions" onchange="updateTextarea()">
           <option value="" disabled selected>Select Remarks/Status</option>
           <option value="PD Follow Up">PD Follow Up</option>
@@ -349,11 +349,13 @@
       </form>
     </div>
     <script>
-      function updateTextarea() {
-        const select = document.getElementById("remarksOptions");
+       function updateTextarea() {
+         const select = document.getElementById("remarksOptions");
         const textarea = document.getElementById("remarksStatus");
-        textarea.value = select.value;
-      }
+         textarea.value = select?.value;
+       }
+
+
       function setupDateInputs() {
         const demoGivenDateInput = document.getElementById("demoGivenDate");
         const followUpDateInput = document.getElementById("followUpDate");
@@ -440,8 +442,8 @@
               SMD: selectedOptions.includes("SMD") ? true : false,
               demoGivenDate: document.getElementById("demoGivenDate").value,
               followUpDate: document.getElementById("followUpDate").value,
-              remarksStatus: document.getElementById("remarksStatus").value,
-              infrastructure: document.getElementById("infrastructure").value,
+              remarksStatus: document.getElementById("remarksStatus")?.value,
+              infrastructure: document.getElementById("infrastructure")?.value,
               teachersQuality: document.getElementById("teachersQuality").value,
               signedFor: document.getElementById("signedFor").value,
             };
