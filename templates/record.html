@@ -311,6 +311,12 @@
           <option value="NI">NI</option>
         </select>
         <input
+        type="text"
+        id="appointmentFixed"
+        name="appointmentFixed"
+        placeholder="Appointment Fixed"
+      />
+        <input
           type="text"
           id="infrastructure"
           name="infrastructure"
@@ -443,6 +449,7 @@
               demoGivenDate: document.getElementById("demoGivenDate").value,
               followUpDate: document.getElementById("followUpDate").value,
               remarksStatus: document.getElementById("remarksStatus")?.value,
+              appointmentFixed: document.getElementById("appointmentFixed")?.value,
               infrastructure: document.getElementById("infrastructure")?.value,
               teachersQuality: document.getElementById("teachersQuality").value,
               signedFor: document.getElementById("signedFor").value,
