@@ -100,119 +100,6 @@ def download_records():
     return send_file(output, download_name="data.xlsx", as_attachment=True,mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 
-@app.route('/getReport', methods=['GET'])
-def get_report():
-    if "username" in session:
-        username = session["username"]
-
-        # Get today's date and the start of the current month
-        today = datetime.now().date()
-        start_of_month = today.replace(day=1)
-
-        # Query the database for all reports by the logged-in user
-        user_reports = Record.find({"user": username})
-        
-        # Prepare the reports data
-        reports_data = []
-        for report in user_reports:
-            # Convert ObjectId to string for compatibility
-            report["_id"] = str(report["_id"])
-            
-            # Convert datetime fields to string for JSON serialization
-            for key in ["demoGivenDate", "followUpDate", "signedAt"]:
-                if key in report:
-                    report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
-            
-            # Calculate PD Done Today for this report
-            pd_done_today = Record.count_documents({
-                "PD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(today, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            smd_done_today = Record.count_documents({
-                "SMD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(today, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            
-            # Calculate SMD Done Today for this report
-            MTD_smd_done = Record.count_documents({
-                "SMD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            
-            MTD_approached = Record.count_documents({
-                "remarksStatus": "Approached",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            MTD_pd_appointment = Record.count_documents({
-                "remarksStatus": "PD appointments",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-
-            MTD_pd_feedback_collected = Record.count_documents({
-                "remarksStatus": "PD feedback form collected",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            MTD_signup_done = Record.count_documents({
-                "remarksStatus": "Sign up done",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-
-            MTD_pd_done = Record.count_documents({
-                "PD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            
-            # Add the calculated fields to the report
-            report["pdDoneToday"] = pd_done_today
-            report["smdDoneToday"] = smd_done_today
-            report["MTDpdDone"] = MTD_pd_done
-            report["MTDsmdDone"] = MTD_smd_done
-            report["mtdApproached"] = MTD_approached
-            report["mtdPdAppointments"] = MTD_pd_appointment
-            report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
-            report["mtdSignupDone"] = MTD_signup_done
-            print("The final reports are: ",  str(report))
-            
-            # Append the enriched report to the list
-            reports_data.append(report)
-            print(reports_data)
-        # Return the enriched reports
-        return jsonify({"status": "success", "data": reports_data}), 200
-
-    else:
-        return jsonify({"status": "error", "message": "User not logged in"}), 401
 
 @app.route('/report_form', methods=['GET'])
 def report_form():
@@ -430,48 +317,252 @@ def signin():
 @app.route('/admin')
 def admin():
     return render_template("admin.html")
+
 @app.route('/getWeeklyReport', methods=['GET'])
 def get_weekly_report():
     # Get the current date and time
     now = datetime.now()
-    
+    today = datetime.now().date()
+    start_of_month = today.replace(day=1)
+    totals = {}
     # Calculate the date for one week ago
     one_week_ago = now - timedelta(days=7)
     username = session.get("username")
-    
+    if "username" in session:
+        username = session["username"]
     # Query MongoDB to find records created within the last week
-    reports = Dash.find({"user": username, "date": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+        # user_reports = Record.find({"user": username, "demoGivenDate": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+        user_reports = Record.find({"user": username})
 
-    # Prepare the response data
-    reports_data = []
-    for report in reports:
-        report_data = {
-            "_id": str(report["_id"]),
-            "reportDate": report.get("reportDate", ""),
-            "name": report.get("name", ""),
-            "schoolsApproached": report.get("schoolsApproached", "0"),
-            "metDate": report.get("metDate", ""),
-            "surveyDone": report.get("surveyDone", "no"),
-            "appointmentFixed": report.get("appointmentFixed", "0"),
-            "pdDoneToday": report.get("pdDoneToday", "0"),
-            "smdDoneToday": report.get("smdDoneToday", "0"),
-            "signed": report.get("signed", "0"),  # Adjust if signed is not a numeric value
-            "signedAt": report.get("signedAt", "0"),
-            "mtdApproached": report.get("mtdApproached", "0"),
-            "mtdPdAppointments": report.get("mtdPdAppointments", "0"),
-            "mtdPdDone": report.get("mtdPdDone", "0"),
-            "mtdPdFeedbackFormCollected": report.get("mtdPdFeedbackFormCollected", "0"),
-            "mtdSmdDone": report.get("mtdSmdDone", "0"),
-            "mtdSignupDone": report.get("mtdSignupDone", "0"),
-            "weekSelect": report.get("weekSelect", ""),
-            "district": report.get("district", ""),
-            "user": report.get("user", ""),
-            "date": report.get("date", ""),
-            "time": report.get("time", ""),
-        }
-        reports_data.append(report_data)
+        # Prepare the response data
+        reports_data = []
+        for report in user_reports:
+            # Convert ObjectId to string for compatibility
+            report["_id"] = str(report["_id"])
+            
+            # Convert datetime fields to string for JSON serialization
+            for key in ["demoGivenDate", "followUpDate", "signedAt"]:
+                if key in report:
+                    report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
+            
+            # Calculate PD Done Today for this report
+            pd_done_today = Record.count_documents({
+                "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(today, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            print("pd done today ", pd_done_today)
 
-    return jsonify({"status": "success", "data": reports_data}), 200
+            smd_done_today = Record.count_documents({
+                "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(today, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            print("smd done today ", smd_done_today)
+                      
+            MTD_smd_done = Record.count_documents({
+                "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            
+            print("mtd smd done ", pd_done_today)  
+
+            MTD_approached = Record.count_documents({
+                "remarksStatus": "Approached",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            MTD_pd_appointment = Record.count_documents({
+                "remarksStatus": "PD appointments",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+
+            MTD_pd_feedback_collected = Record.count_documents({
+                "remarksStatus": "PD feedback form collected",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            MTD_signup_done = Record.count_documents({
+                "remarksStatus": "Sign up done",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+
+            MTD_pd_done = Record.count_documents({
+                "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            totals["pdDoneToday"] = pd_done_today
+            totals["smdDoneToday"] = smd_done_today
+            totals["MTDpdDone"] = MTD_pd_done
+            totals["MTDsmdDone"] = MTD_smd_done
+
+            totals["mtdApproached"] = MTD_approached
+            totals["mtdPdAppointments"] = MTD_pd_appointment
+            totals["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
+            totals["mtdSignupDone"] = MTD_signup_done
+
+            # Add the calculated fields to the report
+            report["pdDoneToday"] = pd_done_today
+            report["smdDoneToday"] = smd_done_today
+            report["MTDpdDone"] = MTD_pd_done
+            report["MTDsmdDone"] = MTD_smd_done
+            report["mtdApproached"] = MTD_approached
+            report["mtdPdAppointments"] = MTD_pd_appointment
+            report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
+            report["mtdSignupDone"] = MTD_signup_done
+            print("The final reports are: ",  str(report))
+            
+            # Append the enriched report to the list
+            reports_data.append(report)
+        print(reports_data)
+        # Return the enriched reports
+        return jsonify({"status": "success", "data": reports_data, "totals":totals}), 200
+
+    else:
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
+
+@app.route('/getReport', methods=['GET'])
+def get_report():
+    if "username" in session:
+        username = session["username"]
+
+        # Get today's date and the start of the current month
+        today = datetime.now().date()
+        start_of_month = today.replace(day=1)
+
+        # Query the database for all reports by the logged-in user
+        user_reports = Record.find({"user": username})
+        
+        # Prepare the reports data
+        reports_data = []
+        for report in user_reports:
+            # Convert ObjectId to string for compatibility
+            report["_id"] = str(report["_id"])
+            
+            # Convert datetime fields to string for JSON serialization
+            for key in ["demoGivenDate", "followUpDate", "signedAt"]:
+                if key in report:
+                    report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
+            
+            # Calculate PD Done Today for this report
+            pd_done_today = Record.count_documents({
+                "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(today, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            smd_done_today = Record.count_documents({
+                "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(today, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            
+            # Calculate SMD Done Today for this report
+            MTD_smd_done = Record.count_documents({
+                "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            
+            MTD_approached = Record.count_documents({
+                "remarksStatus": "Approached",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            MTD_pd_appointment = Record.count_documents({
+                "remarksStatus": "PD appointments",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+
+            MTD_pd_feedback_collected = Record.count_documents({
+                "remarksStatus": "PD feedback form collected",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            MTD_signup_done = Record.count_documents({
+                "remarksStatus": "Sign up done",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+
+            MTD_pd_done = Record.count_documents({
+                "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username  # Specific to this user
+            })
+            
+            # Add the calculated fields to the report
+            report["pdDoneToday"] = pd_done_today
+            report["smdDoneToday"] = smd_done_today
+            report["MTDpdDone"] = MTD_pd_done
+            report["MTDsmdDone"] = MTD_smd_done
+            report["mtdApproached"] = MTD_approached
+            report["mtdPdAppointments"] = MTD_pd_appointment
+            report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
+            report["mtdSignupDone"] = MTD_signup_done
+            print("The final reports are: ",  str(report))
+            
+            # Append the enriched report to the list
+            reports_data.append(report)
+            print(reports_data)
+        # Return the enriched reports
+        return jsonify({"status": "success", "data": reports_data}), 200
+
+    else:
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
+
 
 
 @app.route('/')
