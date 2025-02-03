@@ -1,11 +1,9 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>District Records</title>
-    
-
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -24,99 +22,141 @@
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
-        opacity: 1px;
+        opacity: 1;
       }
       .container {
-        max-width: 500px;
-        padding: 40px;
+        min-width: 50vw;
+        width: fit-content;
+        margin: auto;
+        border-radius: 10px;
+        padding: 10px;
         background-color: #ffffff;
-        box-shadow: 0 4px 8px rgba(6, 238, 10);
-        background-color: goldenrod;
+        box-shadow: 0 0 10px rgb(255, 0, 153);
+        background-color: rgb(7, 26, 55);
+        color: white;
+        padding-bottom: 20px;
+        margin-bottom: 300px;
+      }
+      form {
+        margin-bottom: 50px;
       }
       .buttons {
         display: flex;
         justify-content: space-around;
-        margin-bottom: 20px;
-        margin-top: 100px;
+        margin-bottom: 80px;
+        margin-top: 10px;
       }
       button {
         padding: 10px 20px;
         cursor: pointer;
-        position: relative;
-        top: 30px;
         background-color: red;
         color: white;
         border: none;
-        border-radius: 5px; /* Rounded corners */
+        border-radius: 5px;
         cursor: pointer;
-        transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+        transition: background-color 0.3s, transform 0.3s;
         font-family: Arial, sans-serif;
-        display: flex;
+        position: relative;
+        top: 10px;
       }
       button:hover {
-        background-color: black; /* Darker green */
-        transform: scale(1.05); /* Slightly larger */
+        background-color: black;
+        transform: scale(1.05);
       }
-    
-      /* Active effect */
       button:active {
-        background-color: #3e8e41; /* Even darker green */
-        transform: scale(0.95); /* Slightly smaller */
+        background-color: #3e8e41;
+        transform: scale(0.95);
       }
-    
-      /* Focus effect */
       button:focus {
-        outline: none; /* Remove default outline */
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Custom focus outline */
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
       }
       h2 {
         text-align: center;
         position: relative;
-        top: 20px;
+        top: 50px;
       }
       label,
       input {
         display: block;
-        width: 100%;
+        width: 80%;
         margin-bottom: 10px;
+        position: relative;
+        top: 30px;
       }
-    
-      /* Styling for the submit button */
-      .submit-btn {
-        padding: 15px 30px;
-        font-size: 16px;
-        background-color: red; /* Green background */
-        color: white; /* White text */
-        border: none;
-        border-radius: 5px; /* Rounded corners */
-        cursor: pointer;
-        transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
-        font-family: Arial, sans-serif;
+      select {
+        position: relative;
+        top: 20px;
+      }
+      .report_form {
+        position: relative;
+        top: 30px;
+      }
+      .submit-container {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
+        margin-top: 20px; /* Adjust this value to move the buttons upwards or downwards */
       }
-    
-      /* Hover effect */
+      .submit-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        font-family: Arial, sans-serif;
+      }
       .submit-btn:hover {
-        background-color: black; /* Darker green */
-        transform: scale(1.05); /* Slightly larger */
+        background-color: black;
+        transform: scale(1.05);
       }
-    
-      /* Active effect */
       .submit-btn:active {
-        background-color: #3e8e41; /* Even darker green */
-        transform: scale(0.95); /* Slightly smaller */
+        background-color: #3e8e41;
+        transform: scale(0.95);
       }
-    
-      /* Focus effect */
       .submit-btn:focus {
-        outline: none; /* Remove default outline */
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Custom focus outline */
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+      .download-btn {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: blue;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        font-family: Arial, sans-serif;
+      }
+      .download-btn:hover {
+        background-color: black;
+        transform: scale(1.05);
+      }
+      .download-btn:active {
+        background-color: #3e8e41;
+        transform: scale(0.95);
+      }
+      .download-btn:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+      p {
+        position: relative;
+        top: 60px;
+      }
+      #message {
+        color: green;
+        display: none;
+      }
+      #reportForm,
+      h2 {
+        display: none;
       }
     </style>
-    
-    
   </head>
   <body>
     <div class="container">
@@ -129,73 +169,96 @@
         </button>
         <button onclick="window.location.href='weekly_records'">Weekly</button>
       </div>
-      <h2>Report Form </h2>
+      <h2>Report Form</h2>
       <form id="reportForm">
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="date" required />
+        <label for="reportDate">Today's Report:</label>
+        <input type="date" id="reportDate" name="reportDate" required />
 
-        <label for="totalSchoolsVisited">Total Schools Visited:</label>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="schoolsApproached">Schools Approached:</label>
         <input
           type="number"
-          id="totalSchoolsVisited"
-          name="totalSchoolsVisited"
+          id="schoolsApproached"
+          name="schoolsApproached"
           required
         />
+
+        <label for="metDate">Today's Met:</label>
+        <input type="date" id="metDate" name="metDate" required />
+
+        <label for="surveyDone">Survey Done:</label>
+        <select id="surveyDone" name="surveyDone" required>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+
+        <label for="appointmentFixed">Appointment Fixed:</label>
+        <input
+          type="number"
+          id="appointmentFixed"
+          name="appointmentFixed"
+          required
+        />
+
+        <label for="pdDoneToday">PD Done Today:</label>
+        <input type="number" id="pdDoneToday" name="pdDoneToday" required />
+
+        <label for="smdDoneToday">SMD Done Today:</label>
+        <input type="number" id="smdDoneToday" name="smdDoneToday" required />
+
+        <!-- New Signed Field -->
+        <label for="signed">Signed(How many?):</label>
+        <input type="number" id="signed" name="signed" required />
+
+        <!-- Renamed Signed At Field -->
+        <label for="signedAt">Signed At:</label>
+        <input type="time" id="signedAt" name="signedAt" required />
+
+        <label for="mtdApproached">MTD Approached:</label>
+        <input type="number" id="mtdApproached" name="mtdApproached" required />
+
+        <label for="mtdPdAppointments">MTD PD Appointments:</label>
+        <input
+          type="number"
+          id="mtdPdAppointments"
+          name="mtdPdAppointments"
+          required
+        />
+
+        <label for="mtdPdDone">MTD PD Done:</label>
+        <input type="number" id="mtdPdDone" name="mtdPdDone" required />
+
+        <label for="mtdPdFeedbackFormCollected"
+          >MTD PD Feedback Form Collected:</label
+        >
+        <input
+          type="number"
+          id="mtdPdFeedbackFormCollected"
+          name="mtdPdFeedbackFormCollected"
+          required
+        />
+
+        <label for="mtdSmdDone">MTD SMD Done:</label>
+        <input type="number" id="mtdSmdDone" name="mtdSmdDone" required />
+
+        <label for="mtdSignupDone">MTD Signup Done:</label>
+        <input type="number" id="mtdSignupDone" name="mtdSignupDone" required />
 
         <label for="weekSelect">Select Week:</label>
         <select id="weekSelect" name="weekSelect" required>
-            <option value="week1">Week 1</option>
-            <option value="week2">Week 2</option>
-            <option value="week3">Week 3</option>
-            <option value="week4">Week 4</option>
-            <option value="week5">Week 5</option>
+          <option value="week1">Week 1</option>
+          <option value="week2">Week 2</option>
+          <option value="week3">Week 3</option>
+          <option value="week4">Week 4</option>
+          <option value="week5">Week 5</option>
         </select>
-
-        <label for="interested">Interested:</label>
-        <input type="number" id="interested" name="interested" required />
-
-        <label for="pdDone">PD(Principal Demo)Done:</label>
-        <input type="number" id="pdDone" name="pdDone" required />
-
-        <label for="pdFixed">PD(Principal Demo)Fixed:</label>
-        <input type="number" id="pdFixed" name="pdFixed" required />
-
-        <label for="tdDone">TD(Teacher 's Demo)Done:</label>
-        <input type="number" id="tdDone" name="tdDone" required />
-
-        <label for="tdFixed">TD(Teacher 's Demo)Fixed:</label>
-        <input type="number" id="tdFixed" name="tdFixed" required />
-
-        <label for="smdDone">SMD(Senior Management Demo)Done:</label>
-        <input type="number" id="smdDone" name="smdDone" required />
-
-        <label for="smdFixed">SMD(Senior Management Demo)Fixed:</label>
-        <input type="number" id="smdFixed" name="smdFixed" required />
-
-        <label for="signUpFollowUp">Sign Up Follow Up:</label>
-        <input
-          type="number"
-          id="signUpFollowUp"
-          name="signUpFollowUp"
-          required
-        />
-
-        <label for="signed">Signed:</label>
-        <input type="number" id="signed" name="signed" required />
-
-        <label for="totalSchoolsForSignUp">Total Schools for Sign Up:</label>
-        <input
-          type="number"
-          id="totalSchoolsForSignUp"
-          name="totalSchoolsForSignUp"
-          required
-        />
-
-        <label for="strength">Strength:</label>
-        <input type="number" id="strength" name="strength" required />
 
         <button type="submit" class="submit-btn">Submit</button>
       </form>
+      <button id="download-btn" type="button">Download</button>
+
       <p id="message" style="color: green; display: none">
         The record has been submitted!
       </p>
@@ -205,24 +268,14 @@
         .getElementById("reportForm")
         .addEventListener("submit", function (event) {
           event.preventDefault();
-
-          // Get the district parameter from the current URL
           const urlParams = new URLSearchParams(window.location.search);
-          const district = urlParams.get("district"); // Extract district from URL
-
-          // Get all form data
+          const district = urlParams.get("district");
           const formData = new FormData(document.getElementById("reportForm"));
-
-          // Convert form data to JSON format
           const formDataJson = {};
           formData.forEach((value, key) => {
             formDataJson[key] = value;
           });
-
-          // Add the district to the form data JSON
           formDataJson.district = district;
-
-          // Send data to the SubmitDistrictReport route
           fetch("/SubmitDistrictReport", {
             method: "POST",
             headers: {
@@ -232,7 +285,6 @@
           })
             .then((response) => {
               if (response.ok) {
-                // Display success message
                 document.getElementById("message").style.display = "block";
                 setTimeout(() => {
                   document.getElementById("message").style.display = "none";
@@ -246,318 +298,26 @@
               console.error("Error:", error);
             });
         });
+
+      document
+        .getElementById("download-btn")
+        .addEventListener("click", function () {
+          fetch("/download")
+            .then((response) => response.blob())
+            .then((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.style.display = "none";
+              a.href = url;
+              a.download = "data.xlsx";
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+            })
+            .catch((error) =>
+              console.error("Error downloading the file:", error)
+            );
+        });
     </script>
   </body>
-</html> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>District Records</title>
-    <style>
-      body {
-          font-family: Arial, sans-serif;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          margin: 0;
-          padding: 20px;
-          position: relative;
-          top: 30px;
-          background-color: #f5f5f5;
-          background: fixed;
-          background: url(https://i.gifer.com/embedded/download/I5zb.gif);
-          background-repeat: no-repeat;
-          background-size: cover;
-          background-position: center;
-          background-attachment: fixed;
-          opacity: 1;
-      }
-      .container {
-          min-width: 50vw;
-          width: fit-content;
-          margin: auto;
-          border-radius: 10px;
-          padding: 10px;
-          background-color: #ffffff;
-          box-shadow: 0 0 10px rgb(255, 0, 153);
-          background-color: rgb(7, 26, 55);
-          color: white;
-          padding-bottom: 20px;
-          margin-bottom: 300px;
-      }
-      form{
-        margin-bottom: 50px;
-      }
-      .buttons {
-          display: flex;
-          justify-content: space-around;
-          margin-bottom: 80px;
-          margin-top: 10px;
-      }
-      button {
-          padding: 10px 20px;
-          cursor: pointer;
-          background-color: red;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.3s;
-          font-family: Arial, sans-serif;
-          position: relative;
-          top: 10px;
-      }
-      button:hover {
-          background-color: black;
-          transform: scale(1.05);
-      }
-      button:active {
-          background-color: #3e8e41;
-          transform: scale(0.95);
-      }
-      button:focus {
-          outline: none;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      }
-      h2 {
-          text-align: center;
-          position: relative;
-          top: 50px;
-      }
-      label,
-      input {
-          display: block;
-          width: 80%;
-          margin-bottom: 10px;
-          position: relative;
-          top: 30px;
-      }
-      select{
-        position: relative;
-        top: 20px;
-      }
-      .report_form{
-        position: relative;
-        top: 30px;
-        
-      }
-      .submit-container {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 20px; /* Adjust this value to move the buttons upwards or downwards */
-      }
-      .submit-btn {
-          padding: 10px 20px;
-          font-size: 16px;
-          background-color: red;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.3s;
-          font-family: Arial, sans-serif;
-      }
-      .submit-btn:hover {
-          background-color: black;
-          transform: scale(1.05);
-      }
-      .submit-btn:active {
-          background-color: #3e8e41;
-          transform: scale(0.95);
-      }
-      .submit-btn:focus {
-          outline: none;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      }
-      .download-btn {
-          padding: 10px 20px;
-          font-size: 16px;
-          background-color: blue;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: background-color 0.3s, transform 0.3s;
-          font-family: Arial, sans-serif;
-      }
-      .download-btn:hover {
-          background-color: black;
-          transform: scale(1.05);
-      }
-      .download-btn:active {
-          background-color: #3e8e41;
-          transform: scale(0.95);
-      }
-      .download-btn:focus {
-          outline: none;
-          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      }
-      p {
-        position: relative;
-        top: 60px;
-      }
-      #message {
-          color: green;
-          display: none;
-      }
-      #reportForm, h2{
-        display: none;
-      }
-  </style>
-</head>
-<body>
-    <div class="container">
-        <div class="buttons">
-            <button onclick="window.location.href='individual_records'">Individual</button>
-            <button onclick="window.location.href='district_records'">District</button>
-            <button onclick="window.location.href='weekly_records'">Weekly</button>
-        </div>
-        <h2>Report Form </h2>
-        <form id="reportForm">
-          <label for="reportDate">Today's Report:</label>
-          <input type="date" id="reportDate" name="reportDate" required />
-          
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required />
-      
-          <label for="schoolsApproached">Schools Approached:</label>
-          <input type="number" id="schoolsApproached" name="schoolsApproached" required />
-      
-          <label for="metDate">Today's Met:</label>
-          <input type="date" id="metDate" name="metDate" required />
-      
-          <label for="surveyDone">Survey Done:</label>
-          <select id="surveyDone" name="surveyDone" required>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-          </select>
-      
-          <label for="appointmentFixed">Appointment Fixed:</label>
-          <input type="number" id="appointmentFixed" name="appointmentFixed" required />
-      
-          <label for="pdDoneToday">PD Done Today:</label>
-          <input type="number" id="pdDoneToday" name="pdDoneToday" required />
-      
-          <label for="smdDoneToday">SMD Done Today:</label>
-          <input type="number" id="smdDoneToday" name="smdDoneToday" required />
-      
-          <!-- New Signed Field -->
-          <label for="signed">Signed(How many?):</label>
-          <input type="number" id="signed" name="signed" required />
-      
-          <!-- Renamed Signed At Field -->
-          <label for="signedAt">Signed At:</label>
-          <input type="time" id="signedAt" name="signedAt" required />
-      
-          <label for="mtdApproached">MTD Approached:</label>
-          <input type="number" id="mtdApproached" name="mtdApproached" required />
-      
-          <label for="mtdPdAppointments">MTD PD Appointments:</label>
-          <input type="number" id="mtdPdAppointments" name="mtdPdAppointments" required />
-      
-          <label for="mtdPdDone">MTD PD Done:</label>
-          <input type="number" id="mtdPdDone" name="mtdPdDone" required />
-      
-          <label for="mtdPdFeedbackFormCollected">MTD PD Feedback Form Collected:</label>
-          <input type="number" id="mtdPdFeedbackFormCollected" name="mtdPdFeedbackFormCollected" required />
-      
-          <label for="mtdSmdDone">MTD SMD Done:</label>
-          <input type="number" id="mtdSmdDone" name="mtdSmdDone" required />
-      
-          <label for="mtdSignupDone">MTD Signup Done:</label>
-          <input type="number" id="mtdSignupDone" name="mtdSignupDone" required />
-      
-          <label for="weekSelect">Select Week:</label>
-          <select id="weekSelect" name="weekSelect" required>
-              <option value="week1">Week 1</option>
-              <option value="week2">Week 2</option>
-              <option value="week3">Week 3</option>
-              <option value="week4">Week 4</option>
-              <option value="week5">Week 5</option>
-          </select>
-      
-          <button type="submit" class="submit-btn">Submit</button>
-        </form>
-        <button id="download-btn" type="button">Download</button>
-      
-        <p id="message" style="color: green; display: none">The record has been submitted!</p>
-    </div>
-    <script>
-        document.getElementById("reportForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-            const urlParams = new URLSearchParams(window.location.search);
-            const district = urlParams.get("district");
-            const formData = new FormData(document.getElementById("reportForm"));
-            const formDataJson = {};
-            formData.forEach((value, key) => {
-                formDataJson[key] = value;
-            });
-            formDataJson.district = district;
-            fetch("/SubmitDistrictReport", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formDataJson),
-            }).then((response) => {
-                if (response.ok) {
-                    document.getElementById("message").style.display = "block";
-                    setTimeout(() => {
-                        document.getElementById("message").style.display = "none";
-                        document.getElementById("reportForm").reset();
-                    }, 2000);
-                } else {
-                    console.error("Failed to submit form");
-                }
-            }).catch((error) => {
-                console.error("Error:", error);
-            });
-        });
-        
-        document.getElementById('download-btn').addEventListener('click', function() {
-            fetch('/download')
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = 'data.xlsx';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => console.error('Error downloading the file:', error));
-        });
-    </script>
-</body>
 </html>

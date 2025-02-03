@@ -120,6 +120,11 @@
           top: 20px;
         }
       }
+      #downloadButton {
+        position: fixed;
+        margin-top: 400px;
+        bottom: 2px;
+      }
     </style>
   </head>
   <body>
@@ -129,8 +134,32 @@
         No reports available for you.
       </div>
     </div>
+    <button id="downloadButton">Download Individual Records</button>
 
     <script>
+      document
+        .getElementById("downloadButton")
+        .addEventListener("click", function () {
+          fetch("/downloadIndiReport", {
+            method: "GET",
+          })
+            .then((response) => {
+              if (response.ok) return response.blob();
+              throw new Error("Failed to download report.");
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "individual_records.xlsx";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
       // Function to fetch reports from the backend
       function fetchReports() {
         // Show loading message
@@ -164,7 +193,9 @@
                   <p><strong>Submitted by:</strong> ${report.user}</p>
                   <p><strong>Date:</strong> ${report.demoGivenDate}</p>
                   <p><strong>Survey Done:</strong> ${report.surveyDone}</p>
-                  <p><strong>Appointment Fixed:</strong> ${report.appointmentFixed}</p>
+                  <p><strong>Appointment Fixed:</strong> ${
+                    report.appointmentFixed
+                  }</p>
                   <p><strong>PD Done Today:</strong> ${report.pdDoneToday}</p>
                   <p><strong>SMD Done Today:</strong> ${report.smdDoneToday}</p>
                   <p><strong>Signed:</strong> ${
