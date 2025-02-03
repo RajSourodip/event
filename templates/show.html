@@ -171,7 +171,7 @@ h2 {
                             <p><strong>Contact Number:</strong> ${item.contactNumber || 'N/A'}</p>
                             <p><strong>School SPOC:</strong> ${item.schoolSpoc || 'N/A'}</p>
                             <p><strong>SPOC Contact Number:</strong> ${item.spocContactNumber || 'N/A'}</p>
-                            <p><strong>Demo Given to:</strong> ${item.demoGivenTo || 'N/A'}</p>
+                            <p><strong>Demo Given to:</strong> ${item.PD==true ? "PD" : item.SMD == true? "SMD" : item.TD == true? "TD":"N/A"}</p>
                             <p><strong>Demo Given Date:</strong> ${item.demoGivenDate ? formatDate(item.demoGivenDate) : 'N/A'}</p>
                             <p><strong>Follow up Date:</strong> ${item.followUpDate ? formatDate(item.followUpDate) : 'N/A'}</p>
                             <p><strong>Remarks/Status:</strong> ${item.remarksStatus || 'N/A'}</p>

@@ -165,8 +165,8 @@
                   <p><strong>Date:</strong> ${report.demoGivenDate}</p>
                   <p><strong>Survey Done:</strong> ${report.surveyDone}</p>
                   <p><strong>Appointment Fixed:</strong> ${report.appointmentFixed}</p>
-                  <p><strong>PD Done Today:</strong> ${report.pdDoneToday}</p>
-                  <p><strong>SMD Done Today:</strong> ${report.smdDoneToday}</p>
+                  <p><strong>PD Done Today:</strong> ${report.PD==true? 'Yes' : 'No'}</p>
+                  <p><strong>SMD Done Today:</strong> ${report.SMD==true? 'Yes' : 'No'}</p>
                   <p><strong>Signed:</strong> ${
                     report.remarksStatus === "Signed" ? "Yes" : "No"
                   }</p>

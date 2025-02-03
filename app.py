@@ -64,7 +64,7 @@ def submit_district_report():
 @app.route('/download')
 def download_data():
     # Fetch data from MongoDB
-    data = list(Dash.find({}, {'_id': False}))
+    data = list(Record.find({}, {'_id': False}))
 
     # Convert data to DataFrame
     df = pd.DataFrame(data)
