@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify, send_from_directory, render_template, session, redirect, url_for, send_file, Response
+from flask import Flask, make_response, request, jsonify, send_from_directory, render_template, session, redirect, url_for, send_file, Response
 from flask_bcrypt import Bcrypt
+from openpyxl import Workbook
+import openpyxl
 import yagmail
 from bson.json_util import dumps, ObjectId
-from datetime import datetime, timedelta,  timezone
+from datetime import date, datetime, timedelta,  timezone
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from flask_cors import  CORS
@@ -111,48 +113,48 @@ def report_form():
     return render_template("report_form.html", district=district)
 
 
-@app.route('/getReportsByDistrict', methods=['GET'])
-def get_reports_by_district():
-    # Ensure the user is authenticated by checking session data
-    username = session.get('username')  # Assuming the user_id is stored in the session
-    print(f"User ID from session: {username}")  # Debugging: Check if the user is authenticated
+# @app.route('/getReportsByDistrict', methods=['GET'])
+# def get_reports_by_district():
+#     # Ensure the user is authenticated by checking session data
+#     username = session.get('username')  # Assuming the user_id is stored in the session
+#     print(f"User ID from session: {username}")  # Debugging: Check if the user is authenticated
     
-    if not username:
+#     if not username:
         
-        return redirect(url_for('login')), 401
+#         return redirect(url_for('login')), 401
 
-    # Fetch all reports for the current user
-    query = {"user": username}  # Only fetch reports for the authenticated user
-    print(f"Query to fetch reports: {query}")  # Debugging: Print the query to see if it's correct
+#     # Fetch all reports for the current user
+#     query = {"user": username}  # Only fetch reports for the authenticated user
+#     print(f"Query to fetch reports: {query}")  # Debugging: Print the query to see if it's correct
 
-    try:
-        reports_data = list(Record.find(query))  # Fetch reports from the database
-        print(reports_data)
-    except Exception as e:
-        print(f"Error while fetching reports: {str(e)}")  # Log any database fetching errors
-        return jsonify({"status": "error", "message": "Error fetching reports from the database"}), 500
+#     try:
+#         reports_data = list(Record.find(query))  # Fetch reports from the database
+#         print(reports_data)
+#     except Exception as e:
+#         print(f"Error while fetching reports: {str(e)}")  # Log any database fetching errors
+#         return jsonify({"status": "error", "message": "Error fetching reports from the database"}), 500
 
-    if not reports_data:
-        print("No reports found for the user.")  # Debugging: If no reports are found
-        return jsonify({"status": "error", "message": "No reports found for this user"}), 404
+#     if not reports_data:
+#         print("No reports found for the user.")  # Debugging: If no reports are found
+#         return jsonify({"status": "error", "message": "No reports found for this user"}), 404
 
-    # Classify reports by district
-    reports_by_district = {}
+#     # Classify reports by district
+#     reports_by_district = {}
     
-    for report in reports_data:
-        district = report.get('district', 'Unknown')  # Get district from report, default to 'Unknown' if not present
-        if district not in reports_by_district:
-            reports_by_district[district] = []
-        reports_by_district[district].append(report)
+#     for report in reports_data:
+#         district = report.get('district', 'Unknown')  # Get district from report, default to 'Unknown' if not present
+#         if district not in reports_by_district:
+#             reports_by_district[district] = []
+#         reports_by_district[district].append(report)
 
-    # Convert ObjectId to string for JSON serialization
-    for district, reports in reports_by_district.items():
-        for report in reports:
-            report["_id"] = str(report["_id"])
+#     # Convert ObjectId to string for JSON serialization
+#     for district, reports in reports_by_district.items():
+#         for report in reports:
+#             report["_id"] = str(report["_id"])
 
-    # Return the classified reports
-    print("Reports classified by district:", reports_by_district)  # Debugging: Check the classified reports
-    return jsonify({"status": "success", "data": reports_by_district}), 200
+#     # Return the classified reports
+#     print("Reports classified by district:", reports_by_district)  # Debugging: Check the classified reports
+#     return jsonify({"status": "success", "data": reports_by_district}), 200
 
 @app.route('/individual_records')
 def individual_records():
@@ -318,250 +320,518 @@ def signin():
 def admin():
     return render_template("admin.html")
 
+# @app.route('/getWeeklyReport', methods=['GET'])
+# def get_weekly_report():
+#     # Get the current date and time
+#     now = datetime.now()
+#     today = datetime.now().date()
+#     start_of_month = today.replace(day=1)
+#     totals = {}
+#     # Calculate the date for one week ago
+#     one_week_ago = now - timedelta(days=7)
+#     username = session.get("username")
+#     if "username" in session:
+#         username = session["username"]
+#     # Query MongoDB to find records created within the last week
+#         # user_reports = Record.find({"user": username, "demoGivenDate": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
+#         user_reports = Record.find({"user": username})
+
+#         # Prepare the response data
+#         reports_data = []
+#         for report in user_reports:
+#             # Convert ObjectId to string for compatibility
+#             report["_id"] = str(report["_id"])
+            
+#             # Convert datetime fields to string for JSON serialization
+#             for key in ["demoGivenDate", "followUpDate", "signedAt"]:
+#                 if key in report:
+#                     report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
+            
+#             # Calculate PD Done Today for this report
+#             pd_done_today = Record.count_documents({
+#                 "PD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(today, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             print("pd done today ", pd_done_today)
+
+#             smd_done_today = Record.count_documents({
+#                 "SMD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(today, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             print("smd done today ", smd_done_today)
+                      
+#             MTD_smd_done = Record.count_documents({
+#                 "SMD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+            
+#             print("mtd smd done ", pd_done_today)  
+
+#             MTD_approached = Record.count_documents({
+#                 "remarksStatus": "Approached",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             MTD_pd_appointment = Record.count_documents({
+#                 "remarksStatus": "PD appointments",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+
+#             MTD_pd_feedback_collected = Record.count_documents({
+#                 "remarksStatus": "PD feedback form collected",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             MTD_signup_done = Record.count_documents({
+#                 "remarksStatus": "Sign up done",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+
+#             MTD_pd_done = Record.count_documents({
+#                 "PD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             totals["pdDoneToday"] = pd_done_today
+#             totals["smdDoneToday"] = smd_done_today
+#             totals["MTDpdDone"] = MTD_pd_done
+#             totals["MTDsmdDone"] = MTD_smd_done
+
+#             totals["mtdApproached"] = MTD_approached
+#             totals["mtdPdAppointments"] = MTD_pd_appointment
+#             totals["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
+#             totals["mtdSignupDone"] = MTD_signup_done
+
+#             # Add the calculated fields to the report
+#             report["pdDoneToday"] = pd_done_today
+#             report["smdDoneToday"] = smd_done_today
+#             report["MTDpdDone"] = MTD_pd_done
+#             report["MTDsmdDone"] = MTD_smd_done
+#             report["mtdApproached"] = MTD_approached
+#             report["mtdPdAppointments"] = MTD_pd_appointment
+#             report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
+#             report["mtdSignupDone"] = MTD_signup_done
+#             print("The final reports are: ",  str(report))
+            
+#             # Append the enriched report to the list
+#             reports_data.append(report)
+#         print(reports_data)
+#         # Return the enriched reports
+#         return jsonify({"status": "success", "data": reports_data, "totals":totals}), 200
+
+#     else:
+#         return jsonify({"status": "error", "message": "User not logged in"}), 401
 @app.route('/getWeeklyReport', methods=['GET'])
 def get_weekly_report():
-    # Get the current date and time
     now = datetime.now()
     today = datetime.now().date()
     start_of_month = today.replace(day=1)
     totals = {}
-    # Calculate the date for one week ago
     one_week_ago = now - timedelta(days=7)
     username = session.get("username")
-    if "username" in session:
-        username = session["username"]
-    # Query MongoDB to find records created within the last week
-        # user_reports = Record.find({"user": username, "demoGivenDate": {"$gte": one_week_ago.strftime('%Y-%m-%d')}})
-        user_reports = Record.find({"user": username})
 
-        # Prepare the response data
+    if username:
+        user_reports = Record.find({"user": username})
         reports_data = []
+        
+        reports_data = []
+        totals = {}  # To store aggregated counts for the report
         for report in user_reports:
-            # Convert ObjectId to string for compatibility
             report["_id"] = str(report["_id"])
-            
-            # Convert datetime fields to string for JSON serialization
             for key in ["demoGivenDate", "followUpDate", "signedAt"]:
                 if key in report:
                     report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
             
-            # Calculate PD Done Today for this report
-            pd_done_today = Record.count_documents({
+            # Aggregated counts
+            totals["pdDoneToday"] = Record.count_documents({
                 "PD": True,
                 "demoGivenDate": {
                     "$gte": datetime.combine(today, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
-            print("pd done today ", pd_done_today)
 
-            smd_done_today = Record.count_documents({
+            totals["smdDoneToday"] = Record.count_documents({
                 "SMD": True,
                 "demoGivenDate": {
                     "$gte": datetime.combine(today, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
-            print("smd done today ", smd_done_today)
-                      
-            MTD_smd_done = Record.count_documents({
+
+            # MTD (Month-To-Date) counts
+            totals["mtdSmdDone"] = Record.count_documents({
                 "SMD": True,
                 "demoGivenDate": {
                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
-            
-            print("mtd smd done ", pd_done_today)  
 
-            MTD_approached = Record.count_documents({
+            totals["mtdApproached"] = Record.count_documents({
                 "remarksStatus": "Approached",
                 "demoGivenDate": {
                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
-            MTD_pd_appointment = Record.count_documents({
+
+            totals["mtdPdAppointments"] = Record.count_documents({
                 "remarksStatus": "PD appointments",
                 "demoGivenDate": {
                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
 
-            MTD_pd_feedback_collected = Record.count_documents({
+            totals["mtdPdFeedbackFormCollected"] = Record.count_documents({
                 "remarksStatus": "PD feedback form collected",
                 "demoGivenDate": {
                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
-            MTD_signup_done = Record.count_documents({
+
+            totals["mtdSignupDone"] = Record.count_documents({
                 "remarksStatus": "Sign up done",
                 "demoGivenDate": {
                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
 
-            MTD_pd_done = Record.count_documents({
+            totals["mtdPdDone"] = Record.count_documents({
                 "PD": True,
                 "demoGivenDate": {
                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
                     "$lte": datetime.combine(today, datetime.max.time())
                 },
-                "user": username  # Specific to this user
+                "user": username
             })
-            totals["pdDoneToday"] = pd_done_today
-            totals["smdDoneToday"] = smd_done_today
-            totals["MTDpdDone"] = MTD_pd_done
-            totals["MTDsmdDone"] = MTD_smd_done
 
-            totals["mtdApproached"] = MTD_approached
-            totals["mtdPdAppointments"] = MTD_pd_appointment
-            totals["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
-            totals["mtdSignupDone"] = MTD_signup_done
+            # Append the report with totals data if needed
+            # report["totals"] = totals
+            # reports_data.append(report)
 
-            # Add the calculated fields to the report
-            report["pdDoneToday"] = pd_done_today
-            report["smdDoneToday"] = smd_done_today
-            report["MTDpdDone"] = MTD_pd_done
-            report["MTDsmdDone"] = MTD_smd_done
-            report["mtdApproached"] = MTD_approached
-            report["mtdPdAppointments"] = MTD_pd_appointment
-            report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
-            report["mtdSignupDone"] = MTD_signup_done
-            print("The final reports are: ",  str(report))
-            
-            # Append the enriched report to the list
+            report.update(totals)
             reports_data.append(report)
-        print(reports_data)
-        # Return the enriched reports
-        return jsonify({"status": "success", "data": reports_data, "totals":totals}), 200
+
+        return jsonify({"status": "success", "data": reports_data, "totals": totals}), 200
+    else:
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
+
+
+@app.route('/downloadWeeklyReport', methods=['GET'])
+def download_weekly_report():
+    now = datetime.now()
+    today = datetime.now().date()
+    start_of_month = today.replace(day=1)
+    one_week_ago = now - timedelta(days=7)
+    username = session.get("username")
+
+    if "username" in session:
+        username = session["username"]
+
+        # Query MongoDB for the reports
+        user_reports = Record.find({"user": username})
+
+        # Create a new Excel workbook and worksheet
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = "Weekly Report"
+
+        # Define headers
+        headers = [
+            "Report ID", "Date", "Schools Approached", "Week No.", 
+            "PD Done Today", "SMD Done Today", "Signed", "Signed At",
+            "MTD Approached", "MTD PD Appointments", "MTD PD Done",
+            "MTD SMD Done", "MTD Signup Done", "Submitted by"
+        ]
+        ws.append(headers)
+
+        # Populate Excel rows with report data
+        for report in user_reports:
+            # Convert ObjectId to string and handle date fields
+            report_id = str(report.get("_id", ""))
+            demo_given_date = report.get("demoGivenDate", "").strftime("%Y-%m-%d") if report.get("demoGivenDate") else ""
+            schools_approached = "Approached" if report.get("remarksStatus") == "Approached" else "Not Approached"
+            week_no = report.get("weekSelect", "")
+            pd_done = "PD Done" if report.get("PD") else "PD Not Done"
+            smd_done = "SMD Done" if report.get("SMD") else "SMD Not Done"
+            signed = "Signed" if report.get("remarksStatus") == "Signed" else "Not Signed"
+            signed_at = report.get("signedAt", "").strftime("%Y-%m-%d %H:%M:%S") if report.get("signedAt") else ""
+
+            mtd_approached = report.get("mtdApproached", 0)
+            mtd_pd_appointments = report.get("mtdPdAppointments", 0)
+            mtd_pd_done = report.get("MTDpdDone", 0)
+            mtd_smd_done = report.get("MTDsmdDone", 0)
+            mtd_signup_done = report.get("mtdSignupDone", 0)
+            submitted_by = report.get("user", "")
+
+            # Add a row to the worksheet
+            ws.append([
+                report_id, demo_given_date, schools_approached, week_no,
+                pd_done, smd_done, signed, signed_at,
+                mtd_approached, mtd_pd_appointments, mtd_pd_done,
+                mtd_smd_done, mtd_signup_done, submitted_by
+            ])
+
+        # Save the Excel workbook to a BytesIO stream
+        output = io.BytesIO()
+        wb.save(output)
+        output.seek(0)
+
+        # Create a response to download the file
+        filename = f"Weekly_Report_{username}_{today}.xlsx"
+        return send_file(output, as_attachment=True, download_name=filename, mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
     else:
         return jsonify({"status": "error", "message": "User not logged in"}), 401
+# @app.route('/downloadWeeklyReport', methods=['GET'])
+# def download_weekly_report():
+#     username = session.get("username")
+
+#     if username:
+#         user_reports = Record.find({"user": username})
+
+#         # Create an Excel workbook and worksheet
+#         workbook = openpyxl.Workbook()
+#         sheet = workbook.active
+#         sheet.title = "Weekly Report"
+
+#         # Add headers to the worksheet
+#         headers = [
+#             "ID", "Demo Given Date", "Follow Up Date", "Signed At",
+#             "Remarks Status", "PD Done", "SMD Done", "User"
+#         ]
+#         sheet.append(headers)
+
+#         # Add data rows to the worksheet
+#         for report in user_reports:
+#             row = [
+#                 report.get("_id"),
+#                 report.get("demoGivenDate", ""),
+#                 report.get("followUpDate", ""),
+#                 report.get("signedAt", ""),
+#                 report.get("remarksStatus", ""),
+#                 "Yes" if report.get("PD") else "No",
+#                 "Yes" if report.get("SMD") else "No",
+#                 report.get("user", "")
+#             ]
+#             sheet.append(row)
+
+#         # Save the workbook to a BytesIO stream
+#         output = io.BytesIO()
+#         workbook.save(output)
+#         output.seek(0)
+
+#         # Create a response with the Excel file
+#         response = make_response(output.read())
+#         response.headers["Content-Disposition"] = "attachment; filename=weekly_report.xlsx"
+#         response.headers["Content-Type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+#         return response
+
+#     else:
+#         return jsonify({"status": "error", "message": "User not logged in"}), 401
+    
+
+# @app.route('/getReport', methods=['GET'])
+# def get_report():
+#     if "username" in session:
+#         username = session["username"]
+
+#         # Get today's date and the start of the current month
+#         today = date.today()
+#         start_of_month = date(today.year, today.month, 1) 
+
+#         # Query the database for all reports by the logged-in user
+#         user_reports = Record.find({"user": username})
+        
+#         # Prepare the reports data
+#         reports_data = []
+#         for report in user_reports:
+#             # Convert ObjectId to string for compatibility
+#             report["_id"] = str(report["_id"])
+            
+#             # Convert datetime fields to string for JSON serialization
+#             for key in ["demoGivenDate", "followUpDate", "signedAt"]:
+#                 if key in report:
+#                     report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
+            
+#             # Calculate PD Done Today for this report
+#             pd_done_today = Record.count_documents({
+#                 "PD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(today, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             smd_done_today = Record.count_documents({
+#                 "SMD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(today, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+            
+#             # Calculate SMD Done Today for this report
+#             MTD_smd_done = Record.count_documents({
+#                 "SMD": True,
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+            
+#             MTD_approached = Record.count_documents({
+#                 "remarksStatus": "Approached",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             MTD_pd_appointment = Record.count_documents({
+#                 "remarksStatus": "PD appointments",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+
+#             MTD_pd_feedback_collected = Record.count_documents({
+#                 "remarksStatus": "PD feedback form collected",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+#             MTD_signup_done = Record.count_documents({
+#                 "remarksStatus": "Sign up done",
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),
+#                     "$lte": datetime.combine(today, datetime.max.time())
+#                 },
+#                 "user": username  # Specific to this user
+#             })
+
+#             MTD_pd_done = Record.count_documents({
+#                 "PD": True,  # Filter where PD is True
+#                 "demoGivenDate": {
+#                     "$gte": datetime.combine(start_of_month, datetime.min.time()),  # Start of month
+#                     "$lte": datetime.combine(today, datetime.max.time())           # End of today
+#                 },
+#                 "user": username  # Specific user filter
+#             })
+            
+#             # Add the calculated fields to the report
+#             report["pdDoneToday"] = pd_done_today
+#             report["smdDoneToday"] = smd_done_today
+#             report["MTDpdDone"] = MTD_pd_done
+#             report["MTDsmdDone"] = MTD_smd_done
+#             report["mtdApproached"] = MTD_approached
+#             report["mtdPdAppointments"] = MTD_pd_appointment
+#             report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
+#             report["mtdSignupDone"] = MTD_signup_done
+#             print("The final reports are: ",  str(report))
+            
+#             # Append the enriched report to the list
+#             reports_data.append(report)
+#             print(reports_data)
+#         # Return the enriched reports
+#         return jsonify({"status": "success", "data": reports_data}), 200
+
+#     else:
+#         return jsonify({"status": "error", "message": "User not logged in"}), 401
 
 @app.route('/getReport', methods=['GET'])
 def get_report():
-    if "username" in session:
-        username = session["username"]
+    if "username" not in session:
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
+    
+    username = session["username"]
+    today = date.today()
+    start_of_month = date(today.year, today.month, 1)
+    today_start = datetime.combine(today, datetime.min.time())
+    today_end = datetime.combine(today, datetime.max.time())
+    start_of_month_start = datetime.combine(start_of_month, datetime.min.time())
 
-        # Get today's date and the start of the current month
-        today = datetime.now().date()
-        start_of_month = today.replace(day=1)
+    try:
+        # Fetch all reports for the user
+        user_reports = list(Record.find({"user": username}))
+        if not user_reports:
+            return jsonify({"status": "error", "message": "No reports found"}), 404
 
-        # Query the database for all reports by the logged-in user
-        user_reports = Record.find({"user": username})
-        
-        # Prepare the reports data
         reports_data = []
         for report in user_reports:
-            # Convert ObjectId to string for compatibility
             report["_id"] = str(report["_id"])
-            
-            # Convert datetime fields to string for JSON serialization
             for key in ["demoGivenDate", "followUpDate", "signedAt"]:
                 if key in report:
                     report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
-            
-            # Calculate PD Done Today for this report
-            pd_done_today = Record.count_documents({
-                "PD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(today, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            smd_done_today = Record.count_documents({
-                "SMD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(today, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            
-            # Calculate SMD Done Today for this report
-            MTD_smd_done = Record.count_documents({
-                "SMD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            
-            MTD_approached = Record.count_documents({
-                "remarksStatus": "Approached",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            MTD_pd_appointment = Record.count_documents({
-                "remarksStatus": "PD appointments",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
 
-            MTD_pd_feedback_collected = Record.count_documents({
-                "remarksStatus": "PD feedback form collected",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            MTD_signup_done = Record.count_documents({
-                "remarksStatus": "Sign up done",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
+            # Calculate metrics
+            report["pdDoneToday"] = count_metric("PD", True, today_start, today_end, username)
+            report["smdDoneToday"] = count_metric("SMD", True, today_start, today_end, username)
+            report["MTDpdDone"] = count_metric("PD", True, start_of_month_start, today_end, username)
+            report["MTDsmdDone"] = count_metric("SMD", True, start_of_month_start, today_end, username)
+            report["mtdApproached"] = count_metric("remarksStatus", "Approached", start_of_month_start, today_end, username)
+            report["mtdPdAppointments"] = count_metric("remarksStatus", "PD appointments", start_of_month_start, today_end, username)
+            report["mtdPdFeedbackFormCollected"] = count_metric("remarksStatus", "PD feedback form collected", start_of_month_start, today_end, username)
+            report["mtdSignupDone"] = count_metric("remarksStatus", "Sign up done", start_of_month_start, today_end, username)
 
-            MTD_pd_done = Record.count_documents({
-                "PD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            
-            # Add the calculated fields to the report
-            report["pdDoneToday"] = pd_done_today
-            report["smdDoneToday"] = smd_done_today
-            report["MTDpdDone"] = MTD_pd_done
-            report["MTDsmdDone"] = MTD_smd_done
-            report["mtdApproached"] = MTD_approached
-            report["mtdPdAppointments"] = MTD_pd_appointment
-            report["mtdPdFeedbackFormCollected"] = MTD_pd_feedback_collected
-            report["mtdSignupDone"] = MTD_signup_done
-            print("The final reports are: ",  str(report))
-            
-            # Append the enriched report to the list
             reports_data.append(report)
-            print(reports_data)
-        # Return the enriched reports
-        return jsonify({"status": "success", "data": reports_data}), 200
 
-    else:
-        return jsonify({"status": "error", "message": "User not logged in"}), 401
+        return jsonify({"status": "success", "data": reports_data}), 200
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+def count_metric(field, value, start_date, end_date, username):
+    return Record.count_documents({
+        field: value,
+        "demoGivenDate": {"$gte": start_date, "$lte": end_date},
+        "user": username
+    })
 
 
 @app.route('/downloadIndiReport', methods=['GET'])
@@ -667,6 +937,115 @@ def download_Indi_report():
 
     else:
         return jsonify({"status": "error", "message": "User not logged in"}), 401
+    
+    
+@app.route('/getReportsByDistrict', methods=['GET'])
+def get_reports_by_district():
+    username = session.get('username')
+    print(f"User ID from session: {username}")
+
+    if not username:
+        return redirect(url_for('login')), 401
+
+    query = {"user": username}
+    print(f"Query to fetch reports: {query}")
+
+    try:
+        reports_data = list(Record.find(query))
+        print(reports_data)
+    except Exception as e:
+        print(f"Error while fetching reports: {str(e)}")
+        return jsonify({"status": "error", "message": "Error fetching reports from the database"}), 500
+
+    if not reports_data:
+        print("No reports found for the user.")
+        return jsonify({"status": "error", "message": "No reports found for this user"}), 404
+
+    reports_by_district = {}
+    for report in reports_data:
+        district = report.get('district', 'Unknown')
+        if district not in reports_by_district:
+            reports_by_district[district] = []
+        reports_by_district[district].append(report)
+
+    for district, reports in reports_by_district.items():
+        for report in reports:
+            report["_id"] = str(report["_id"])
+
+    print("Reports classified by district:", reports_by_district)
+    return jsonify({"status": "success", "data": reports_by_district}), 200
+
+@app.route('/downloadReportsByDistrict', methods=['GET'])
+def download_reports_by_district():
+    username = session.get('username')
+    print(f"User ID from session: {username}")
+
+    if not username:
+        return redirect(url_for('login')), 401
+
+    query = {"user": username}
+    print(f"Query to fetch reports: {query}")
+
+    try:
+        reports_data = list(Record.find(query))
+        print(reports_data)
+    except Exception as e:
+        print(f"Error while fetching reports: {str(e)}")
+        return jsonify({"status": "error", "message": "Error fetching reports from the database"}), 500
+
+    if not reports_data:
+        print("No reports found for the user.")
+        return jsonify({"status": "error", "message": "No reports found for this user"}), 404
+
+    reports_by_district = {}
+    for report in reports_data:
+        district = report.get('district', 'Unknown')
+        if district not in reports_by_district:
+            reports_by_district[district] = []
+        reports_by_district[district].append(report)
+
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.title = "District Reports"
+
+    # Adding headers
+    headers = ["District", "Schools", "PD", "SMD", "Signed", "SMD to Sign Up Follow Up", "Hot Follow Up", "NI"]
+    sheet.append(headers)
+
+    for district, reports in reports_by_district.items():
+        stats = {
+            "schools": len(reports),
+            "pd": sum(1 for r in reports if r.get('PD')),
+            "smd": sum(1 for r in reports if r.get('SMD')),
+            "signed": sum(1 for r in reports if r.get('remarksStatus') == "Signed"),
+            "smdToSignUpFollowUp": sum(1 for r in reports if r.get('remarksStatus') == "SMD Follow UP"),
+            "hotFollowUp": sum(1 for r in reports if r.get('remarksStatus') == "Hot Follow Up"),
+            "ni": sum(1 for r in reports if r.get('remarksStatus') == "NI"),
+        }
+
+        row = [
+            district,
+            stats["schools"],
+            stats["pd"],
+            stats["smd"],
+            stats["signed"],
+            stats["smdToSignUpFollowUp"],
+            stats["hotFollowUp"],
+            stats["ni"],
+        ]
+        sheet.append(row)
+
+    # Save the workbook to a BytesIO stream
+    output = io.BytesIO()
+    workbook.save(output)
+    output.seek(0)
+
+    response = make_response(output.getvalue())
+    response.headers["Content-Disposition"] = "attachment; filename=district_reports.xlsx"
+    response.headers["Content-Type"] = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    return response    
+    
+
 
 
 @app.route('/')

@@ -310,6 +310,9 @@
           <option value="Hot Follow up">Hot Follow up</option>
           <option value="NI">NI</option>
         </select>
+
+        <textarea id="remarksStatus" placeholder="Selected remarks/status will appear here"></textarea>
+
         <input
         type="text"
         id="appointmentFixed"
@@ -355,11 +358,21 @@
       </form>
     </div>
     <script>
-       function updateTextarea() {
-         const select = document.getElementById("remarksOptions");
-        const textarea = document.getElementById("remarksStatus");
-         textarea.value = select?.value;
-       }
+      //  function updateTextarea() {
+      //    const select = document.getElementById("remarksOptions");
+      //   const textarea = document.getElementById("remarksStatus");
+      //    textarea.value = select?.value;
+      //  }
+
+      function updateTextarea() {
+  const select = document.getElementById("remarksOptions");
+  const textarea = document.getElementById("remarksStatus");
+
+  if (select && textarea) {
+    textarea.value = select.value || ""; // Safely set the textarea value
+  }
+}
+
 
 
       function setupDateInputs() {

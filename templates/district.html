@@ -112,8 +112,32 @@
       </thead>
       <tbody></tbody>
     </table>
+    <button id="downloadButton">Download District Records</button>
 
     <script>
+      document
+        .getElementById("downloadButton")
+        .addEventListener("click", function () {
+          fetch("downloadReportsByDistrict", {
+            method: "GET",
+          })
+            .then((response) => {
+              if (response.ok) return response.blob();
+              throw new Error("Failed to download report.");
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "Lead tracker.xlsx";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
       // Function to create the table rows and cells
       function createTable(data) {
         const tbody = document

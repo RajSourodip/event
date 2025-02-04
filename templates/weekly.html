@@ -148,8 +148,30 @@
     <h1>Weekly Reports</h1>
     <div id="weeklyReports" class="report-container"></div>
     <div id="totalsSection" class="totals-section"></div>
-
+    <button id="downloadButton">Download Weekly Records</button>
     <script>
+      document
+        .getElementById("downloadButton")
+        .addEventListener("click", function () {
+          fetch("/downloadWeeklyReport", {
+            method: "GET",
+          })
+            .then((response) => {
+              if (response.ok) return response.blob();
+              throw new Error("Failed to download report.");
+            })
+            .then((blob) => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "Lead tracker.xlsx";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+            })
+            .catch((error) => console.error("Error:", error));
+        });
       // Function to create the report items and totals
       function createReportsAndTotals(data, tt) {
         console.log("Data received:", data);
