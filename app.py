@@ -463,14 +463,14 @@ def get_weekly_report():
         user_reports = Record.find({"user": username})
         reports_data = []
         
-        reports_data = []
+        
         totals = {}  # To store aggregated counts for the report
         for report in user_reports:
             report["_id"] = str(report["_id"])
             for key in ["demoGivenDate", "followUpDate", "signedAt"]:
                 if key in report:
                     report[key] = report[key].strftime("%Y-%m-%d %H:%M:%S")
-            
+            totals = {}
             # Aggregated counts
             totals["pdDoneToday"] = Record.count_documents({
                 "PD": True,
