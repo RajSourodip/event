@@ -193,45 +193,80 @@ def get_permissions():
         return jsonify({'message': 'Error fetching permissions', 'error': str(e)}), 500
 
 
+# @app.route('/send_permission_request', methods=['POST', 'GET'])
+# def send_permission_request():
+#     try:
+#         # Get the username from the incoming JSON request body
+#         data = request.json
+#         username = session.get("username")
+#         # Check if username is provided
+#         if not username:
+#             return jsonify({'message': 'Username is required'}), 400
+
+#         # Check if the user already has a request in the permissions collection
+#         existing_request = Permit.find_one({'user': username})
+
+#         # If the user has a granted request, return an error
+#         if existing_request and existing_request.get('status') == 'granted':
+#             return jsonify({'message': 'Permission already granted for this user'}), 400
+
+#         # Create a new permission request document in the MongoDB database
+#         if not existing_request or existing_request.get('status') == 'rejected':
+#             now_utc = datetime.now(timezone.utc)
+#             # Convert UTC to IST (UTC + 5:30)
+#             ist_offset = timedelta(hours=5, minutes=30)
+#             now_ist = now_utc + ist_offset
+#             permission_request = {
+#                 'user': username,
+#                 'status': 'pending',  # Pending status initially
+#                 'request_date': now_ist.isoformat()  # Use timezone-aware datetime
+#             }
+#             print(permission_request)
+#             Permit.insert_one(permission_request)
+#             return jsonify({'message': 'Permission request sent successfully', 'success': True}), 200
+
+#         # Return success response
+#         return jsonify({'message': 'Permission request already exists for this user'}), 400
+
+#     except Exception as e:
+#         print(f"Error: {str(e)}")
+#         return jsonify({'message': 'Error sending permission request', 'error': str(e)}), 500
+
 @app.route('/send_permission_request', methods=['POST', 'GET'])
 def send_permission_request():
     try:
-        # Get the username from the incoming JSON request body
-        data = request.json
+        # Get current user from session
         username = session.get("username")
-        # Check if username is provided
         if not username:
             return jsonify({'message': 'Username is required'}), 400
 
-        # Check if the user already has a request in the permissions collection
+        # Check if user already has a request
         existing_request = Permit.find_one({'user': username})
 
-        # If the user has a granted request, return an error
-        if existing_request and existing_request.get('status') == 'granted':
-            return jsonify({'message': 'Permission already granted for this user'}), 400
+        if existing_request:
+            if existing_request.get('status') == 'granted':
+                return jsonify({'message': 'Permission already granted for this user'}), 400
+            if existing_request.get('status') == 'pending':
+                return jsonify({'message': 'Permission request already exists for this user'}), 400
 
-        # Create a new permission request document in the MongoDB database
-        if not existing_request or existing_request.get('status') == 'rejected':
-            now_utc = datetime.now(timezone.utc)
-            # Convert UTC to IST (UTC + 5:30)
-            ist_offset = timedelta(hours=5, minutes=30)
-            now_ist = now_utc + ist_offset
-            permission_request = {
-                'user': username,
-                'status': 'pending',  # Pending status initially
-                'request_date': now_ist.isoformat()  # Use timezone-aware datetime
-            }
-            print(permission_request)
-            Permit.insert_one(permission_request)
-            return jsonify({'message': 'Permission request sent successfully', 'success': True}), 200
+        # Create permission request
+        now_utc = datetime.now(timezone.utc)
+        ist_offset = timedelta(hours=5, minutes=30)
+        now_ist = now_utc + ist_offset
 
-        # Return success response
-        return jsonify({'message': 'Permission request already exists for this user'}), 400
+        permission_request = {
+            'user': username,
+            'status': 'pending',
+            'request_date': now_ist.isoformat()
+        }
+
+        Permit.insert_one(permission_request)
+        return jsonify({'message': 'Permission request sent successfully', 'success': True}), 200
 
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({'message': 'Error sending permission request', 'error': str(e)}), 500
-
+    
 @app.route('/check_permission', methods=['POST', 'GET'])
 def check_permission():
     try:
