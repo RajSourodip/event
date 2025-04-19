@@ -485,6 +485,8 @@ def admin():
 
 #     else:
 #         return jsonify({"status": "error", "message": "User not logged in"}), 401
+
+
 @app.route('/getWeeklyReport', methods=['GET'])
 def get_weekly_report():
     now = datetime.now()
@@ -658,6 +660,11 @@ def download_weekly_report():
 
     else:
         return jsonify({"status": "error", "message": "User not logged in"}), 401
+    
+
+
+
+    
 # @app.route('/downloadWeeklyReport', methods=['GET'])
 # def download_weekly_report():
 #     username = session.get("username")
@@ -869,8 +876,8 @@ def count_metric(field, value, start_date, end_date, username):
     })
 
 
-@app.route('/downloadIndiReport', methods=['GET'])
-def download_Indi_report():
+# @app.route('/downloadIndiReport', methods=['GET'])
+# def download_Indi_report():
     if "username" in session:
         username = session["username"]
         user_reports = Record.find({"user": username})
@@ -973,6 +980,131 @@ def download_Indi_report():
     else:
         return jsonify({"status": "error", "message": "User not logged in"}), 401
     
+
+@app.route('/downloadIndiReport', methods=['GET'])
+def download_Indi_report():
+    if "username" in session:
+        username = session["username"]
+        user_reports = Record.find({"user": username})
+        today = datetime.now().date()
+        start_of_month = today.replace(day=1)
+
+        reports_data = []
+        for report in user_reports:
+            MTD_smd_done = Record.count_documents({
+                "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+            })
+
+            MTD_approached = Record.count_documents({
+                "remarksStatus": "Approached",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+            })
+
+            MTD_pd_appointment = Record.count_documents({
+                "remarksStatus": "PD appointments",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+            })
+
+            MTD_pd_feedback_collected = Record.count_documents({
+                "remarksStatus": "PD feedback form collected",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+            })
+
+            MTD_signup_done = Record.count_documents({
+                "remarksStatus": "Sign up done",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+            })
+
+            MTD_pd_done = Record.count_documents({
+                "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+            })
+
+            surveyDone = "Yes" if report.get("surveyDone") == True else "No"
+            report_dict = {
+                "Report ID": str(report["_id"]),
+                "Today's Report": report.get("demoGivenDate", ""),
+                "Submitted by": report.get("user", ""),
+                "Date": report.get("demoGivenDate", ""),
+                "Survey Done": surveyDone,
+                "Appointment Fixed": report.get("appointmentFixed", ""),
+                "PD Done Today": "Yes" if report.get("PD") == True else "No",
+                "SMD Done Today": "Yes" if report.get("SMD") == True else "No",
+                "Signed": "Yes" if report.get("remarksStatus") == "Signed" else "No",
+                "Signed At": report.get("signedAt", ""),
+                "MTD Approached": MTD_approached,
+                "MTD PD Appointments": MTD_pd_appointment,
+                "MTD PD Done": MTD_pd_done,
+                "MTD PD Feedback Form Collected": MTD_pd_feedback_collected,
+                "MTD SMD Done": MTD_smd_done,
+                "MTD Signup Done": MTD_signup_done,
+                "Week No": report.get("weekSelect", ""),
+            }
+            reports_data.append(report_dict)
+
+    #     # Convert to DataFrame
+    #     df = pd.DataFrame(reports_data)
+
+    #     # Create in-memory Excel file
+    #     output = BytesIO()
+    #     with pd.ExcelWriter(output, engine='openpyxl') as writer:
+    #         df.to_excel(writer, index=False, sheet_name='Reports')
+
+    #     output.seek(0)  # Go to beginning of the BytesIO buffer
+
+    #     # Return the file as a download response
+    #     return Response(
+    #         output,
+    #         mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    #         headers={"Content-Disposition": "attachment;filename=individual_records.xlsx"}
+    #     )
+
+    # else:
+    #     return jsonify({"status": "error", "message": "User not logged in"}), 401
+
+    # Convert data to Pandas DataFrame
+        df = pd.DataFrame(reports_data)
+
+        # Convert DataFrame to Excel
+        excel_buffer = pd.ExcelWriter("individual_records.xlsx", engine="openpyxl")
+        df.to_excel(excel_buffer, index=False, sheet_name="Reports")
+        excel_buffer.close()
+
+        # Send file to frontend
+        with open("individual_records.xlsx", "rb") as f:
+            file_data = f.read()
+
+        response = Response(file_data, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response.headers["Content-Disposition"] = "attachment; filename=individual_records.xlsx"
+        return response
+
+    else:
+        return jsonify({"status": "error", "message": "User not logged in"}), 401
     
 @app.route('/getReportsByDistrict', methods=['GET'])
 def get_reports_by_district():
