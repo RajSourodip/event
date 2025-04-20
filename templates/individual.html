@@ -141,12 +141,10 @@
       document
         .getElementById("downloadButton")
         .addEventListener("click", function () {
-          //  fetch("/downloadIndiReport", {
-          //    method: "GET",
-          //  })
            fetch("/downloadIndiReport", {
-            method: "GET",
-          }) 
+             method: "GET",
+           })
+          
             .then((response) => {
               if (response.ok) return response.blob();
               throw new Error("Failed to download report.");
