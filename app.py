@@ -878,107 +878,107 @@ def count_metric(field, value, start_date, end_date, username):
 
 # @app.route('/downloadIndiReport', methods=['GET'])
 # def download_Indi_report():
-    if "username" in session:
-        username = session["username"]
-        user_reports = Record.find({"user": username})
-        today = datetime.now().date()
-        start_of_month = today.replace(day=1)
+    # if "username" in session:
+    #     username = session["username"]
+    #     user_reports = Record.find({"user": username})
+    #     today = datetime.now().date()
+    #     start_of_month = today.replace(day=1)
 
-        # Convert MongoDB Cursor to List of Dictionaries
-        reports_data = []
-        for report in user_reports:
-            MTD_smd_done = Record.count_documents({
-                "SMD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
+    #     # Convert MongoDB Cursor to List of Dictionaries
+    #     reports_data = []
+    #     for report in user_reports:
+    #         MTD_smd_done = Record.count_documents({
+    #             "SMD": True,
+    #             "demoGivenDate": {
+    #                 "$gte": datetime.combine(start_of_month, datetime.min.time()),
+    #                 "$lte": datetime.combine(today, datetime.max.time())
+    #             },
+    #             "user": username  # Specific to this user
+    #         })
             
-            MTD_approached = Record.count_documents({
-                "remarksStatus": "Approached",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            MTD_pd_appointment = Record.count_documents({
-                "remarksStatus": "PD appointments",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
+    #         MTD_approached = Record.count_documents({
+    #             "remarksStatus": "Approached",
+    #             "demoGivenDate": {
+    #                 "$gte": datetime.combine(start_of_month, datetime.min.time()),
+    #                 "$lte": datetime.combine(today, datetime.max.time())
+    #             },
+    #             "user": username  # Specific to this user
+    #         })
+    #         MTD_pd_appointment = Record.count_documents({
+    #             "remarksStatus": "PD appointments",
+    #             "demoGivenDate": {
+    #                 "$gte": datetime.combine(start_of_month, datetime.min.time()),
+    #                 "$lte": datetime.combine(today, datetime.max.time())
+    #             },
+    #             "user": username  # Specific to this user
+    #         })
 
-            MTD_pd_feedback_collected = Record.count_documents({
-                "remarksStatus": "PD feedback form collected",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
-            MTD_signup_done = Record.count_documents({
-                "remarksStatus": "Sign up done",
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
+    #         MTD_pd_feedback_collected = Record.count_documents({
+    #             "remarksStatus": "PD feedback form collected",
+    #             "demoGivenDate": {
+    #                 "$gte": datetime.combine(start_of_month, datetime.min.time()),
+    #                 "$lte": datetime.combine(today, datetime.max.time())
+    #             },
+    #             "user": username  # Specific to this user
+    #         })
+    #         MTD_signup_done = Record.count_documents({
+    #             "remarksStatus": "Sign up done",
+    #             "demoGivenDate": {
+    #                 "$gte": datetime.combine(start_of_month, datetime.min.time()),
+    #                 "$lte": datetime.combine(today, datetime.max.time())
+    #             },
+    #             "user": username  # Specific to this user
+    #         })
 
-            MTD_pd_done = Record.count_documents({
-                "PD": True,
-                "demoGivenDate": {
-                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
-                    "$lte": datetime.combine(today, datetime.max.time())
-                },
-                "user": username  # Specific to this user
-            })
+    #         MTD_pd_done = Record.count_documents({
+    #             "PD": True,
+    #             "demoGivenDate": {
+    #                 "$gte": datetime.combine(start_of_month, datetime.min.time()),
+    #                 "$lte": datetime.combine(today, datetime.max.time())
+    #             },
+    #             "user": username  # Specific to this user
+    #         })
             
-            surveyDone = "Yes" if report.get("surveyDone") == True else "No"
-            report_dict = {
-                "Report ID": str(report["_id"]),
-                "Today's Report": report.get("demoGivenDate", ""),
-                "Submitted by": report.get("user", ""),
-                "Date": report.get("demoGivenDate", ""),
-                "Survey Done": surveyDone,
-                "Appointment Fixed": report.get("appointmentFixed", ""),
-                "PD Done Today": "Yes" if report.get("PD") == True else "No",
-                "SMD Done Today": "Yes" if report.get("SMD") == True else "No",
-                "Signed": "Yes" if report.get("remarksStatus") == "Signed" else "No",
-                "Signed At": report.get("signedAt", ""),
-                "MTD Approached": MTD_approached,
-                "MTD PD Appointments": MTD_pd_appointment,
-                "MTD PD Done": MTD_pd_done,
-                "MTD PD Feedback Form Collected": MTD_pd_feedback_collected,
-                "MTD SMD Done": MTD_smd_done,
-                "MTD Signup Done": MTD_signup_done,
-                "Week No": report.get("weekSelect", ""),
-            }
-            reports_data.append(report_dict)
+    #         surveyDone = "Yes" if report.get("surveyDone") == True else "No"
+    #         report_dict = {
+    #             "Report ID": str(report["_id"]),
+    #             "Today's Report": report.get("demoGivenDate", ""),
+    #             "Submitted by": report.get("user", ""),
+    #             "Date": report.get("demoGivenDate", ""),
+    #             "Survey Done": surveyDone,
+    #             "Appointment Fixed": report.get("appointmentFixed", ""),
+    #             "PD Done Today": "Yes" if report.get("PD") == True else "No",
+    #             "SMD Done Today": "Yes" if report.get("SMD") == True else "No",
+    #             "Signed": "Yes" if report.get("remarksStatus") == "Signed" else "No",
+    #             "Signed At": report.get("signedAt", ""),
+    #             "MTD Approached": MTD_approached,
+    #             "MTD PD Appointments": MTD_pd_appointment,
+    #             "MTD PD Done": MTD_pd_done,
+    #             "MTD PD Feedback Form Collected": MTD_pd_feedback_collected,
+    #             "MTD SMD Done": MTD_smd_done,
+    #             "MTD Signup Done": MTD_signup_done,
+    #             "Week No": report.get("weekSelect", ""),
+    #         }
+    #         reports_data.append(report_dict)
 
-        # Convert data to Pandas DataFrame
-        df = pd.DataFrame(reports_data)
+    #     # Convert data to Pandas DataFrame
+    #     df = pd.DataFrame(reports_data)
 
-        # Convert DataFrame to Excel
-        excel_buffer = pd.ExcelWriter("individual_records.xlsx", engine="openpyxl")
-        df.to_excel(excel_buffer, index=False, sheet_name="Reports")
-        excel_buffer.close()
+    #     # Convert DataFrame to Excel
+    #     excel_buffer = pd.ExcelWriter("individual_records.xlsx", engine="openpyxl")
+    #     df.to_excel(excel_buffer, index=False, sheet_name="Reports")
+    #     excel_buffer.close()
 
-        # Send file to frontend
-        with open("individual_records.xlsx", "rb") as f:
-            file_data = f.read()
+    #     # Send file to frontend
+    #     with open("individual_records.xlsx", "rb") as f:
+    #         file_data = f.read()
 
-        response = Response(file_data, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response.headers["Content-Disposition"] = "attachment; filename=individual_records.xlsx"
-        return response
+    #     response = Response(file_data, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    #     response.headers["Content-Disposition"] = "attachment; filename=individual_records.xlsx"
+    #     return response
 
-    else:
-        return jsonify({"status": "error", "message": "User not logged in"}), 401
+    # else:
+    #     return jsonify({"status": "error", "message": "User not logged in"}), 401
     
 
 @app.route('/downloadIndiReport', methods=['GET'])
