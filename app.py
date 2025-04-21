@@ -605,6 +605,55 @@ def download_weekly_report():
     if "username" in session:
         username = session["username"]
 
+        # mtd_start = datetime.combine(start_of_month, datetime.min.time())
+        # mtd_end = datetime.combine(today, datetime.max.time())
+
+        # Calculate dynamic MTD totals for this user
+        mtd_approached = Record.count_documents({
+           "remarksStatus": "Approached",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+        })
+
+        mtd_pd_appointments = Record.count_documents({
+            "remarksStatus": "PD appointments",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+        })
+
+        mtd_pd_done = Record.count_documents({
+            "PD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+        })
+
+        mtd_smd_done = Record.count_documents({
+            "SMD": True,
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+        })
+
+        mtd_signup_done = Record.count_documents({
+            "remarksStatus": "Sign up done",
+                "demoGivenDate": {
+                    "$gte": datetime.combine(start_of_month, datetime.min.time()),
+                    "$lte": datetime.combine(today, datetime.max.time())
+                },
+                "user": username
+        })
+
         # Query MongoDB for the reports
         user_reports = Record.find({"user": username})
 
@@ -634,11 +683,11 @@ def download_weekly_report():
             signed = "Signed" if report.get("remarksStatus") == "Signed" else "Not Signed"
             signed_at = report.get("signedAt", "").strftime("%Y-%m-%d %H:%M:%S") if report.get("signedAt") else ""
 
-            mtd_approached = report.get("mtdApproached", 0)
-            mtd_pd_appointments = report.get("mtdPdAppointments", 0)
-            mtd_pd_done = report.get("MTDpdDone", 0)
-            mtd_smd_done = report.get("MTDsmdDone", 0)
-            mtd_signup_done = report.get("mtdSignupDone", 0)
+            # mtd_approached = report.get("mtdApproached", 0)
+            # mtd_pd_appointments = report.get("mtdPdAppointments", 0)
+            # mtd_pd_done = report.get("MTDpdDone", 0)
+            # mtd_smd_done = report.get("MTDsmdDone", 0)
+            # mtd_signup_done = report.get("mtdSignupDone", 0)
             submitted_by = report.get("user", "")
 
             # Add a row to the worksheet
@@ -1092,9 +1141,9 @@ def download_Indi_report():
 
     # Convert data to Pandas DataFrame
         df = pd.DataFrame(reports_data)
+
         output = io.BytesIO()
-        workbook = Workbook()
-        sheet = workbook.active
+        
 
         # Convert DataFrame to Excel
         with pd.ExcelWriter(output, engine="openpyxl") as excel_writer: df.to_excel(excel_writer, index=False, sheet_name="Reports")
