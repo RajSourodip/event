@@ -1092,17 +1092,21 @@ def download_Indi_report():
 
     # Convert data to Pandas DataFrame
         df = pd.DataFrame(reports_data)
+        output = io.BytesIO()
+        workbook = Workbook()
+        sheet = workbook.active
 
         # Convert DataFrame to Excel
-        excel_buffer = pd.ExcelWriter("individual_records.xlsx", engine="openpyxl")
-        df.to_excel(excel_buffer, index=False, sheet_name="Reports")
-        excel_buffer.close()
+        with pd.ExcelWriter(output, engine="openpyxl") as excel_writer: df.to_excel(excel_writer, index=False, sheet_name="Reports")
 
+        # workbook = excel_writer.book
+        # sheet = workbook.active
+        output.seek(0)
         # Send file to frontend
-        with open("individual_records.xlsx", "rb") as f:
-            file_data = f.read()
+        # with open("individual_records.xlsx", "rb") as f:
+        #     file_data = f.read()
 
-        response = Response(file_data, content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response = Response(output.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         response.headers["Content-Disposition"] = "attachment; filename=individual_records.xlsx"
         return response
 
